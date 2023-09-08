@@ -7,11 +7,11 @@ body {
 
 form {
     max-width: 400px;
-    margin: 50px auto;
-    padding: 20px;
+    margin: 60px auto;
+    padding: 30px ;
     background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
 }
 
 h2 {
@@ -27,14 +27,17 @@ h2 {
 label {
     font-weight: bold;
     color: #333;
+    
 }
 
 .form-control {
+    box-sizing: border-box;
     width: 100%;
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    
 }
 
 .error-message {
