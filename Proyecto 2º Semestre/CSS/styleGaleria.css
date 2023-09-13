@@ -1,7 +1,198 @@
-.productos__descripcion--textoOculto{
-    display: none;
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.show{
-    display: block;
+body{
+ font-family: 'open sans';
+}
+
+/* Header */
+
+header{
+    width: 100%;
+    height: 900px;
+    background: #8360c3a6;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #2ebf919c, #8360c3a2), url(../Imagenes/Logo/portadala.jpg); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to right, #2ebf91a6, #8360c3b6), url(../Imagenes/Logo/portadala.jpg); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background-size: cover;
+    background-attachment: fixed;
+    position: relative;
+}
+
+nav{
+    text-align: right;
+    padding: 30px 50px 0 0;
+}
+
+nav > a{
+    color: rgb(255, 255, 255);
+    font-weight: 400;
+    text-decoration: none;
+    margin-right: 30px;
+}
+
+nav > a:hover{
+    text-decoration: underline;
+}
+
+.textos-header h1{
+    font-weight: 550;
+    font-size: 75px;
+    color: rgb(0, 0, 0);  
+}
+
+
+header .textos-header{
+    display: flex;
+    height: 200px;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.division h2{ 
+    font-weight: 500;
+    font-size: 35px;
+    color: rgb(0, 0, 0);  
+}
+
+header .division{
+    display: flex;
+    height: 1px;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.wave{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Accesorios */
+
+.acces__titulo h2{
+    font-weight: 550;
+    font-size: 35px;
+    color: rgb(75, 50, 116);  
+}
+.acces__titulo{
+    display: flex;
+    height: 30px;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.acces__producto--div{
+    font-style:italic;
+    font-size: 20px;
+    font-weight: 500;
+    color: rgb(29, 29, 29);  
+}
+
+
+/* Cuchas */
+
+.cuchas__titulo h2{
+    font-weight: 550;
+    font-size: 35px;
+    color: rgb(75, 50, 116);  
+}
+.cuchas__titulo{
+    display: flex;
+    height: 30px;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.cuchas__producto--div{
+    font-style:italic;
+    font-size: 20px;
+    font-weight: 500;
+    color: rgb(29, 29, 29);  
+}
+
+
+/* Juguetes */
+.juguetes__titulo h2{
+    font-weight: 550;
+    font-size: 35px;
+    color: rgb(75, 50, 116);  
+}
+.juguetes__titulo{
+    display: flex;
+    height: 30px;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+}
+.juguetes__producto--div{
+    font-style:italic;
+    font-size: 20px;
+    font-weight: 500;
+    color: rgb(29, 29, 29);  
+}
+
+/* Ropa */
+.Ropa__titulo h2{
+    font-weight: 550;
+    font-size: 35px;
+    color: rgb(75, 50, 116);  
+}
+.Ropa__titulo{
+    display: flex;
+    height: 30px;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+}
+.ropa__producto--div{
+    font-style:italic;
+    font-size: 20px;
+    font-weight: 550;
+    color: rgb(29, 29, 29);  
+    
+}
+
+
+
+
+/* footer  */
+
+footer{
+    background-color: #33f1c1a2;
+    padding: 60px 0 30px 0;
+    margin: auto;
+    overflow: hidden;
+}
+
+.direccion {
+    text-align: center;
+    font-weight: 550;
+    font-size: 24px;
+}
+
+.derechos-de-autor {
+    display: flex;
+}
+
+.copy {
+    margin: auto;
 }
