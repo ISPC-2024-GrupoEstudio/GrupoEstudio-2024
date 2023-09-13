@@ -1,7 +1,44 @@
-.textos-header{
+.textos-header {
     background-image: url("../Imagenes/Fondos/wave.svg");
     background-size: cover;
     height: 200px;
 }
 
-.h-100vh { min-height: 100vh; height: 100vh !important;}
+.h-100vh {
+    min-height: 100vh;
+    height: 100vh !important;
+}
+
+.fondo-seccion {
+    background: #8360c3;
+    /* fallback for old browsers */
+    background: -webkit-linear-gradient(to left, #2ebf91, #8360c3);
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to left, #2ebf91, #8360c3);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+
+.banderin {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 60%, 0 100%);
+}
+
+.banderin-container {
+    height: 400px;
+
+}
+
+.texto-direccion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.map-responsive {
+
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+}
