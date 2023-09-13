@@ -1,77 +1,103 @@
-
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <link rel="icon" type="image/png" sizes="32x32" href="../Imagenes/Logo/favicon-32x32.png">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pet Boutique</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="../Imagenes/Logo/favicon-32x32.png">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <link rel="stylesheet" href="../CSS/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pet Boutique</title>
 </head>
+
 <body>
-     <header>
-        <div class="row">
-            <div class="col text-center">
-                <img src="../Imagenes/Logo/Pet Boutique.png" alt="Logo de Pet Boutique" class="logo" width="300" height="300">
+  <header>
+    <div class="row">
+      <div class="col">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+          <div class="container-fluid">
+            <a class="navbar-brand" href="#">Menu</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+              aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link" aria-current="page" href="../Paginas/landing.html">Inicio</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../Paginas/galeria_productos.html">Productos</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../Paginas/contacto.html">Contacto</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../Paginas/login.html">Login</a>
+                </li>
+                </li>
+              </ul>
             </div>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+  <main>
+    <section class="textos-header text-center h-100vh">
+      <div class="row">
+        <div class="col text-center">
+          <img src="../Imagenes/Logo/Pet Boutique.png" alt="Logo de Pet Boutique" class="logo" width="300" height="300">
         </div>
-        <div class="row">
-            <div class="col">
-            <nav class="navbar navbar-expand-lg bg-body-tertiary">
-            <div class="container-fluid">
-              <a class="navbar-brand" href="#">Menu</a>
-              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-              </button>
-              <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul class="navbar-nav">
-                  <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="#">Inicio</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="#">Productos</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="#">Contacto</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="#">Login</a>
-                  </li>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </nav>
+      </div>
+      <h1>Variedad de productos para mascotas </h1>
+    </section>
+
+    <section class="container mt-5 h-100vh">
+      <h1 class="text-center pt-5">Sobre Nosotros</h1>
+      <div class="row">
+        <div class="col-5">
+          <img src="../Imagenes/Logo/mujer.jpg" alt="a" width="500" height="400" class="imagen-sobre-nos">
         </div>
+        <div class="col-7 pt-5 text-center">
+          <h3>La mejor opción</h3>
+          <p class="pt-3">Somos un equipo de amantes de los animales que entiende la importancia de proporcionar a
+            las
+            mascotas el mejor cuidado y atención. En PetBoutique, nos enorgullece ofrecer productos seleccionados
+            cuidadosamente para garantizar la satisfacción tanto de los dueños como de sus queridas mascotas. Nuestra
+            pasión por los animales nos impulsa a brindar un servicio excepcional y una selección diversa de productos
+            que hacen que la vida de los perros sea aún más emocionante y cómoda.<br>Nuestro compromiso es brindarte
+            productos de alta calidad que combinen estilo y funcionalidad. Ya sea que estés buscando un regalo especial
+            para tu mejor amigo peludo o simplemente quieras mimarlo un poco más, en PetBoutique estamos aquí para
+            ayudarte.</p>
         </div>
-        <section class="textos-header pt-5 text-center">
-            <h1 class="z-1">Variedad de productos para mascotas </h1>
-            <div class="wave z-0" style="height: 150px; overflow: hidden;" ><svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 100%; width: 100%;"><path d="M0.00,49.98 C113.71,192.94 349.20,-49.98 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #08f;"></path></svg></div>
-            </div>
-        </section>
-        
-    </header>
-     <main>
-        <section class="contenedor sobre-nosotros">
-            <h2 class="titulo">Sobre Nosotros</h2>
-            <div class="contenedor-sobre-nosotros">
-                <img src="../Imagenes/Logo/mujer.jpg" alt="a" width="500" height="400" class="imagen-sobre-nos">
-                <div class="contenido-textos">
-                    <h3><span>-</span>Las mejor opción</h3>
-                    <p>Somos un equipo de amantes de los animales que entiende la importancia de proporcionar a las mascotas el mejor cuidado y atención. En PetBoutique, nos enorgullece ofrecer productos seleccionados cuidadosamente para garantizar la satisfacción tanto de los dueños como de sus queridas mascotas. Nuestra pasión por los animales nos impulsa a brindar un servicio excepcional y una selección diversa de productos que hacen que la vida de los perros sea aún más emocionante y cómoda.<br>Nuestro compromiso es brindarte productos de alta calidad que combinen estilo y funcionalidad. Ya sea que estés buscando un regalo especial para tu mejor amigo peludo o simplemente quieras mimarlo un poco más, en PetBoutique estamos aquí para ayudarte.</p>
-                </div>
-            </div>
-        </section>
-     </main>
-     <footer> 
-        <div class="direccion">
-            <h3>Encontranos en nuestro local</h3>
-            <p> Dirección: 123 Calle de las Mascotas, Ciudad Mascotaville</p>
+
+      </div>
+    </section>
+
+
+    <section class="mt-5 h-100vh container">
+      <div class="row">
+        <div class="col-5">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13620.783690138103!2d-64.20954315303815!3d-31.40872766636745!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9432997f07c3154d%3A0x27452e6ed41a5355!2sPet%20Shop%20Avellaneda!5e0!3m2!1ses-419!2sar!4v1694564623049!5m2!1ses-419!2sar"
+            width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
-        <div class="derechos-de-autor">
-            <p>&copy; 2023 Pet Boutique. Todos los derechos reservados.</p>
-        </div> 
-     </footer>
+        <div class="col-7 text-center">
+          <h3>Encontranos en nuestro local</h3>
+          <p> Dirección: 123 Calle de las Mascotas, Ciudad Mascotaville</p>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="text-center border-top pt-2">
+
+    <p>&copy; 2023 Pet Boutique. Todos los derechos reservados.</p>
+  </footer>
 </body>
+
 </html>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>

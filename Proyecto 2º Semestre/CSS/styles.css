@@ -1,0 +1,7 @@
+.textos-header{
+    background-image: url("../Imagenes/Fondos/wave.svg");
+    background-size: cover;
+    height: 200px;
+}
+
+.h-100vh { min-height: 100vh; height: 100vh !important;}
