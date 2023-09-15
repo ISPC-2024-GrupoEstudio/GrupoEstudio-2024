@@ -1,0 +1,36 @@
+.textos-header {
+    background-image: url("../Imagenes/Fondos/wave.svg");
+    background-size: cover;
+    height: 200px;
+}
+
+.h-100vh {
+    min-height: 100vh;
+    height: 100vh !important;
+}
+
+.fondo-seccion {
+    background-image: url("../Imagenes/Logo/perros.png");
+
+}
+
+.banderin {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 60%, 0 100%);
+}
+
+.banderin-container {
+    height: 400px;
+
+}
+
+section {
+    margin-top: 50px;
+    margin-bottom: 100px;
+}
+
+.texto-direccion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
