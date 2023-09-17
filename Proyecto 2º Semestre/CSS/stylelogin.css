@@ -3,7 +3,17 @@ body {
     background-color: #f4f4f4;
     text-align: center;
     margin: 0;
+    background: #8360c3a6;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #2ebf919c, #8360c3a2), url(../Imagenes/Logo/portadala.jpg); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to right, #2ebf91a6, #8360c3b6), url(../Imagenes/Logo/portadala.jpg); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background-size: cover;
+    background-attachment: fixed;
+    height: 700px;
+    border-left: 90px solid #8360c3b6;
+    border-right: 90px solid #8360c3b6;
+
 }
+
 
 form {
     max-width: 400px;
