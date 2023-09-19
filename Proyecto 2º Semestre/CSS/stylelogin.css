@@ -9,8 +9,6 @@ body {
     background-size: cover;
     background-attachment: fixed;
     height: 700px;
-    border-left: 90px solid #8360c3b6;
-    border-right: 90px solid #8360c3b6;
 
 }
 
@@ -25,8 +23,10 @@ form {
 }
 
 h2 {
-    margin-bottom: 20px;
-    color: #333;
+    margin-bottom: 10px;
+    color:black;
+    font-weight: 900;
+    margin-top: -80px;
 }
 
 .form-group {
@@ -69,3 +69,18 @@ label {
 .btn-primary:hover {
     background-color: #0056b3;
 }
+
+.banderin {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 60%, 0 100%);
+}
+
+.banderin-container {
+    height: 400px;
+
+}
+
+h1 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 80px;
+ }
