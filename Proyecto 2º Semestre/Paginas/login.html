@@ -6,57 +6,50 @@
     <title>Iniciar Sesión</title>
     <link rel="icon" type="image/png" sizes="32x32" href="../Imagenes/Logo/favicon-32x32.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-    <link rel="stylesheet" href="../CSS/stylelogin.css"
+    <link rel="stylesheet" href="../CSS/stylelogin.css">
 </head>
 
 <body>
-    <header>
-        <div class="row">
-          <div class="col">
-            <nav class="navbar bg-white navbar-expand-lg">
-              <div class="container-fluid">
-                <a class="navbar-brand" href="#">Menu</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
-                  aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                  <ul class="navbar-nav">
-                    <li class="nav-item">
-                      <a class="nav-link" aria-current="page" href="../Paginas/landing.html">Inicio</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="../Paginas/galeria_productos.html">Productos</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="../Paginas/contacto.html">Contacto</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="../Paginas/login.html">Login</a>
-                    </li>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </nav>
-          </div>
-        </div>
-    </header>
-      
-        <section class="textos-header text-center h-100vh fondo-seccion">
-          <div class="row">
-            <div class="col text-center banderin">
-              <div class="banderin-container">
-                <img src="../Imagenes/Logo/Pet Boutique.png" alt="Logo de Pet Boutique" class="logo" width="300"
-                  height="300">
-              </div>
+  <header>
+    <div class="row">
+      <div class="col">
+        <nav class="navbar bg-white navbar-expand-lg">
+          <div class="container-fluid">
+
+            <a class="navbar-brand" href="#">Menu</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+              aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link" aria-current="page" href="../Paginas/landing.html">Inicio</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../Paginas/galeria_productos.html">Productos</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../Paginas/contacto.html">Contacto</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../Paginas/login.html">Login</a>
+                </li>
+                </li>
+              </ul>
+
             </div>
+
           </div>
-        </section>
-    <div class="container-sm">
+        </nav>
+      </div>
+    </div>
+  </header>
+      
+  <div class="container-fluid login__cuerpo" >
     
-      <br>
-      <br>
     <div>
         <h2>Ingresá tu e-mail de usuario</h2>
     </div>
@@ -76,6 +69,8 @@
     <div class="registrate">
         <h1>¿Eres nuevo?, Crea tu cuenta ahora mismo! <a href="registro.html">Registrate aqui</a></h1>
     </div>
+
+    
 
     <script>
         document.querySelector('form').addEventListener('submit', function(event) {
@@ -106,6 +101,11 @@
             }
         });
     </script>
-    </div>
+  </div>
+  <footer class="text-center border-top pt-2">
+    <p>&copy; 2023 Pet Boutique. Todos los derechos reservados.</p>
+  </footer>
 </body>
 </html>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
