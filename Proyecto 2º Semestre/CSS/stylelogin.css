@@ -3,7 +3,15 @@ body {
     background-color: #f4f4f4;
     text-align: center;
     margin: 0;
+    background: #8360c3a6;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #2ebf919c, #8360c3a2), url(../Imagenes/Logo/portadala.jpg); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to right, #2ebf91a6, #8360c3b6), url(../Imagenes/Logo/portadala.jpg); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background-size: cover;
+    background-attachment: fixed;
+    height: 700px;
+
 }
+
 
 form {
     max-width: 400px;
@@ -15,8 +23,10 @@ form {
 }
 
 h2 {
-    margin-bottom: 20px;
-    color: #333;
+    margin-bottom: 10px;
+    color:black;
+    font-weight: 900;
+    margin-top: -80px;
 }
 
 .form-group {
@@ -59,3 +69,18 @@ label {
 .btn-primary:hover {
     background-color: #0056b3;
 }
+
+.banderin {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 60%, 0 100%);
+}
+
+.banderin-container {
+    height: 400px;
+
+}
+
+h1 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 80px;
+ }

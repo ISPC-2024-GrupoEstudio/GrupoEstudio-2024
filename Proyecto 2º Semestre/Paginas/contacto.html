@@ -3,6 +3,8 @@
     <head> 
         <meta charset="utf-8"/>
         <title>CONTACTO PET BOUTIQUE</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="Pet Boutique" content="agregar los Productos">
         <meta name="description" content="Pet Boutique S.A es una empresa destinada a brindar 
@@ -17,19 +19,38 @@
 
     <body>
         <header>
-            <nav>
-                <a href="landing.html">Inicio</a>
-                <a href="galeria_productos.html">Productos</a>
-                <a href="contacto.html"">Contacto</a>
-                <a href="login.html">Login</a>
-                <!-- <ul>
-                    <li><a href="" target="_blank">Inicio</a></li>
-                    <li><a href=""target="_blank" >Galeria de Productos</a></li>
-                    <li><a href="" target="_blank">Gestion de usuarios</a></li>
-                    <li><a href="" target="_blank">Contactos</a></li>
-                </ul> -->
-            </nav>
-
+            <div class="row">
+              <div class="col">
+                <nav class="navbar bg-white navbar-expand-lg">
+                  <div class="container-fluid">
+                    <a class="navbar-brand" href="#">Menu</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                      aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                      <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                      <ul class="navbar-nav">
+                        <li class="nav-item">
+                          <a class="nav-link" aria-current="page" href="../Paginas/landing.html">Inicio</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="../Paginas/galeria_productos.html">Productos</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="../Paginas/contacto.html">Contacto</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="../Paginas/login.html">Login</a>
+                        </li>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </nav>
+              </div>
+            </div>
+        </header>
+        <main>
             <form class="form">
                 <div class="form__container">
                     <h2 class="form__title">PONETE EN CONTACTO O DEJANOS TUS DATOS Y NOS 
@@ -47,7 +68,7 @@
 
                     </div>
             </form>
-           
+        </main>
            
            
            
@@ -111,7 +132,6 @@
                 </from>
                 <a href="">VOLVER AL MENU</a>
              </aside> -->
-        </header>
         <!-- <article>
             <section>
                 <div>
