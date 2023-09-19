@@ -1,0 +1,42 @@
+.textos-header {
+    background-image: url("../Imagenes/Fondos/wave.svg");
+    background-size: cover;
+    height: 200px;
+}
+
+.h-100vh {
+    min-height: 100vh;
+    height: 100vh !important;
+}
+
+.fondo-seccion {
+    width: 100%;
+    height: 900px;
+    background: #8360c3a6;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #2ebf919c, #8360c3a2), url(../Imagenes/Logo/portadala.jpg); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to right, #2ebf91a6, #8360c3b6), url(../Imagenes/Logo/portadala.jpg); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background-size: cover;
+    position: relative;
+
+}
+
+.banderin {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 60%, 0 100%);
+}
+
+.banderin-container {
+    height: 400px;
+
+}
+
+section {
+    margin-top: 50px;
+    margin-bottom: 100px;
+}
+
+.texto-direccion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}

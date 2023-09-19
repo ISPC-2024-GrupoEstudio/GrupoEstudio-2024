@@ -1,12 +1,19 @@
+/* Globales */
+*::after,
+*::before,
 *{
     margin: 0;
     padding: 0;
+    zoom: 0.95;
     box-sizing: border-box;
 }
 
 body{
- font-family: 'open sans';
+    font-family: 'Open sans';
+    color: #333;
+    background-color: rgb(220, 252, 242);
 }
+
 
 /* Header */
 
@@ -37,10 +44,18 @@ nav > a:hover{
     text-decoration: underline;
 }
 
+.wave{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: rgb(255, 255, 255);
+}
+
+
 .textos-header h1{
     font-weight: 550;
     font-size: 75px;
-    color: rgb(0, 0, 0);  
+    color: rgb(31, 13, 46);  
 }
 
 
@@ -70,22 +85,19 @@ header .division{
     text-align: center;
 }
 
-.wave{
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-}
-
-/* Accesorios */
+/* Titulo */
 
 .acces__titulo h2{
-    font-weight: 550;
-    font-size: 35px;
-    color: rgb(75, 50, 116);  
+    font-family:'open sans';
+    font-style: italic;
+    font-weight: bolder;
+    font-weight: 1000;
+    font-size: 40px;
+    color: #370464;  
 }
 .acces__titulo{
     display: flex;
-    height: 30px;
+    height: 100px;
     width: 100%;
     align-items: center;
     justify-content: center;
@@ -93,91 +105,104 @@ header .division{
     text-align: center;
 }
 
-.acces__producto--div{
-    font-style:italic;
-    font-size: 20px;
+.info-product h2{
+    font-family:'open sans';
+    text-decoration: underline;
+    font-weight: bold;
+    font-size: 27px;
+    color: rgb(0, 0, 0);  
+    text-align: center;
+}
+
+.acces__producto--descripcion {
+    font-family:'open sans';
+    font-style: italic;
     font-weight: 500;
-    color: rgb(29, 29, 29);  
-}
-
-
-/* Cuchas */
-
-.cuchas__titulo h2{
-    font-weight: 550;
-    font-size: 35px;
-    color: rgb(75, 50, 116);  
-}
-.cuchas__titulo{
-    display: flex;
-    height: 30px;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    text-align: center;
-}
-
-.cuchas__producto--div{
-    font-style:italic;
     font-size: 20px;
+    text-align: left;
+}
+.cuchas__producto--descripcion {
+    font-family:'open sans';
+    font-style: italic;
     font-weight: 500;
-    color: rgb(29, 29, 29);  
-}
-
-
-/* Juguetes */
-.juguetes__titulo h2{
-    font-weight: 550;
-    font-size: 35px;
-    color: rgb(75, 50, 116);  
-}
-.juguetes__titulo{
-    display: flex;
-    height: 30px;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    text-align: center;
-}
-.juguetes__producto--div{
-    font-style:italic;
     font-size: 20px;
+    text-align: left;
+}
+.juguete__producto--descripcion {
+    font-family:'open sans';
+    font-style: italic;
     font-weight: 500;
-    color: rgb(29, 29, 29);  
-}
-
-/* Ropa */
-.Ropa__titulo h2{
-    font-weight: 550;
-    font-size: 35px;
-    color: rgb(75, 50, 116);  
-}
-.Ropa__titulo{
-    display: flex;
-    height: 30px;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    text-align: center;
-}
-.ropa__producto--div{
-    font-style:italic;
     font-size: 20px;
-    font-weight: 550;
-    color: rgb(29, 29, 29);  
-    
+    text-align: left;
+}
+.ropa__producto--descripcion{
+    font-family:'open sans';
+    font-style: italic;
+    font-weight: 500;
+    font-size: 20px;
+    text-align: left;
 }
 
+.price{
+    font-family:'open sans';
+    font-weight: 550;
+    font-size: 20px;
+    text-align: center;
+    color: rgb(0, 0, 0);  
+}
 
+/* Productos */
+
+.container-items{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 50px;
+}
+
+.item{
+    border-radius: 30px;
+    background-color:rgba(160, 120, 223, 0.425);
+}
+
+.item:hover{
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.20);
+}
+
+.item img{
+    width: 100%;
+    height: 450px;
+    object-fit: contain;
+    border-radius: 15px 15px 0 0;
+    transition: all .5s;
+}
+
+.item figure{
+    overflow: hidden;
+}
+
+.item:hover img{
+    transform: scale(1.2);
+}
+
+.info-product{
+    padding: 10px 10px;
+    line-height: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.price{
+    font-size: 21px;
+    font-weight: 900;
+}
 
 
 /* footer  */
 
 footer{
-    background-color: #33f1c1a2;
+    font-family: "open sans";
+    background-color: #35d1aaa2;
     padding: 60px 0 30px 0;
     margin: auto;
     overflow: hidden;
@@ -190,6 +215,7 @@ footer{
 }
 
 .derechos-de-autor {
+    font-family: "open sans";
     display: flex;
 }
 
