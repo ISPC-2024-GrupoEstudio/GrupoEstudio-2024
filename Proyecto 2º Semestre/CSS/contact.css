@@ -18,7 +18,7 @@ body {
 /* nav  */
 
 nav{
-    text-align: right;
+    text-align: left;
     padding: 30px 50px 0 0;
     margin-bottom: 100px;
 }
@@ -38,6 +38,7 @@ nav > a:hover{
     color: #3B0086;
     background-color: #00000000;
 }
+
 
 /* form  */
 
@@ -118,6 +119,8 @@ i {
         padding: 3.5em 1em;
     }
 }
+
+
 
 
 /* footer  */
