@@ -1,9 +1,3 @@
-.textos-header {
-    background-image: url("../Imagenes/Fondos/wave.svg");
-    background-size: cover;
-    height: 200px;
-}
-
 .h-100vh {
     min-height: 100vh;
     height: 100vh !important;
@@ -12,9 +6,12 @@
 .fondo-seccion {
     width: 100%;
     height: 900px;
-    background: #8360c3a6;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #2ebf919c, #8360c3a2), url(../Imagenes/Logo/portadala.jpg); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    background: linear-gradient(to right, #2ebf91a6, #8360c3b6), url(../Imagenes/Logo/portadala.jpg); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: #8360c3a6;
+    /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #2ebf919c, #8360c3a2), url(../Imagenes/Logo/portadala.jpg);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to right, #2ebf91a6, #8360c3b6), url(../Imagenes/Logo/portadala.jpg);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     background-size: cover;
     position: relative;
 
@@ -30,7 +27,6 @@
 }
 
 section {
-    margin-top: 50px;
     margin-bottom: 100px;
 }
 
