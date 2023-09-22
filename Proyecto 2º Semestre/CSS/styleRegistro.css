@@ -1,22 +1,32 @@
 body {
-    font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     text-align: center;
     margin: 0;
+    background: #8360c3a6;
+    /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #2ebf919c, #8360c3a2), url(../Imagenes/Logo/portadala.jpg);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to right, #2ebf91a6, #8360c3b6), url(../Imagenes/Logo/portadala.jpg);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background-size: cover;
+    background-attachment: fixed;
+    height: 700px;
 }
 
 form {
     max-width: 400px;
     margin: 40px auto;
-    padding: 30px ;
+    padding: 30px;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
-    margin-bottom: 20px;
-    color: #333;
+    margin-bottom: 10px;
+    color: black;
+    font-weight: 700;
+
 }
 
 .form-group {
@@ -56,4 +66,11 @@ label {
 
 .btn-primary:hover {
     background-color: #0056b3;
+}
+
+
+h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 100px;
 }
