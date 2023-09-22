@@ -1,12 +1,23 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar Sesión</title>
-    <link rel="icon" type="image/png" sizes="32x32" href="../Imagenes/Logo/favicon-32x32.png">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-    <link rel="stylesheet" href="../CSS/stylelogin.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Diphylleia&family=Open+Sans:ital,wght@0,300;0,800;1,300;1,400&display=swap"
+    rel="stylesheet">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <link rel="stylesheet" href="../CSS/styles.css">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="../Imagenes/Logo/favicon-32x32.png">
+  <title>Pet Boutique</title>
+  <link rel="stylesheet" href="../CSS/stylelogin.css">
 </head>
 
 <body>
@@ -15,15 +26,12 @@
       <div class="col">
         <nav class="navbar bg-white navbar-expand-lg">
           <div class="container-fluid">
-
             <a class="navbar-brand" href="#">Menu</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
               aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
-
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
-
               <ul class="navbar-nav">
                 <li class="nav-item">
                   <a class="nav-link" aria-current="page" href="../Paginas/landing.html">Inicio</a>
@@ -39,73 +47,72 @@
                 </li>
                 </li>
               </ul>
-
             </div>
-
           </div>
         </nav>
       </div>
     </div>
   </header>
-      
-  <div class="container-fluid login__cuerpo" >
-    
+
+  <div class="container-fluid login__cuerpo">
+
     <div>
-        <h2>Ingresá tu e-mail de usuario</h2>
+      <h2>Ingresá tu e-mail de usuario</h2>
     </div>
     <form action="/login" method="POST">
-        <div class="form-group">
-            <label for="email">Correo Electrónico</label>
-            <input type="email" id="email" name="email" class="form-control" required>
-            <small class="error-message" id="email-error"></small>
-        </div>
-        <div class="form-group">
-            <label for="password">Contraseña</label>
-            <input type="password" id="password" name="password" class="form-control" required minlength="6" maxlength="20">
-            <small class="error-message" id="password-error"></small>
-        </div>
-        <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+      <div class="form-group">
+        <label for="email">Correo Electrónico</label>
+        <input type="email" id="email" name="email" class="form-control" required>
+        <small class="error-message" id="email-error"></small>
+      </div>
+      <div class="form-group">
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" name="password" class="form-control" required minlength="6" maxlength="20">
+        <small class="error-message" id="password-error"></small>
+      </div>
+      <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
     </form>
     <div class="registrate">
-        <h1>¿Eres nuevo?, Crea tu cuenta ahora mismo! <a href="registro.html">Registrate aqui</a></h1>
+      <h1>¿Eres nuevo?, Crea tu cuenta ahora mismo! <a href="registro.html">Registrate aqui</a></h1>
     </div>
 
-    
+
 
     <script>
-        document.querySelector('form').addEventListener('submit', function(event) {
-            let email = document.getElementById('email').value;
-            let password = document.getElementById('password').value;
-            let emailError = document.getElementById('email-error');
-            let passwordError = document.getElementById('password-error');
-            let valid = true;
+      document.querySelector('form').addEventListener('submit', function (event) {
+        let email = document.getElementById('email').value;
+        let password = document.getElementById('password').value;
+        let emailError = document.getElementById('email-error');
+        let passwordError = document.getElementById('password-error');
+        let valid = true;
 
-            // Validación de correo electrónico
-            if (!/^\S+@\S+\.\S+$/.test(email)) {
-                emailError.textContent = 'Por favor, ingrese un correo electrónico válido.';
-                valid = false;
-            } else {
-                emailError.textContent = '';
-            }
+        // Validación de correo electrónico
+        if (!/^\S+@\S+\.\S+$/.test(email)) {
+          emailError.textContent = 'Por favor, ingrese un correo electrónico válido.';
+          valid = false;
+        } else {
+          emailError.textContent = '';
+        }
 
-            // Validación de contraseña
-            if (password.length < 6 || password.length > 20) {
-                passwordError.textContent = 'La contraseña debe tener entre 6 y 20 caracteres.';
-                valid = false;
-            } else {
-                passwordError.textContent = '';
-            }
+        // Validación de contraseña
+        if (password.length < 6 || password.length > 20) {
+          passwordError.textContent = 'La contraseña debe tener entre 6 y 20 caracteres.';
+          valid = false;
+        } else {
+          passwordError.textContent = '';
+        }
 
-            if (!valid) {
-                event.preventDefault(); // Evitar el envío del formulario si hay errores
-            }
-        });
+        if (!valid) {
+          event.preventDefault(); // Evitar el envío del formulario si hay errores
+        }
+      });
     </script>
   </div>
   <footer class="text-center border-top pt-2">
     <p>&copy; 2023 Pet Boutique. Todos los derechos reservados.</p>
   </footer>
 </body>
+
 </html>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
   integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>

@@ -1,12 +1,14 @@
 body {
-    font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     text-align: center;
     margin: 0;
-    background: #8360c3a6;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #2ebf919c, #8360c3a2), url(../Imagenes/Logo/portadala.jpg); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    background: linear-gradient(to right, #2ebf91a6, #8360c3b6), url(../Imagenes/Logo/portadala.jpg); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    background-size:cover;
+    background: #8360c3a6;
+    /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #2ebf919c, #8360c3a2), url(../Imagenes/Logo/portadala.jpg);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to right, #2ebf91a6, #8360c3b6), url(../Imagenes/Logo/portadala.jpg);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background-size: cover;
     box-sizing: border-box;
     background-attachment: fixed;
 }
@@ -15,7 +17,7 @@ body {
 form {
     max-width: 25rem;
     margin: 2.5rem auto;
-    padding: 1.875rem ;
+    padding: 1.875rem;
     background-color: #fff;
     border-radius: 0.5rem;
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
@@ -24,7 +26,7 @@ form {
 
 h2 {
     margin-bottom: 0.625rem;
-    color:black;
+    color: black;
     font-weight: 900;
 }
 
@@ -36,7 +38,7 @@ h2 {
 label {
     font-weight: bold;
     color: #333;
-    
+
 }
 
 .form-control {
@@ -46,7 +48,7 @@ label {
     font-size: 1rem;
     border: 1px solid #ccc;
     border-radius: 0.25rem;
-    
+
 }
 
 .error-message {
@@ -75,16 +77,14 @@ h1 {
     margin-top: 5rem;
 }
 
-.login__cuerpo{
-  margin:  3rem 0 1.5rem 0;
+.login__cuerpo {
+    margin: 3rem 0 1.5rem 0;
 }
 
-footer{
+footer {
     background-color: white;
     padding: 0.625rem;
     margin-top: 5rem;
     overflow: hidden;
     text-align: center;
 }
-
-
