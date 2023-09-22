@@ -1,6 +1,7 @@
+import Controladores.ControladorUsuario
 class PantallaLogin():
     def __init__(self, controlador):
-        self.controlador = controladorUsuario()
+        self.controlador = Controladores.ControladorUsuario()
 
-    def login():
-        pass
+    def login(self,nombreUsuario, contraseña):
+        self.controlador.getUsuario(nombreUsuario, contraseña)
