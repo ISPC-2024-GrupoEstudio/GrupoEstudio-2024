@@ -1,0 +1,108 @@
+body {
+    background-color: #f4f4f4;
+    text-align: center;
+    margin: 0;
+    background: #8360c3a6;
+    /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #2ebf919c, #8360c3a2), url(../Imagenes/Logo/portadala.jpg);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to right, #2ebf91a6, #8360c3b6), url(../Imagenes/Logo/portadala.jpg);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background-size: cover;
+    background-attachment: fixed;
+    height: 700px;
+}
+
+form {
+    max-width: 25rem;
+    margin: auto;
+    padding: 1.875rem;
+    background-color: #fff;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.75rem 0.5rem rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+h1 {
+    margin-bottom: 0.625rem;
+    color: black;
+    font-weight: 600;
+}
+
+.form-group {
+    margin-bottom: 0.5rem;
+    text-align: left;
+}
+
+label {
+    font-weight: bold;
+    color: #333;
+}
+
+.form-control {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.625rem;
+    font-size: 1rem;
+    border: 0.0625rem solid #ccc;
+    border-radius: 0.25rem;
+}
+
+.error-message {
+    color: red;
+    font-size: 0.875rem;
+    margin-top: 0.3125rem;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    padding: 0.625rem 1.25rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+
+h2 {
+    font-weight: 600;
+    margin-top: 3.5rem;
+}
+
+footer {
+    background-color: white;
+    padding: 0.625rem;
+    margin-top: 5rem;
+    overflow: hidden;
+    text-align: center;
+}
+
+footer a {
+    text-decoration: none;
+    color: black;
+}
+
+@media screen and (max-width: 768px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    p {
+        font-size: 1rem;
+    }
+
+    .col-md-6 {
+        width: 80%;
+        margin: auto;
+    }
+
+    .button {
+        font-size: 1rem;
+        padding: 0.5rem 1.25rem;
+    }
+}
