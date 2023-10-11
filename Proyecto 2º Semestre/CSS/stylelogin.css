@@ -84,7 +84,7 @@ h1 {
 footer {
     background-color: white;
     padding: 0.625rem;
-    margin-top: 5rem;
+    margin-top: auto;
     overflow: hidden;
     text-align: center;
 }
