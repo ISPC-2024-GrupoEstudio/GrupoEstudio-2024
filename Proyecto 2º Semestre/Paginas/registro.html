@@ -55,7 +55,7 @@
   <main>
     <h1>Registro de Usuario</h1>
 
-    <form action="/procesar_registro" method="post" class="form">
+    <form action="/registro" method="post" class="form">
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
@@ -80,24 +80,30 @@
 
           <div class="form-group">
             <label for="username">Nombre de Usuario:</label>
-            <input type="text" id="username" name="username" class="form-control" required>
+            <input type="text" id="username" name="username" class="form-control" required minlength="4" maxlength="20">
           </div>
         </div>
 
         <div class="col-md-6">
           <div class="form-group">
-            <label for="TipoDocumento">Tipo de documento:</label>
-            <input type="text" id="TipoDocumento" name="TipoDocumento" class="form-control" required>
+            <label for="tipo-dni">Tipo de DNI:</label>
+            <select id="tipo-dni" name="tipo-dni" class="form-control" required>
+              <option value="">Seleccione un tipo de DNI</option>
+              <option value="DNI">DNI</option>
+              <option value="CUIL/CUIT">CUIL/CUIT</option>
+            </select>
           </div>
 
           <div class="form-group">
             <label for="contrasena">Contraseña:</label>
-            <input type="password" id="contrasena" name="contrasena" class="form-control" required>
+            <input type="password" id="contrasena" name="contrasena" class="form-control" required minlength="6" maxlength="20">
+            <small class="error-message" id="password-error"></small>
           </div>
 
           <div class="form-group">
             <label for="confirmar_contrasena">Confirmar Contraseña:</label>
             <input type="password" id="confirmar_contrasena" name="confirmar_contrasena" class="form-control" required>
+            <small class="error-message" id="confirmar_contrasena-error"></small>
           </div>
 
           <input type="submit" value="Registrar" class="btn btn-primary">
@@ -105,6 +111,45 @@
     </form>
 
     <h2>¿Ya tienes una cuenta? <a href="login.html">Inicia sesión aquí</a></h2>
+
+    <script>
+        document.querySelector('form').addEventListener('submit', function (event) {
+      let password = document.getElementById('contrasena').value;
+      let confirmPassword = document.getElementById('confirmar_contrasena').value;
+      let passwordError = document.getElementById('password-error');
+      let confirmPasswordError = document.getElementById('confirmar_contrasena-error');
+      let valid = true;
+
+      // Restablece los mensajes de error al inicio de cada envío del formulario.
+      passwordError.textContent = '';
+      confirmPasswordError.textContent = '';
+
+      if (password === '') {
+          passwordError.textContent = 'El campo de contraseña es obligatorio.';
+          valid = false;
+      } else if (password.length < 6 || password.length > 20) {
+          passwordError.textContent = 'La contraseña debe tener entre 6 y 20 caracteres.';
+          valid = false;
+      }
+
+      if (confirmPassword === '') {
+          confirmPasswordError.textContent = 'El campo de confirmar contraseña es obligatorio.';
+          valid = false;
+      } else if (password !== confirmPassword) {
+          confirmPasswordError.textContent = 'Las contraseñas no coinciden.';
+          valid = false;
+      }
+
+      if (valid) {
+        // Si la validación es correcta, muestra un mensaje y redirige al usuario.
+        alert("¡Registro exitoso!");
+        window.location.href = "login.html"; // Cambia "login.html" por la URL de la página de inicio de sesión.
+
+        event.preventDefault(); // Evita que el formulario se envíe automáticamente.
+      }
+      });
+      </script>
+
   </main>
 
   <footer class="text-center border-top pt-2">
