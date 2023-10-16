@@ -36,9 +36,9 @@ class MySQLConnection:
 connection = MySQLConnection(
     host='localhost',
     user='root', 
-    password='9111',
+    password='admin',
     port='3306',
-    database='bdnormativas'
+    database='pet boutique'
 )
 # Establecer la conexión
 connection.connect()

@@ -9,8 +9,6 @@ class Usuario:
         self.nombreUsuario = nombreUsuario
         self.contraseña = contraseña
         self.telefono = telefono
-        self.fechaAlta = fechaAlta
-        self.fechaBaja = fechaBaja
         self.estado = estado
 
 
@@ -61,18 +59,6 @@ class Usuario:
     
     def setTelefono(self, telefono):
         self.telefono = telefono
-
-    def getFechaAlta(self):
-        return self.fechaAlta
-    
-    def setFechaAlta(self, fechaAlta):
-        self.fechaAlta = fechaAlta
-
-    def getFechaBaja(self):
-        return self.fechaBaja
-    
-    def setFechaBaja(self, fechaBaja):
-        self.fechaBaja = fechaBaja
 
     def getEstado(self):
         return self.estado

@@ -1,8 +1,10 @@
 class Proveedor():
-    def __init__(self, id, nombre, descripcion):
+    def __init__(self, id, nombre, direccion, telefono, mail):
         self.id = id
         self.nombre = nombre
-        self.descripcion = descripcion
+        self.direccion = direccion
+        self.telefono = telefono
+        self.mail = mail
     
     def getId(self):
         return self.id
@@ -16,8 +18,20 @@ class Proveedor():
     def setNombre(self, nombre):
         self.nombre = nombre
     
-    def getDescripcion(self):
-        return self.descripcion
+    def getDireccion(self):
+        return self.direccion
     
-    def setDescripcion(self, descripcion):
-        self.descripcion = descripcion
+    def setDireccion(self, direccion):
+        self.direccion = direccion
+
+    def getTelefono(self):
+        return self.telefono
+    
+    def setTelefono(self, telefono):
+        self.telefono = telefono
+    
+    def getMail(self):
+        return self.mail
+    
+    def setMail(self, mail):
+        self.mail = mail
