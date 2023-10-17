@@ -101,17 +101,11 @@
           passwordError.textContent = '';
         }
 
-        if (!valid) {
-          event.preventDefault();
-          if (!/^\S+@\S+\.\S+$/.test(email)) {
-          alert('Por favor, ingrese un correo electrónico válido.,Ejemplo "correo@electronico.com"');
-         }
-        if (password.length < 6 || password.length > 20) {
-          alert('La contraseña debe tener entre 6 y 20 caracteres. Ejemplo "contraseña" o "123456".');
-         } //   no enviar formulario
-        } else {
+        if (valid) {
           alert("Iniciando sesión exitosamente");
-          window.location.href = "landing.html";  //redirigir a landing
+          window.location.href ="landing.html";  //redirigir a landing
+
+          event.preventDefault(); // no envia formulario
         }
       });
     </script>
