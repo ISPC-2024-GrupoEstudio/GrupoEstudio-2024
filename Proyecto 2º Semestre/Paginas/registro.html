@@ -55,7 +55,7 @@
   <main>
     <h1>Registro de Usuario</h1>
 
-    <form action="/registro" method="post" class="form">
+    <form action="/registro" method="post" class="form" onsubmit="registrar(event)">
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
@@ -113,41 +113,42 @@
     <h2>¿Ya tienes una cuenta? <a href="login.html">Inicia sesión aquí</a></h2>
 
     <script>
-        document.querySelector('form').addEventListener('submit', function (event) {
-      let password = document.getElementById('contrasena').value;
-      let confirmPassword = document.getElementById('confirmar_contrasena').value;
-      let passwordError = document.getElementById('password-error');
-      let confirmPasswordError = document.getElementById('confirmar_contrasena-error');
-      let valid = true;
+      function registrar(event) {
+        event.preventDefault(); // Evita que el formulario se envíe automáticamente si hay errores.
 
-      // Restablece los mensajes de error al inicio de cada envío del formulario.
-      passwordError.textContent = '';
-      confirmPasswordError.textContent = '';
+        let password = document.getElementById('contrasena').value;
+        let confirmPassword = document.getElementById('confirmar_contrasena').value;
+        let passwordError = document.getElementById('password-error');
+        let confirmPasswordError = document.getElementById('confirmar_contrasena-error');
+        let valid = true;
 
-      if (password === '') {
+        // Restablece los mensajes de error al inicio de cada envío del formulario.
+        passwordError.textContent = '';
+        confirmPasswordError.textContent = '';
+
+        if (password === '') {
           passwordError.textContent = 'El campo de contraseña es obligatorio.';
           valid = false;
-      } else if (password.length < 6 || password.length > 20) {
+        } else if (password.length < 6 || password.length > 20) {
           passwordError.textContent = 'La contraseña debe tener entre 6 y 20 caracteres.';
           valid = false;
-      }
+        }
 
-      if (confirmPassword === '') {
+        if (confirmPassword === '') {
           confirmPasswordError.textContent = 'El campo de confirmar contraseña es obligatorio.';
           valid = false;
-      } else if (password !== confirmPassword) {
+        } else if (password !== confirmPassword) {
           confirmPasswordError.textContent = 'Las contraseñas no coinciden.';
           valid = false;
-      }
+        }
 
-      if (valid) {
-        // Si la validación es correcta, muestra un mensaje y redirige al usuario.
-        alert("¡Registro exitoso!");
-        window.location.href = "login.html"; // Cambia "login.html" por la URL de la página de inicio de sesión.
-
-        event.preventDefault(); // Evita que el formulario se envíe automáticamente.
+        if (!valid) {
+        } else {
+          // Si la validación es correcta, muestra un mensaje y redirige al usuario.
+          alert("¡Registro exitoso!");
+          window.location.href = "login.html"; // Cambia "login.html" por la URL de la página de inicio de sesión.
+        }
       }
-      });
       </script>
 
   </main>
