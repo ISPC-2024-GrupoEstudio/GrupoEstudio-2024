@@ -52,70 +52,57 @@
       </div>
     </div>
   </header>
-  <main>
-    <h1>Registro de Usuario</h1>
-
-    <form action="/registro" method="post" class="form" onsubmit="registrar(event)">
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" name="nombre" class="form-control" required>
+  <div class="container">
+    <div class="title">Registro de usuario</div>
+    <div class="content">
+      <form action="/procesar_registro" method="post">
+        <div class="user-details">
+          <div class="input-box">
+            <label for="nombre" class="details">Nombre</label>
+            <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
           </div>
-
-          <div class="form-group">
-            <label for="apellido">Apellido:</label>
-            <input type="text" id="apellido" name="apellido" class="form-control" required>
+          <div class="input-box">
+            <label for="apellido" class="details">Apellido</label>
+            <input type="text" id="apellido" name="apellido" placeholder="Tu apellido" required>
           </div>
-
-          <div class="form-group">
-            <label for="email">Correo Electrónico:</label>
-            <input type="email" id="email" name="email" class="form-control" required>
+          <div class="input-box">
+            <label for="username" class="details">Nombre de usuario</label>
+            <input type="text" id="username" name="username" placeholder="Tu usuario" required>
           </div>
-
-          <div class="form-group">
-            <label for="dni">Número de DNI:</label>
-            <input type="number" id="dni" name="dni" class="form-control" required>
+          <div class="input-box">
+            <label for="dni" class="details">Número de DNI</label>
+            <input type="number" id="dni" placeholder="ingrese su dni" required>
           </div>
-
-          <div class="form-group">
-            <label for="username">Nombre de Usuario:</label>
-            <input type="text" id="username" name="username" class="form-control" required minlength="4" maxlength="20">
+          <div class="input-box">
+            <label for="TipoDocumento" class="details">Tipo de documento</label>
+            <input type="text" id="TipoDocumento" name="TipoDocumento" placeholder="Su tipo de documento" required>
+          </div>
+          <div class="input-box">
+            <label for="email" class="details">Email</label>
+            <input type="email" id="email" name="email" placeholder="Su email" required>
+          </div>
+          <div class="input-box">
+            <label for="contraseña" class="details">Contraseña</label>
+            <input type="password" id="contraseña" name="contraseña" placeholder="Cree su contraseña" required>
+          </div>
+          <div class="input-box">
+            <label for="confirmar_contraseña" class="details">Confirmar contraseña</label>
+            <input type="password" id="confirmar_contraseña" name="confirmar_contraseña" placeholder="Repita su contraseña" required>
           </div>
         </div>
-
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="tipo-dni">Tipo de DNI:</label>
-            <select id="tipo-dni" name="tipo-dni" class="form-control" required>
-              <option value="">Seleccione un tipo de DNI</option>
-              <option value="DNI">DNI</option>
-              <option value="CUIL/CUIT">CUIL/CUIT</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="contrasena">Contraseña:</label>
-            <input type="password" id="contrasena" name="contrasena" class="form-control" required minlength="6" maxlength="20">
-            <small class="error-message" id="password-error"></small>
-          </div>
-
-          <div class="form-group">
-            <label for="confirmar_contrasena">Confirmar Contraseña:</label>
-            <input type="password" id="confirmar_contrasena" name="confirmar_contrasena" class="form-control" required>
-            <small class="error-message" id="confirmar_contrasena-error"></small>
-          </div>
-
-          <input type="submit" value="Registrar" class="btn btn-primary">
+        
+        <div class="button">
+          <input type="submit" value="Crear cuenta">
         </div>
-    </form>
-
-    <h2>¿Ya tienes una cuenta? <a href="login.html">Inicia sesión aquí</a></h2>
-
+      </form>
+      <h2>¿Ya tienes una cuenta? <a href="login.html">Inicia sesión aquí!</a></h2>
+    </div>
+    
+    
     <script>
       function registrar(event) {
         event.preventDefault(); // Evita que el formulario se envíe automáticamente si hay errores.
-
+        
         let password = document.getElementById('contrasena').value;
         let confirmPassword = document.getElementById('confirmar_contrasena').value;
         let passwordError = document.getElementById('password-error');
@@ -141,7 +128,7 @@
           confirmPasswordError.textContent = 'Las contraseñas no coinciden.';
           valid = false;
         }
-
+        
         if (!valid) {
         } else {
           // Si la validación es correcta, muestra un mensaje y redirige al usuario.
@@ -149,9 +136,9 @@
           window.location.href = "login.html"; // Cambia "login.html" por la URL de la página de inicio de sesión.
         }
       }
-      </script>
-
-  </main>
+    </script>
+    
+  </div>
 
   <footer class="text-center border-top pt-2">
     <p>&copy; 2023 Pet Boutique. Todos los derechos reservados.</p>
