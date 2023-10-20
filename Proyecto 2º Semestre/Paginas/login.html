@@ -101,7 +101,8 @@
           passwordError.textContent = '';
         }
 
-        if (valid) {
+        if (!valid) {
+        } else {
           alert("Iniciando sesión exitosamente");
           window.location.href ="landing.html";  //redirigir a landing
 
