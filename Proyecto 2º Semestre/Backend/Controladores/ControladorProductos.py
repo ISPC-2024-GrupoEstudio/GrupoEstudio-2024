@@ -27,3 +27,12 @@ class ControladorProductos():
             producto = Producto(i[0],i[1],i[2],i[3],i[4],i[6],i[5],i[7])
             productos.append(producto)
         return productos
+    
+
+    def crear_producto(self, producto):
+            connection.connect()
+            cursor = connection.cursor()
+            consulta = "INSERT INTO productos (nombre, descripcion, precio, stock_actual, proveedor, stock_min, categoria) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+            valores = (producto.getNombre(), producto.getDescripcion(), producto.getPrecio(), producto.getCantidadStockActual(), producto.getProveedor(), producto.getCantidadStockMin(), producto.getCategoria())
+            cursor.execute(consulta, valores)
+            connection.commit()
