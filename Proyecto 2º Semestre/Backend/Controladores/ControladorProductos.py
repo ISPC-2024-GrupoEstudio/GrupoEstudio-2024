@@ -36,3 +36,4 @@ class ControladorProductos():
             valores = (producto.getNombre(), producto.getDescripcion(), producto.getPrecio(), producto.getCantidadStockActual(), producto.getProveedor(), producto.getCantidadStockMin(), producto.getCategoria())
             cursor.execute(consulta, valores)
             connection.commit()
+        
