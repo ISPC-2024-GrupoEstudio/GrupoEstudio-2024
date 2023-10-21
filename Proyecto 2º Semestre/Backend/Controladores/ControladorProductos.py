@@ -1,4 +1,5 @@
 from Entidades.Producto import Producto
+from Entidades.Proveedor import Proveedor
 from Utils.Conector import connection
 class ControladorProductos():
 
@@ -28,29 +29,49 @@ class ControladorProductos():
             productos.append(producto)
         return productos
     
+    def listar_productos(_self_):
+        connection.connect()
+        cursor=connection.cursor()
 
-   consulta = "SELECT * FROM productos"
-   cursor = conexion.cursor()
+        consulta = """Select
+                        prod.IdProducto, 
+                        prod.nombre, 
+                        prod.descripcion, 
+                        prod.precio, 
+                        prod.stock_actual, 
+                        prov.nombre, 
+                        prod.stock_min, 
+                        cat.nombre
+                    from Productos prod 
+	                    inner join categoriaproductos cat on prod.categoria = cat.idCategoriaProducto
+                        inner join proveedores prov on prod.proveedor = prov.idProveedores""" 
+        
+        cursor.execute(consulta)
 
-   cursor.execute(consulta)
 
-   resultados = cursor.fetchall()
+        query = cursor.fetchall()
 
-for fila in resultados:
-    idProductos, nombre, descripcion, pedido, stock_actual, proveedor, stock_min, categoria = fila
-    print(f"ID de Producto: {idProductos}")
-    print(f"Nombre: {nombre}")
-    print(f"Descripción: {descripcion}")
-    print(f"Pedido: {pedido}")
-    print(f"Stock Actual: {stock_actual}")
-    print(f"Proveedor: {proveedor}")
-    print(f"Stock Mínimo: {stock_min}")
-    print(f"Categoría: {categoria}")
-    print("\n")
+        productos = []
+        for fila in query:
 
-cursor.close()
-conexion.close()
+            # obtengo cada valor de la fila de la consula 
+            idProducto = fila[0]
+            nombre = fila[1]
+            descripcion =fila[2]
+            precio =fila[3]
+            stock_actual =fila[4]
+            proveedor =fila[5]
+            stock_min =fila[6]
+            categoria =fila[7]
 
+            # creamos el objeto producto
+            producto = Producto(idProducto, nombre, descripcion, precio, stock_actual, stock_min, proveedor, categoria)
+            productos.append(producto)
+
+        for p in productos:
+            print(f"idProducto: {p.getId()}, nombre: {p.getNombre()}, descripcion: {p.getDescripcion()}, precio: {p.getPrecio()}, stock_actual: {p.getCantidadStockActual()}, proveedor: {p.getProveedor()}, stock_min: {p.getCantidadStockMin()}, categoria: {p.getCategoria()}")
+        cursor.close()
+    
 
     def crear_producto(self, producto):
             connection.connect()
@@ -59,5 +80,7 @@ conexion.close()
             valores = (producto.getNombre(), producto.getDescripcion(), producto.getPrecio(), producto.getCantidadStockActual(), producto.getProveedor(), producto.getCantidadStockMin(), producto.getCategoria())
             cursor.execute(consulta, valores)
             connection.commit()
+
+ 
         
 
