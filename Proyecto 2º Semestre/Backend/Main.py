@@ -1,5 +1,5 @@
 
-#Este espacio del Back es para hacer las pruebas (ej. CRUD)
+# Este espacio del Back es para hacer las pruebas (ej. CRUD)
 
 # 1- Creo el controlador de producto
 from Controladores.ControladorProductos import ControladorProductos
@@ -17,5 +17,6 @@ controlador_producto = ControladorProductos()
 
 # 4- Pruebo el caso de uso Listar Producto
 
-#controlador_producto.listar_productos()
+# controlador_producto.listar_productos()
 
+controlador_producto.eliminar_producto(4)
