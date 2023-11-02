@@ -552,7 +552,15 @@ form .button input:hover{
 }
 
 @media (min-height: 1050px){
-    .footer__contacto, .footer__registro{
+    .footer__contacto {
+        position: fixed;
+        bottom: 0;
+        width: 100%; 
+    }
+}
+
+@media (min-height: 820px){
+    .footer__registro{
         position: fixed;
         bottom: 0;
         width: 100%; 
