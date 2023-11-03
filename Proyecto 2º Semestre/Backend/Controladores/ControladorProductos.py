@@ -5,12 +5,12 @@ from Utils.Conector import connection
 
 class ControladorProductos():
 
-    def filtrarPorCategoria(self, categoria):
-        prodXCategoria = []
-        for p in self.productos:
-            if p.categoria == categoria:
-                prodXCategoria.append(p)
-        return prodXCategoria
+    # def filtrarPorCategoria(self, categoria):
+    #     prodXCategoria = []
+    #     for p in self.productos:
+    #         if p.categoria == categoria:
+    #             prodXCategoria.append(p)
+    #     return prodXCategoria
 
     def modificar_producto(_self_, producto):
         connection.connect()
@@ -92,3 +92,11 @@ class ControladorProductos():
         cursor.execute(consulta, valores)
         connection.commit()
         cursor.close()
+
+    def obtener_producto(_self_, id):
+        connection.connect()
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM productos WHERE idProducto = %s", (id,))
+        query = cursor.fetchone()
+        producto = Producto(query[0], query[1], query[2], query[3], query[4], query[6], query[5], query[7])
+        return producto
