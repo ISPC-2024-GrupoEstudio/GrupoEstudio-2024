@@ -541,6 +541,31 @@ form .button input:hover{
     margin-top: 5rem;
 }
 
+.footer__login{
+    position: fixed;
+    bottom: 0;
+    width: 100%; 
+}
+
+.footer__contacto, .footer__registro{
+    position: sticky;
+}
+
+@media (min-height: 1050px){
+    .footer__contacto {
+        position: fixed;
+        bottom: 0;
+        width: 100%; 
+    }
+}
+
+@media (min-height: 820px){
+    .footer__registro{
+        position: fixed;
+        bottom: 0;
+        width: 100%; 
+    }
+}
 /* ---------------------------------------*/
 
 
@@ -579,4 +604,5 @@ section {
 .section__landing{
     max-width: 80%;
 }
-/*Validado por w3c/
+/*Validado por w3c*/
+
