@@ -54,5 +54,4 @@ Este proyecto es puramente académico y no se destina a su uso en producción ni
 
 ## Ingresar a la página:
 
-En el siguiente link se puede abrir la pagina web del pet bobutique:
-https://iscp-2023-equipo-estudio.github.io/Grupo_TSDWAD_2do_Semestre/Proyecto%202%C2%BA%20Semestre/Paginas/index.html
+En el siguiente link se puede abrir la pagina web del pet bobutique: [link a la pagina](https://iscp-2023-equipo-estudio.github.io/Grupo_TSDWAD_2do_Semestre/Proyecto%202%C2%BA%20Semestre/Paginas/index.html)
