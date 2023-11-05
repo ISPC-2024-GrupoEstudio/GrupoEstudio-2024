@@ -51,3 +51,8 @@ Agradecemos a nuestros profesores y compañeros de clase por su apoyo y orientac
 Este proyecto es puramente académico y no se destina a su uso en producción ni a la venta de productos reales para mascotas.
 
 **Tecnicatura en Desarrollo web y Aplicaciones digitales** &copy; 2023. Todos los derechos reservados.
+
+## Ingresar a la página:
+
+En el siguiente link se puede abrir la pagina web del pet bobutique:
+https://iscp-2023-equipo-estudio.github.io/Grupo_TSDWAD_2do_Semestre/Proyecto%202%C2%BA%20Semestre/Paginas/index.html
