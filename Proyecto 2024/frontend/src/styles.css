@@ -2,8 +2,8 @@
 body, .header__galeria, .fondo-seccion{
     width: 100%;
     background: #8360c3a6;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #2ebf919c, #8360c3a2), url(../Imagenes/Logo/portadala.jpg); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    background: linear-gradient(to right, #2ebf91a6, #8360c3b6), url(../Imagenes/Logo/portadala.jpg); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: -webkit-linear-gradient(to right, #2ebf919c, #8360c3a2), url(assets/imagenes/portadala.jpg); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to right, #2ebf91a6, #8360c3b6), url(assets/imagenes/portadala.jpg); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     background-size: cover;
     position: relative; 
 }
