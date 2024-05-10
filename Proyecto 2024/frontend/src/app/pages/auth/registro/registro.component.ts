@@ -71,21 +71,6 @@ get Lastname(){
   return this.form.get("confirm_password")
  }
 
- validarNumeros(event: KeyboardEvent) {
-  const pattern = /^[0-9]*$/;
-  const inputChar = String.fromCharCode(event.charCode);
-  if (!pattern.test(inputChar)) {
-      event.preventDefault();
-  }
-}
 
-onPaste(event: ClipboardEvent) {
-  const clipboardData = event.clipboardData;
-  const pastedText = clipboardData?.getData('text');
-  const pattern = /^[0-9]*$/;
-  if (!pattern.test(pastedText || '')) {
-      event.preventDefault();
-  }
-}
 
 }

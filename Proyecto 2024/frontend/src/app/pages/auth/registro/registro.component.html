@@ -39,10 +39,7 @@
             </div>
             <div class="input-box">
               <label class="label__registro" for="dni">Número de DNI:</label>
-              <input class="input__registro" type="text" id="dni" name="dni" class="form-control" formControlName="dni"
-              (keypress)="validarNumeros($event)" 
-              (paste)="onPaste($event)"
-              inputmode="numeric">
+              <input class="input__registro" type="number" id="dni" name="dni" class="form-control" formControlName="dni">
             
               @if (Dni?.errors && Dni?.touched) {
                 @if (Dni?.hasError("required")) 
