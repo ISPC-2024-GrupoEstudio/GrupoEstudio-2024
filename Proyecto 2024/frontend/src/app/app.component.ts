@@ -4,11 +4,12 @@ import { NavComponent } from './shared/nav/nav.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { DashboardComponent} from './pages/dashboard/dashboard.component';
 import { RegistroComponent } from './pages/auth/registro/registro.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavComponent, FooterComponent, DashboardComponent, RegistroComponent],
+  imports: [RouterOutlet, NavComponent, FooterComponent, DashboardComponent, RegistroComponent, CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
