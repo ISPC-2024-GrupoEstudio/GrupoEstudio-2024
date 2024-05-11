@@ -378,8 +378,8 @@ i {
 /* Estilos registro */
 
 .body__registro{
-    text-align: center;
-    margin: 0;
+    text-align: initial;
+    margin: 20px auto;
     background-attachment: fixed;
     height: 700px;
 }
