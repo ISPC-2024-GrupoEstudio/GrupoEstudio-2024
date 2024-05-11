@@ -4,6 +4,6 @@ import { RegistroComponent } from './pages/auth/registro/registro.component';
 import { Component } from '@angular/core';
 
 export const routes: Routes = [
-    {path: "home", component: HomeComponent},
+    {path: "", component: HomeComponent},
     {path: "registro", component:RegistroComponent},
 ];
