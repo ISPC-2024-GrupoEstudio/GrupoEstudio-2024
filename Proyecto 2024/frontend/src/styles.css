@@ -604,7 +604,8 @@ section {
 }
 
 .section__landing{
-    max-width: 80%;
+    max-width: 100%;
+    background-color: white;
 }
 /*Validado por w3c*/
 
