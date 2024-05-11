@@ -6,11 +6,13 @@ import { DashboardComponent} from './pages/dashboard/dashboard.component';
 import { HomeComponent } from './pages/home/home.component';
 import { RegistroComponent } from './pages/auth/registro/registro.component';
 import { CommonModule } from '@angular/common';
+import { ProductosComponent } from './pages/productos/productos.component';
+
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavComponent, FooterComponent, DashboardComponent, RegistroComponent, CommonModule,HomeComponent,RouterModule],
+  imports: [RouterOutlet, NavComponent, FooterComponent, DashboardComponent, RegistroComponent, CommonModule,HomeComponent,RouterModule, ProductosComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
