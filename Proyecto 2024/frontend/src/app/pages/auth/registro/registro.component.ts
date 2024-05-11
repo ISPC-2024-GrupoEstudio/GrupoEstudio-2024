@@ -17,7 +17,7 @@ export class RegistroComponent {
       names: ["", Validators.required],
       lastName: ["", Validators.required],
       tipodni: ["", Validators.required],
-      dni: ["",Validators.required, Validators.pattern("^[0-9]*$")],
+      dni: ["",[Validators.required, Validators.pattern("^[0-9]*$")]],
       username: ["",[Validators.required,Validators.minLength(5), Validators.maxLength(20) ]],
       email: ["",[Validators.required, Validators.email]],
       password:["",[Validators.required,Validators.minLength(6)]],
