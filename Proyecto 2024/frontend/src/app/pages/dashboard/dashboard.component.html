@@ -1,1 +1,96 @@
-<p>dashboard works!</p>
+<!DOCTYPE html>
+
+<html leng="es">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://fonts.googleapis.com/css2?family=Diphylleia&family=Open+Sans:ital,wght@0,300;0,800;1,300;1,400&display=swap" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <title>Dashboard</title>
+    </head>
+
+    <body>
+        
+            <h1 class="texto-historial">Historial de Compras</h1>
+            <table class="table tabla-historial" >
+
+                <thead>
+                  <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Codigo de Compra</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Estado</th>
+                  </tr>
+                </thead>
+                <tbody >
+                  <tr>
+                    <th scope="row">1</th>
+                    <td> <a class="ver-todo" onclick="mostrarEstadoEnvio()">#0001</a></td>
+                    <td>18/01/2024</td>
+                    <td>Enviado</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">2</th>
+                    <td><a href="#" class="ver-todo">#0002</a></td>
+                    <td>23/02/2024</td>
+                    <td>Enviado</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">3</th>
+                    <td> <a href="#" class="ver-todo">#0003</a></td>
+                    <td>10/03/2024</td>
+                    <td>Enviado</td>
+        
+                  </tr>
+                  <tr>
+                    <th scope="row">3</th>
+                    <td> <a href="#" class="ver-todo">#0004</a></td>
+                    <td>01/04/2024</td>
+                    <td>Enviado</td>
+                
+                </tbody>
+            </table>
+            
+            <section class="seccion-cupon">
+                <div class="cupon-container pulse">
+                    <div class="texto-cupon">
+                        <h2 class="texto-cupon-primero">Tenemos un cupón de descuento para tu próxima compra !!</h2>
+                        <h1 class="texto-off">30% off</h1>
+                    </div>
+                    <div class="div-deco-cupon">
+                        <img src="../../../assets/imagenes/huella.png" alt="huella" class="huella">
+                        <h2 class="codigo-cupon">PERROS30</h2>
+                    </div>
+                </div>
+            </section>
+
+            <section class="seccion-carrusel">
+
+                <h2 class="titulo-recomendacion">Recomendaciónes para vos:</h2>
+    
+                <div class="carousel-container">
+                    <div class="carousel-slide">
+                        <div class="carrusel-recomendacion">
+                            <img class="swing" src="../../../assets/imagenes/Accesorios/Collar-Gato.png" alt="Recomendacion 1">
+                            <p>Collar para gato</p>
+                        </div>
+    
+                        <div class="carrusel-recomendacion">
+                            <img class="swing" src="../../../assets/imagenes/Cuchas/Calabaza.png" alt="Recomendacion 2">
+                            <p>Cucha tipo calabaza</p>
+                        </div>
+    
+                        <div class="carrusel-recomendacion">
+                            <img class="swing" src="../../../assets/imagenes/Juguetes/Huesos.png" alt="Recomendacion 3">
+                            <p>Huesos para morder</p>
+                        </div>
+    
+                    </div>
+                </div>
+            </section>
+
+            //ESTADO Envios
+            
+
+    </body>
+</html>
