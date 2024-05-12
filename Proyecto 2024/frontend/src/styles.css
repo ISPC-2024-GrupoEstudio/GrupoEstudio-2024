@@ -564,9 +564,8 @@ form .button input:hover{
 }
 
 .subtitulos__login{
-    margin-bottom: 0.625rem;
+    margin-bottom: 1.625rem;
     color: black;
-    font-weight: 900;
 }
 
 .form-group {
@@ -617,7 +616,7 @@ form .button input:hover{
 .titulo__login{
     font-size: 1.25rem;
     font-weight: 600;
-    margin-top: 5rem;
+    margin-top: 2rem;
 }
 
 .footer__login{
@@ -681,7 +680,8 @@ section {
 }
 
 .section__landing{
-    max-width: 80%;
+    max-width: 100%;
+    background-color: white;
 }
 /*Validado por w3c*/
 
