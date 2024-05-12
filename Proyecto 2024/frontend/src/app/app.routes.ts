@@ -6,10 +6,12 @@ import { LoginComponent } from './pages/auth/login/login.component';
 
 import { Component } from '@angular/core';
 import { ProductosComponent } from './pages/productos/productos.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
 
 export const routes: Routes = [
     {path: "", component: HomeComponent},
     {path: "registro", component:RegistroComponent},
     {path:"galeria", component:ProductosComponent},
-    {path: "login", component: LoginComponent}
+    {path: "login", component: LoginComponent},
+    {path: "dashboard", component:DashboardComponent}
 ];
