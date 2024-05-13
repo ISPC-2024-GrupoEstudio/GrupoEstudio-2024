@@ -1,0 +1,55 @@
+body{
+    width: 100%;
+    background: #8360c3a6;  
+}
+  
+header {
+    background-color: lightblue;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 5%;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.table-container {
+    padding: 20px; 
+    padding-bottom: 5rem; 
+    display: flex;    
+    justify-content: center;
+}
+
+.table-container table {
+    width: 90%; 
+    border-collapse: collapse;
+}
+
+.table-primary{
+    background-color: lightblue; 
+    
+}
+
+.table-container th, .table-container td {
+    border: 1px solid #b16ded; 
+    padding: 1rem; 
+    font-size: 1.2rem;
+}
+
+th{
+    background-color: rgb(80, 191, 228); 
+
+}
+
+.rectangle {
+    width: 100%; 
+    background-color: lightblue; 
+    padding: 2rem; 
+    text-align: center; 
+    font-size: 15px; 
+    line-height: 1.5; 
+}
+  
