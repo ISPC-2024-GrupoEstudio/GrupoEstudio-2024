@@ -379,7 +379,7 @@ i {
 
 .body__registro{
     text-align: initial;
-    margin: 20px auto;
+    margin: 20px auto 0 auto;
     background-attachment: fixed;
     height: 700px;
 }
@@ -646,7 +646,7 @@ form .button input:hover{
 }
 /* ---------------------------------------*/
 
-
+/* Estilos Home */
 
 
 .h-100vh {
@@ -679,9 +679,38 @@ section {
 
 }
 
+.main__home{
+    padding-bottom: 3rem;
+
+}
+
 .section__landing{
-    max-width: 100%;
+    max-width: 80%;
     background-color: white;
+    margin: 0;
+}
+
+.div__direccion-home{
+    padding: 2rem;
+}
+
+@media (max-width: 1200px){
+    
+    .contenido__sobreNs{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    .div__img-sobreNs{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding-top: 1rem;
+    }
 }
 /*Validado por w3c*/
 
