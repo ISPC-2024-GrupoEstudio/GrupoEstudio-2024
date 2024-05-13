@@ -291,3 +291,53 @@ header {
     }
 
 }
+
+/* ----------*/
+body{
+    width: 100%;
+    background: #8360c3a6;  /* fallback for old browsers */
+  }
+  
+
+
+header {
+  background-color:lightblue ;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 5%;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.table-container {
+    border: 1px solid #ccc; /* Borde del cuadro */
+    padding: 20px; /* Espacio interno del cuadro */
+    margin-bottom: 20px; /* Espacio inferior entre cuadros */
+  }
+
+  .table-container table {
+    width: 100%; /* Ancho completo de la tabla */
+    border-collapse: collapse; /* Combina los bordes de las celdas adyacentes */
+  }
+
+  .table-container th, .table-container td {
+    border: 1px solid #ddd; /* Borde de las celdas */
+    padding: 8px; /* Espaciado interno de las celdas */
+  }
+
+  .rectangle {
+    width: 97,5%; /* Ancho del rectángulo */
+    height: 45px; /* Altura del rectángulo */
+    background-color: lightblue; /* Color de fondo del rectángulo */
+  
+    padding: 20px; /* Espaciado interno del rectángulo */
+    text-align: left; /* Alineación del texto al centro */
+    font-size: 15px; /* Tamaño de fuente del texto */
+    line-height: 1.5; /* Altura de línea del texto */
+    margin-bottom: 100px;
+  }
+  
