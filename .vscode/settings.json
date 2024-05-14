@@ -1,3 +1,4 @@
 {
-    "terminal.integrated.fontFamily": "MesloLGM Nerd Font"
+    "terminal.integrated.fontFamily": "MesloLGM Nerd Font",
+    "git.ignoreLimitWarning": true
 }

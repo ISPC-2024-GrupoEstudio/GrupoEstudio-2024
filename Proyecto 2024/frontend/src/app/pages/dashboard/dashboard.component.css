@@ -1,0 +1,343 @@
+body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.texto-historial , .titulo-recomendacion{
+    font-size: 3rem;
+    margin: 2rem 0 4rem 0;
+    text-decoration: none;
+    color: black;
+    background-color: #2ebf91a6;
+    padding: 1.5rem;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    border-radius: 50px;
+}
+
+.texto-historial:hover{
+    transition-duration: 1s;
+    background-image: linear-gradient(to right, #2ebf91a6, #8360c3);
+
+}
+
+/* HISTORIAL DE COMPRAS TABLA */
+
+  
+
+header {
+    text-align: center;
+    background-color: #f8f9fa;
+    max-height: 95%;
+    padding: 20px;
+    margin-bottom: 5%;
+}
+
+.table {
+    border-collapse: collapse; 
+    width: 90%; 
+    background-color: #8360c3;
+}
+
+
+
+.table th,
+.table td {
+    border: 2px solid #b5b2b2; 
+    padding: 20px; 
+    
+}
+  
+.table th {
+    background-color: #2ebf91a6; 
+}
+  
+.table tbody tr:nth-child(even) {
+    background-color: #2ebf91a6;
+}
+
+  
+.center-table{
+    margin: 0 auto;
+}
+
+
+.table td{
+    background-color: #ada1c4;
+}
+
+/* SECCION CUPON */
+
+.seccion-cupon{
+    background-image: linear-gradient( #8360c3a6, #2ebf91a6 );
+    padding: 4rem 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+
+.cupon-container{
+    display: flex;
+    justify-content: center;
+    width: 40rem;
+    height: 20rem;
+    background-image:linear-gradient(to right,#8360c3, rgba(165, 145, 202, 0.514)) ;
+    align-content: center;
+    border: 3px dashed rgba(0, 0, 0, 0.833);
+    border-radius: 30px;
+
+}
+
+
+.texto-cupon {
+    background-color: #8360c3;
+    border-radius: 30px 50px 50px 30px ;
+    padding: 2rem;
+    text-align: center;
+    
+}
+
+.texto-off{
+    margin: 2rem 0 ;
+    font-size: 3rem;
+    background-COLOR:rgba(165, 145, 202, 0.514) ;
+    border-radius: 3rem;
+    text-align: center;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+
+}
+
+.texto-cupon-primero{
+    font-size: 2rem;
+}
+
+.div-deco-cupon{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 3rem;
+}
+
+.huella{
+    width: 10rem;
+    height: 10rem;
+    padding: 1rem;
+}
+
+.codigo-cupon{
+    background-color:#2ebf91a6;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.20);
+    padding: 1rem;
+    margin: 1rem 0 0 0;
+}
+
+.pulse {
+    animation-name: pulse;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+}
+  
+@keyframes pulse {
+    0% {transform: scale(1);}
+    50% {transform: scale(1.2);}
+    100% {transform: scale(1);}
+}
+
+/* CARRUSEL */
+
+.seccion-carrusel{
+    background-image: linear-gradient( #2ebf91a6,#8360c3a6 );
+    padding: 6rem 0 0 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    border-top: 1px solid rgb(97, 39, 206);
+}
+
+
+
+.carousel-container{
+    width: 80rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 6rem;
+}
+
+.carousel-slide{
+    display: flex;
+    align-content: space-around;
+    
+}
+
+.carousel-slide::-webkit-scrollbar{
+    display: none;
+}
+
+.carrusel-recomendacion{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 20rem;
+    margin:2rem 2rem 2rem 0;
+}
+
+.carrusel-recomendacion img{
+    width: 20rem;
+    height: 20rem;
+    margin: 1rem;
+    padding:2rem 1rem;
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.457);
+    background-color: #9e89c5;
+    border-radius: 1rem;
+    object-fit: contain;
+}
+  
+.carrusel-recomendacion p{
+    font-size: 1.5rem;
+    font-weight: 500;
+    background-color: #73bda6d1;
+    border-radius: 3rem;
+    padding: 1rem;
+}
+
+.swing:hover{
+    animation-name: swing;
+        -webkit-animation-name: swing;
+        -moz-animation-name: swing;
+    animation-duration: 1s;
+        -webkit-animation-duration: 1s;
+        -moz-animation-duration: 1s;
+    background-image: linear-gradient(to right, #6736c3db, #9e89c5d5);
+}
+
+@keyframes swing {
+        20% {transform: rotate3d(0, 0, 1, 15deg);}
+        40% {transform: rotate3d(0, 0, 1, -10deg);}
+        60% {transform: rotate3d(0, 0, 1, 5deg);}
+        80% {transform: rotate3d(0, 0, 1, -5deg);}
+        to  {transform: rotate3d(0, 0, 1, 0deg);}
+}
+
+@media (max-width: 1280px){
+    .carousel-slide {
+        flex-direction: column;
+    }
+
+    .carousel-container{
+        width: 100%;
+    }
+
+    .carrusel-recomendacion img{
+        width: 30rem;
+    }
+}
+
+@media (max-width:700px){
+    .cupon-container{
+        width: 30rem;
+    }
+
+    .texto-cupon-primero{
+        font-size: 1.5rem;
+    }
+
+    .texto-off{
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width:533px){
+    .carrusel-recomendacion img{
+        width: 20rem;
+        height: 20rem;
+    }
+
+    .titulo-recomendacion{
+        font-size: 1.5rem;
+    }
+
+    .cupon-container{
+        width: 20rem;
+    }
+
+    .texto-cupon-primero{
+        padding-top: 4rem;
+    }
+
+    .texto-cupon-primero, .texto-off, .codigo-cupon{
+        font-size: 1rem;
+    }
+
+    .div-deco-cupon{
+        margin: 0 1rem;
+    }
+
+    .texto-cupon{
+        padding: 1rem;
+    }
+
+    .texto-historial{
+        font-size: 2rem;
+    }
+
+}
+
+/* ----------*/
+body{
+    width: 100%;
+    background: #8360c3a6;  /* fallback for old browsers */
+  }
+  
+
+
+header {
+  background-color:lightblue ;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 5%;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.table-container {
+    border: 1px solid #ccc; /* Borde del cuadro */
+    padding: 20px; /* Espacio interno del cuadro */
+    margin-bottom: 20px; /* Espacio inferior entre cuadros */
+  }
+
+  .table-container table {
+    width: 100%; /* Ancho completo de la tabla */
+    border-collapse: collapse; /* Combina los bordes de las celdas adyacentes */
+  }
+
+  .table-container th, .table-container td {
+    border: 1px solid #ddd; /* Borde de las celdas */
+    padding: 8px; /* Espaciado interno de las celdas */
+  }
+
+  .rectangle {
+    width: 97,5%; /* Ancho del rectángulo */
+    height: 45px; /* Altura del rectángulo */
+    background-color: lightblue; /* Color de fondo del rectángulo */
+  
+    padding: 20px; /* Espaciado interno del rectángulo */
+    text-align: left; /* Alineación del texto al centro */
+    font-size: 15px; /* Tamaño de fuente del texto */
+    line-height: 1.5; /* Altura de línea del texto */
+    margin-bottom: 100px;
+  }
+  
