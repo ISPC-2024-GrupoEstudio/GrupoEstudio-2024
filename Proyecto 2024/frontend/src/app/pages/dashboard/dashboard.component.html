@@ -11,42 +11,13 @@
 
     <body>
         
-            <h1 class="texto-historial">Historial de Compras</h1>
-            <table class="table tabla-historial" >
+            <a routerLink="/dashboard/historial-compras" (click)="hideSections()" class="texto-historial">Historial de Compras</a>
+            <router-outlet></router-outlet>
 
-                <thead>
-                  <tr>
-                    <th scope="col"></th>
-                    <th scope="col">Codigo de Compra</th>
-                    <th scope="col">Fecha</th>
-                    <th scope="col">Estado</th>
-                  </tr>
-                </thead>
-                <tbody >
-                  <tr>
-                    <th scope="row">1</th>
-                    <td> <a class="ver-todo" [routerLink]="['/compra01']" >#0001</a></td>
-                    <td>18/01/2024</td>
-                    <td>Enviado</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td><a href="#" class="ver-todo" [routerLink]="['/compra02']">#0002</a></td>
-                    <td>23/02/2024</td>
-                    <td>Enviado</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td> <a href="#" class="ver-todo" [routerLink]="['/compra03']">#0003</a></td>
-                    <td>10/03/2024</td>
-                    <td>Enviado</td>
-        
-                  </tr>
-                
-                </tbody>
-            </table>
+            <a routerLink="/dashboard/detalle-compra"class="texto-historial" *ngIf="showSections">Detalle Compras</a>
+            <router-outlet></router-outlet>
             
-            <section class="seccion-cupon">
+            <section class="seccion-cupon" *ngIf="showSections">
                 <div class="cupon-container pulse">
                     <div class="texto-cupon">
                         <h2 class="texto-cupon-primero">Tenemos un cupón de descuento para tu próxima compra !!</h2>
@@ -59,7 +30,7 @@
                 </div>
             </section>
 
-            <section class="seccion-carrusel">
+            <section class="seccion-carrusel" *ngIf="showSections">
 
                 <h2 class="titulo-recomendacion">Recomendaciones para vos:</h2>
     
@@ -83,6 +54,5 @@
                     </div>
                 </div>
             </section>
-
     </body>
 </html>
