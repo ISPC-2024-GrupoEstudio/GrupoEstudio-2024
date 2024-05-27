@@ -11,6 +11,7 @@ import { ContactoComponent } from './pages/contacto/contacto.component';
 import { Compra01Component } from './pages/dashboard/compra01/compra01.component';
 import { Compra02Component } from './pages/dashboard/compra02/compra02.component';
 import { Compra03Component } from './pages/dashboard/compra03/compra03.component';
+import { CheckoutComponent } from './pages/cart/checkout/checkout.component';
 
 export const routes: Routes = [
     {path: "", component: HomeComponent},
@@ -21,5 +22,6 @@ export const routes: Routes = [
     {path: "contacto", component: ContactoComponent},
     {path: "compra01", component: Compra01Component},
     {path: "compra02", component: Compra02Component},
-    {path: "compra03", component: Compra03Component}
+    {path: "compra03", component: Compra03Component},
+    {path: "checkout", component: CheckoutComponent}
 ];
