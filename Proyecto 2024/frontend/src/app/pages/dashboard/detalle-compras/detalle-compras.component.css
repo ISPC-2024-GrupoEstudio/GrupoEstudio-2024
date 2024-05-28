@@ -1,0 +1,155 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background: linear-gradient(to right, #2ebf91a6, #8360c3b6), url('../../../assets/imagenes/portadala.jpg') no-repeat center center fixed;
+    background-size: cover;
+    width: 100%;
+}
+
+.container {
+    max-width: 800px;
+    width: 100%;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.card-header {
+    width: 1000px;
+    height: 30px;
+    max-width: 800px;
+    border: 2px solid #fcfbfb;
+    background-color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 20px 0;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card {
+    background-color: white;
+    padding: 20px;
+    width: 800px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.flex {
+    display: flex;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.text-lg {
+    font-size: 1.25rem;
+}
+
+.font-semibold {
+    font-weight: 600;
+}
+
+.ml-4 {
+    margin-left: 1rem;
+}
+
+.mt-2 {
+    margin-top: 0.5rem;
+}
+
+.mt-4 {
+    margin-top: 1rem;
+}
+
+.block {
+    display: block;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.product-image {
+    border-radius: 50%;
+}
+
+.status {
+    color: #16a34a;
+    font-weight: 600;
+}
+
+.text-xl {
+    font-size: 1.5rem;
+}
+
+.font-bold {
+    font-weight: 700;
+}
+
+.action {
+    margin-top: 20px;
+}
+
+.action button {
+    background-color: #1d4ed8;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.action button:hover {
+    background-color: #2563eb;
+}
+
+.purchase-date {
+    color: #505086;
+}
+
+.purchase-details {
+    margin-top: 15px;
+}
+
+.detail {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.discount {
+    color: #010101;
+}
+
+.total {
+    border-top: 1px solid #e5e7eb;
+    padding-top: 10px;
+}
+
+.payment-details {
+    display: block;
+    color: #1d4ed8;
+    text-decoration: none;
+    margin-top: 15px;
+}
+
+.payment-details:hover {
+    text-decoration: underline;
+}
