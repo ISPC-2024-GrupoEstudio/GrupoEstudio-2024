@@ -1,0 +1,44 @@
+.cupon-titulo{
+    background-image: linear-gradient(to right,#0f6767e3, #53A6A6e3 );
+    color: white;
+    padding: 2rem 0;
+    margin: 0;
+}
+
+.cupon-container{
+    background-image: linear-gradient(#53A6A6e3, #2ebf919c);
+    width: 100%;
+    height: auto;
+    margin:0;
+    padding: 3rem;
+}
+
+.card-cupones{
+    background-color: #cdfdfde3;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.565);
+
+}
+
+.cupon-img{
+    padding: 0.7rem 0;
+}
+
+.card-title{
+    background-color: #0f6767e3;
+    color: white;
+    padding: 1rem;
+    width: 100%;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.565);
+}
+
+.btn-cupones{
+    background-image: linear-gradient(to right,#0f6767e3, #2ebf919c);
+    border: none;
+}
+
+.btn-cupones:hover{
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.449);
+    background-image: linear-gradient(to right,#679a9ae3, #72c1a89c);
+    color: rgba(0, 0, 0, 0.869);
+
+}

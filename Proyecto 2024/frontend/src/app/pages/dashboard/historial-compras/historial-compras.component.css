@@ -1,0 +1,37 @@
+
+  
+
+
+
+.table {
+    border-collapse: collapse; 
+    width: 90%; 
+    background-color: #8360c3;
+}
+
+
+
+.table th,
+.table td {
+    border: 2px solid #b5b2b2; 
+    padding: 20px; 
+    
+}
+  
+.table th {
+    background-color: #2ebf91a6; 
+}
+  
+.table tbody tr:nth-child(even) {
+    background-color: #2ebf91a6;
+}
+
+  
+.center-table{
+    margin: 0 auto;
+}
+
+
+.table td{
+    background-color: #ada1c4;
+}
