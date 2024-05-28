@@ -1,1 +1,59 @@
-<p>detalle-compras works!</p>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="detalle-compras.component.css">
+    <title>Detalle de Compra</title>
+</head>
+<body>
+    <div class="container">
+        <div class="card-header">
+            Detalle de la compra 
+        </div>
+        <div class="card card1">
+            <div class="flex items-center justify-between">
+                <h2 class="text-lg font-semibold">Cucha de Perro</h2>
+                <img src="https://placehold.co/50" alt="Product Image" class="product-image ml-4">
+            </div>
+            <div class="flex items-center justify-between mt-2">
+                <h2 class="text-lg font-semibold">Vertedero</h2>
+                <img src="https://placehold.co/50" alt="Product Image" class="product-image ml-4">
+            </div>
+            <a href="" class="boton mt-4 block text-center">Ver detalle</a>
+        </div>
+        <div class="card card2">
+            <p class="status">Entregado</p>
+            <h3 class="text-xl font-bold">Llego el 5 de marzo</h3>
+            <p>Se entrego a domicilio en <strong>Chaco 300</strong>, Córdoba.</p>
+            <div class="action mt-4">
+                <button>Volver a comprar</button>
+            </div>
+        </div>
+        <div class="card card3">
+            <h3 class="text-lg font-semibold">Detalle de la compra</h3>
+            <p class="purchase-date">Se pago el 1 Marzo | # 200224</p>
+            <div class="purchase-details mt-2">
+                <table class="w-full">
+                    <tr class="detail">
+                        <td class="text-left">Cucha de Perro</td>
+                        <td class="text-right">$ 3.000</td>
+                    </tr>
+                    <tr class="detail">
+                        <td class="text-left">Vertedero</td>
+                        <td class="text-right discount">$ 2.000</td>
+                    </tr>
+                    <tr class="detail total">
+                        <td class="text-left font-semibold">Monto Total</td>
+                        <td class="text-right font-semibold">$ 5.000</td>
+                    </tr>
+                </table>
+                <a href="#" class="payment-details">Detalles de pago y envío</a>
+            </div>
+        </div>
+    </div>
+    
+                
+</body>
+</html>
