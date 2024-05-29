@@ -1,7 +1,7 @@
 .body-dashboard{
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;  /* Cambiado de center a flex-start */
+    justify-content: flex-start;
     align-items: stretch; 
     width: 100%;
     margin: 0;
@@ -24,8 +24,8 @@
     font-size: 4rem;
     font-weight: 500;
     background-image: linear-gradient(to right, #2ebf91a6, #8360c3);
-    -webkit-background-clip: text; /* Para WebKit (Safari, Chrome, etc.) */
-    background-clip: text; /* Para navegadores estándar */
+    -webkit-background-clip: text; 
+    background-clip: text; 
     color: transparent;
 }
 
@@ -63,7 +63,7 @@
     }
 }
 
-/*SECCION HISTORIAL Y DETALLES*/
+/*SECCION HISTORIAL*/
   
 .texto-historial, .div-historial{
     background-color: #7F72C0e3;
@@ -90,18 +90,6 @@
         -moz-transform: scale3d(1.5, 1.5, 0.3);
 }
                            
-
-  
-.titulo-recomendacion{
-      font-size: 3rem;
-      margin: 2rem 0 4rem 0;
-      text-decoration: none;
-      color: black;
-      padding: 1.5rem;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-      border-radius: 50px;
-  
-}
 /* SECCION CUPON */
 
 .seccion-cupon{
@@ -159,7 +147,6 @@
     100% {transform: scale(1);}
 }
 
-
 /* RECOMENDACIONES */
 
 .recomendaciones{
@@ -209,3 +196,109 @@
 
 }
 
+/* RESPONSIVE */
+
+@media (max-width: 1000px){
+    .titulo-header{
+        font-size: 3rem;
+    }
+}
+
+@media (max-width: 995px){
+    .titulo-cupon{
+        font-size: 1.2rem;
+    }
+
+    .btn-cupon{
+        font-size: 1.2rem;
+        padding: 0.5rem;
+        margin-top: 0.5rem;
+    }
+}
+
+@media (max-width: 829px){
+    .div-header-dash{
+        flex-direction: column;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .recomendaciones-titulo{
+        font-size: 3rem;
+    }
+}
+
+@media (max-width:690px){
+    .seccion-cupon{
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .btn-cupon{
+        width: 30%;
+        text-align: center;
+    }
+}
+
+@media (max-width:550px){
+    .titulo-cupon{
+        font-size: 1rem;
+    }
+
+    .btn-cupon{
+        font-size: 1rem;
+        padding: 0.3rem;
+        margin-top: 0.5rem;
+    }
+
+    .texto-historial, .div-historial{
+        font-size: 2rem;
+    }
+
+    .btn-producto-carousel{
+        font-size: 1rem;
+    }
+}
+
+@media (max-width:490px){
+    .titulo-cupon, .btn-cupon{
+        font-size: 0.8rem;
+    }
+
+    
+    .texto-historial, .div-historial{
+        font-size: 1.5rem;
+    }
+
+    .recomendaciones-titulo{
+        font-size: 2rem;
+    }
+
+    .seccion-cupon{
+        padding: 2rem 0;
+    }
+
+    .flecha{
+        width: 1.5rem;
+    }
+}
+
+@media (max-width:340px){
+    .titulo-cupon, .btn-cupon{
+        font-size: 0.5rem;
+    }
+
+    .recomendaciones-titulo, .titulo-header, .texto-historial, .div-historial{
+        font-size: 1.2rem;
+    }
+
+    .seccion-cupon{
+        padding: 1rem 0;
+    }
+
+    .flecha{
+        width: 1rem;
+    }
+}

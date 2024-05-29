@@ -42,3 +42,27 @@
     color: rgba(0, 0, 0, 0.869);
 
 }
+
+@media (max-width: 1200px){
+    .card-cupones{
+        margin: 1rem 0;
+        height: 390px;
+    }
+}
+
+@media (max-width: 1000px){
+    .cupon-container{
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+@media (max-width: 600px){
+    .cupon-container{
+        flex-direction: column;
+    }
+
+    .card-cupones{
+        height: 400px;
+    }
+}
