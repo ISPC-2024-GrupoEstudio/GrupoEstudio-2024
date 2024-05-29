@@ -26,13 +26,6 @@
                 <img src="./../../../assets/imagenes/Dashboard/flecha-desplegable.png" alt="flecha desplegable" class="flecha grow">
                 <router-outlet></router-outlet>
             </section>
-
-            <section class="div-detalles text-center">
-
-                <a routerLink="/dashboard/detalle-compra" class="texto-detalle text-decoration-none text-center" *ngIf="showSections" >Detalle Compras</a>
-                <img src="./../../../assets/imagenes/Dashboard/flecha-desplegable.png" alt="flecha desplegable" class="flecha grow" *ngIf="showSections">
-                <router-outlet></router-outlet>
-            </section>
             
             <section class="seccion-cupon d-flex justify-content-around" *ngIf="showSections" id="cupones">
 

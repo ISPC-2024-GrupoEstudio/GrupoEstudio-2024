@@ -1,8 +1,8 @@
 .body-dashboard{
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-start;  /* Cambiado de center a flex-start */
+    align-items: stretch; 
     width: 100%;
     margin: 0;
     padding: 0;
@@ -65,18 +65,13 @@
 
 /*SECCION HISTORIAL Y DETALLES*/
   
-.texto-historial, .div-historial, .texto-detalle, .div-detalles{
+.texto-historial, .div-historial{
     background-color: #7F72C0e3;
     font-size: 3rem;
     width: 100%;
     color: rgba(0, 0, 0, 0.789);
     padding: 1rem 1rem;
     margin: 0;
-}
-
-.div-detalles, .texto-detalle{
-    background-color: #6989b3e3;
-
 }
 
 .flecha{

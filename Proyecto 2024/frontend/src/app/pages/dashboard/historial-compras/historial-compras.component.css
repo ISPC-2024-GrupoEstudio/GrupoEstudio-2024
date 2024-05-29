@@ -1,4 +1,4 @@
-.body-historial {
+body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
@@ -52,6 +52,7 @@
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    flex-direction: row;
 }
 .card img {
     width: 30%;
@@ -85,4 +86,8 @@
 }
 .card-content button:hover {
     background-color: #0056b3;
+}
+
+.view-button{
+    margin: 0 1rem;
 }
