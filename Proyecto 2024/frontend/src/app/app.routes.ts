@@ -18,8 +18,11 @@ export const routes: Routes = [
     {path:"galeria", component:ProductosComponent},
     {path: "login", component: LoginComponent},
     {path: "dashboard", component:DashboardComponent, children: [
-        {path:"historial-compras", component: HistorialComprasComponent},
-        {path: "detalle-compra", component: DetalleComprasComponent}
+        {path:"historial-compras", component: HistorialComprasComponent, children: [
+            {path: "detalle-compra", component: DetalleComprasComponent},
+
+        ]},
+
     ]},
     {path:"cupones", component: CuponesComponent},
     {path: "contacto", component: ContactoComponent},
