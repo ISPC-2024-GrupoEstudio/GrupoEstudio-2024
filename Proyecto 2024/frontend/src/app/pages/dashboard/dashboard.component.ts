@@ -17,7 +17,7 @@ export class DashboardComponent {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         // Verifica si la URL actual es '/dashboard/detalles-compra' o '/dashboard/historial-compras'
-        this.showSections = !['/dashboard/detalles-compra', '/dashboard/historial-compras'].includes(event.urlAfterRedirects);
+        this.showSections = !['/dashboard/detalles-compra', '/dashboard/historial-compras', '/dashboard/historial-compras/detalle-compra'].includes(event.urlAfterRedirects);
       }
     });
   }
