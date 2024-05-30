@@ -1,6 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="historial-compras.component.css">
+    <title>Historial de Compras</title>
+</head>
 <body class="body-historial">
+     <div class="card-header">
+        Historial de Compras
+     </div>
     <div class="container ">
-        <div class="card d-flex">
+        <form id="filter-form" class="filter-form">
+            <input type="text" id="keyword" placeholder="Palabra clave">
+            <input type="date" id="start-date">
+            <input type="date" id="end-date">
+            <input type="number" id="max-amount" placeholder="Monto máximo">
+            <button type="submit">Filtrar</button>
+        </form>
+    </div>
+        <div class="card">
             <img src="https://via.placeholder.com/300x200" alt="Imagen 1">
             <div class="card-content">
                 <h2>Pedido # 200224</h2>
@@ -12,8 +31,7 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="container">
+   
         <div class="card">
             <img src="https://via.placeholder.com/300x200" alt="Imagen 1">
             <div class="card-content">
@@ -26,8 +44,7 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="container">
+
         <div class="card">
             <img src="https://via.placeholder.com/300x200" alt="Imagen 1">
             <div class="card-content">
@@ -40,8 +57,7 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="container">
+
         <div class="card">
             <img src="https://via.placeholder.com/300x200" alt="Imagen 1">
             <div class="card-content">
@@ -54,8 +70,7 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="container">
+
         <div class="card">
             <img src="https://via.placeholder.com/300x200" alt="Imagen 1">
             <div class="card-content">
@@ -68,5 +83,5 @@
                 </div>
             </div>
         </div>
-    </div>  
+  
 </body>

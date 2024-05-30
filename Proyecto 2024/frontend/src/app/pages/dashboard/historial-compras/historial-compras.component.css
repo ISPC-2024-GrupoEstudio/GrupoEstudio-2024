@@ -29,15 +29,44 @@ body {
     padding: 20px;
     display: flex;
     font-size: 24px;
-    justify-content: center; /* Centra horizontalmente */
-    align-items: center; /* Centra verticalmente */
+    justify-content: center; 
+    align-items: center; 
     font-weight: bold;
-    margin: 20px 0; /* Simplificado */
-    border-radius: 8px; /* Último valor considerado */
+    margin: 20px 0; 
+    border-radius: 8px; 
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
+.filter-form {
+    width: 90%;
+    max-width: 1200px;
+    margin: 20px auto;
+    display: flex;
+    justify-content: space-between;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 10px 8px rgba(0,0,0,0.1);
+}
 
+.filter-form input,
+.filter-form button {
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.filter-form button {
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.filter-form button:hover {
+    background-color: #0056b3;
+}
 
 .container {
     width: 90%;
@@ -52,7 +81,7 @@ body {
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    flex-direction: row;
+    width: 60%;
 }
 .card img {
     width: 30%;
