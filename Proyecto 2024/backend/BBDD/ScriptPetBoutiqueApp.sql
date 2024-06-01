@@ -445,19 +445,20 @@ DROP TABLE IF EXISTS `producto`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `producto` (
   `id_producto` int NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(45) DEFAULT NULL,
-  `descripcion` varchar(45) DEFAULT NULL,
-  `precio` varchar(45) DEFAULT NULL,
+  `nombre` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `descripcion` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci,
+  `precio` float DEFAULT NULL,
   `stock_actual` int DEFAULT NULL,
   `id_proveedor` int DEFAULT NULL,
   `stock_minimo` int DEFAULT NULL,
   `id_categoria_producto` int DEFAULT NULL,
+  `image_url` text,
   PRIMARY KEY (`id_producto`),
   KEY `proveedor_idx` (`id_proveedor`),
   KEY `fk_productos_categoria_idx` (`id_categoria_producto`),
   CONSTRAINT `fk_productos_categoria` FOREIGN KEY (`id_categoria_producto`) REFERENCES `categoria_producto` (`id_categoria_producto`),
   CONSTRAINT `fk_productos_proveedor` FOREIGN KEY (`id_proveedor`) REFERENCES `proveedor` (`id_proveedor`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -466,7 +467,7 @@ CREATE TABLE `producto` (
 
 LOCK TABLES `producto` WRITE;
 /*!40000 ALTER TABLE `producto` DISABLE KEYS */;
-INSERT INTO `producto` VALUES (1,'Modificado','Collar entretejido con term reforzadas','5000',10,1,5,1),(2,'Cucha Perro','Cucha para perro madera','45000',5,2,2,2),(3,'Buzo Adidog','Buzo algodon con friza elastizado','8000',28,1,8,4),(6,'Capa ','Para la lluvia con capucha','8000',12,2,2,4),(7,'Huesito','Hueso de fantasía ','1200',10,1,5,3),(8,'Ponchito','Poncho de lana con detalles en morley','15600',4,1,1,2);
+INSERT INTO `producto` VALUES (1,'Modificado','Collar entretejido con term reforzadas',5000,10,1,5,1,'https://i.ibb.co/WcVM7Nj/Collar-Gato.png'),(2,'Cucha Perro','Cucha para perro madera',45000,5,2,2,2,'https://i.ibb.co/VWr3jPj/Cucha-Exterior.png'),(3,'Buzo Adidog','Buzo algodon con friza elastizado',8000,28,1,8,4,'https://i.ibb.co/QmvL3pK/Buzo-Miami.png'),(6,'Capa ','Para la lluvia con capucha',8000,12,2,2,4,'https://i.ibb.co/hDsc0Hz/Buzo-Puffer.png'),(7,'Huesito','Hueso de fantasía ',1200,10,1,5,3,'https://i.ibb.co/bJn9zFr/Huesos.png'),(8,'Ponchito','Poncho de lana con detalles en morley',15600,4,1,1,2,'https://i.ibb.co/xg9KJD1/Sweter-Gato.png'),(9,'Cucha calabaza','Cucha estilo calabaza para gatos, color naranja, con relleno de guata y una abertura principal.',3500,4,1,1,2,'https://i.ibb.co/5vVSGxk/Calabaza.png'),(10,'Cucha Madera','Cucha de madera para perros ideal para exteriores, con techo corredizo, comedero y bebedero de agua. Detalles en negro en sus bordes',3500,4,1,1,2,'https://i.ibb.co/Yj42b5p/Cucha-Exterior.png'),(11,'Cucha Cat','Cama para gatos con forma de gato, cubierta con peluche e interiór de felpa. Incluye un pompón colgante como juguete.',3500,4,1,1,2,'https://i.ibb.co/TKPQhjq/Forma-Gato.png'),(12,'Cucha Sillon','Cama estilo sillon para perros con relleno de guata, abierto, coor gris con detalles blancos en sus bordes.',3000,3,2,1,2,'https://i.ibb.co/FWr40Sw/Sillon.png'),(13,'Cama colgante','Cama colgante para gatos con cubierta azul oscuro con textura, abertura para su entrada e interior acolchado',3800,5,2,1,2,'https://i.ibb.co/s6TQ6SM/Gato-Colgante.png'),(14,'Cama donna','Cama tipo Donna con relleno de guata y cubierta de felpa para perros en varios colores',4100,10,2,1,2,'https://i.ibb.co/tLkMRj2/Donnas.png'),(15,'Collar para Gato','Collar para gato con broche de seguridad y cascabel en varios colores.',3000,20,1,1,2,'https://i.ibb.co/g3Fgqww/Collar-Gato.png'),(16,'Collar para Gato','Collar para gato con broche de seguridad y cascabel en varios colores.',3000,20,1,1,1,'https://i.ibb.co/g3Fgqww/Collar-Gato.png'),(17,'Bolso transportador','Bolso trasportador para mascotas con interior de felpa, red para una mejor oxigenación y manijas de agarre seguro.',60000,10,1,1,1,'https://i.ibb.co/61VqkHH/Transportador.png'),(18,'Collar para perro','Collares para perros con broche de seguridad y con estampados diversos.',10000,20,1,1,1,'https://i.ibb.co/jvZxXgg/Collar-Perro.png'),(19,'Rascador para gato','Rascador para gato de 4 pisos con bolsa colgante, cucha con salidas, y juguete en su piso superior. Todos los pisos estan cubiertos de felpa con detalles en gris.',100000,2,2,1,1,'https://i.ibb.co/5jYk6K5/Rascador.png'),(20,'Correa extensible','Correa extensible para mascotas con gancho para enganchar en el collar y un largo total de 1 metro con botón regulable.',20000,3,2,1,1,'https://i.ibb.co/Rp00xwC/Correa.png'),(21,'Comedero + Dispenser','Base blanca con comedero transparente en forma de gato y dispensador de agua.',25000,4,2,1,1,'https://i.ibb.co/hMxnRKW/Vertedero.png'),(22,'Caña con pluma','Juguete de tipo caña con una pluma en su extremo para jugar con gatos.',3000,13,2,1,3,'https://i.ibb.co/m987M63/Jueguete-Gato.png'),(23,'Hueso para perro','Huesos de cuero comestible para perros',1500,14,2,1,3,'https://i.ibb.co/mG1rYpS/Huesos.png'),(24,'Peluche Felpa','Peluche de felpa tipo patita para gatos. Varios colores.',2500,14,2,1,3,'https://i.ibb.co/wSTP5j6/Peluche-Gato.png'),(25,'Sogas trenzadas','Sogas trenzadas para jugar con perros. Varios colores.',2500,15,1,1,3,'https://i.ibb.co/CMy9xZ8/Sogas.png'),(26,'Raton de Juguete','Ratón de juguete con control remoto para divertirte con tu gato.',4500,7,1,1,3,'https://i.ibb.co/fYNH3sv/Raton.png'),(27,'Lanzador de pelota','Lanzador automático de pelotas para perros. Incluuye 6 pelotas de regalo.',5500,7,1,1,3,'https://i.ibb.co/QDR8RzX/Arrojador-Automatico.png'),(28,'Chaleco Puffer','Chaleco estilo puffer para perro mediano, color verde militar con interior de corderito.',13000,3,1,1,4,'https://i.ibb.co/sVDqPDc/Buzo-Puffer.png'),(29,'Buzo Orejas','Bolso trasportador para mascotas con interior de felpa, red para una mejor oxigenación y manijas de agarre seguro.',16000,4,1,1,4,'https://i.ibb.co/7RsWs21/Buzo-Orejas-Gato.png'),(30,'Buzo Miami','Buzo para perro mediano. Color verde oscuro con letras \"Miami\" color dorado y detalles en color blanco y rojo. Mangas largas.',17000,2,1,1,4,'https://i.ibb.co/WzWx73x/Buzo-Miami.png'),(31,'Gorro Pingüino','Gorro para gato color celeste en forma de pingüino con detalles en color blanco y amarillo.',8000,8,2,1,4,'https://i.ibb.co/mFRQjc8/Gorro-Pinguino.png'),(32,'Buzo Peluche','Buzo de peluche para perro chico. Varios colores. Con capucha con detalles de orejas. Detalles en blanco. Interior de corderito.',9000,11,2,1,4,'https://i.ibb.co/4SSnNWM/Buzo-Felpa.png'),(33,'Sweater Lana','Sweater tejido de lana para gato. Color celeste con cuello y mangas cortas.',8700,22,2,1,4,'https://i.ibb.co/74cyQ2L/Sweter-Gato.png');
 /*!40000 ALTER TABLE `producto` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -702,4 +703,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-06-01 18:11:33
+-- Dump completed on 2024-06-01 20:43:54
