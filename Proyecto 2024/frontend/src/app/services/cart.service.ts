@@ -13,24 +13,24 @@ export class CartService {
   private productsSubject: BehaviorSubject<Product[]> = new BehaviorSubject<Product[]>([]);
   public products$: Observable<Product[]> = this.productsSubject.asObservable();
 
-  constructor(private http: HttpClient) { }
+  constructor(private readonly httpClient : HttpClient) { }
 
   getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.cartUrl);
+    return this.httpClient.get<Product[]>(this.cartUrl);
   }
 
   addToCart(product: Product): Observable<any> {
-    return this.http.post(`${this.cartUrl}add_to_cart/`, { product_id: product.id, quantity: 1 });
+    return this.httpClient.post(`${this.cartUrl}add_to_cart/`, { product_id: product.id, quantity: 1 });
   }
 
 
 
   checkout(): Observable<any> {
-    return this.http.post(this.checkoutUrl, {});
+    return this.httpClient.post(this.checkoutUrl, {});
   }
   
   removeProduct(productId: number): Observable<any> {
-    return this.http.delete(`${this.cartUrl}/${productId}`);
+    return this.httpClient.delete(`${this.cartUrl}/${productId}`);
   }
   /*
   getPaymentMethods(): Observable<any> {
