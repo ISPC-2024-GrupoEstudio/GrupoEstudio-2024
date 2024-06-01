@@ -1,0 +1,18 @@
+    <h1 class="cupon-titulo text-center">Mis Cupones</h1>
+    <div *ngIf="cuponesLista.length>0" class="row cupon-container">
+        <div *ngFor="let item of cuponesLista" class="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 col-auto text-center">
+            <div class="card d-flex card-cupones" >
+                <img [src]="item.url" alt="..." class="card-img-top align-self-center cupon-img" style="height: 9rem;width: 9rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{item.name}}</h5>
+                    <p class="card-text">{{item.descripcion}}</p>
+                    <p>Vencimiento: {{item.fechaVencimiento | date: 'dd-MM-yyyy' }}</p>
+                    <a class="btn btn-primary btn-cupones" (click)="alertaCupon()">Seleccionar Cupón</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="cuponesLista.length==0">
+        <p class="alert alert-danger">No hay cupones diponibles</p>
+    </div>
+
