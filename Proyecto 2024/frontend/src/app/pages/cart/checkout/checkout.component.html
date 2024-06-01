@@ -15,7 +15,7 @@
                   <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
                       <p class="mb-1">Carrito de compras</p>
-                      <p class="mb-0">Tienes 4 productos en tu carrito</p>
+                      <p class="mb-0">Tienes {{ products.length }}  productos en tu carrito</p>
                     </div>
                     <div>
                       <p class="mb-0"><span class="text-muted">Sort by:</span> <a href="#!"
@@ -23,109 +23,30 @@
                     </div>
                   </div>
   
-                  <div class="card mb-3">
+                  <div *ngFor="let product of products" class="card mb-3">
                     <div class="card-body">
                       <div class="d-flex justify-content-between">
                         <div class="d-flex flex-row align-items-center">
                           <div>
                             <img
-                              src="../../../assets/imagenes/Accesorios/Collar-Gato.png" alt="producto"
+                              src="product.image" alt="producto"
                               class="img-fluid rounded-3" alt="Shopping item" style="width: 65px;">
                           </div>
                           <div class="ms-3">
-                            <h5>Collar de gato</h5>
-                            <p class="small mb-0">Descripcion aquí</p>
+                            <h5>{{ product.name }}</h5>
+                            <p class="small mb-0">{{ product.description }}</p>
                           </div>
                         </div>
                         <div class="d-flex flex-row align-items-center">
                           <div style="width: 50px;">
-                            <h5 class="fw-normal mb-0">2</h5>
+                            <h5 class="fw-normal mb-0">{{ product.quantity }}</h5>
                           </div>
                           <div style="width: 80px;">
-                            <h5 class="mb-0">$900</h5>
+                            <h5 class="mb-0">${{ product.price }}</h5>
                           </div>
-                          <a href="#!" style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-  
-                  <div class="card mb-3">
-                    <div class="card-body">
-                      <div class="d-flex justify-content-between">
-                        <div class="d-flex flex-row align-items-center">
-                          <div>
-                            <img
-                              src="../../../assets/imagenes/Accesorios/Transportador.png"
-                              class="img-fluid rounded-3" alt="Shopping item" style="width: 65px;">
-                          </div>
-                          <div class="ms-3">
-                            <h5>Transportador </h5>
-                            <p class="small mb-0">Descripcion aqui</p>
-                          </div>
-                        </div>
-                        <div class="d-flex flex-row align-items-center">
-                          <div style="width: 50px;">
-                            <h5 class="fw-normal mb-0">2</h5>
-                          </div>
-                          <div style="width: 80px;">
-                            <h5 class="mb-0">$900</h5>
-                          </div>
-                          <a href="#!" style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-  
-                  <div class="card mb-3">
-                    <div class="card-body">
-                      <div class="d-flex justify-content-between">
-                        <div class="d-flex flex-row align-items-center">
-                          <div>
-                            <img
-                              src="../../../assets/imagenes/Accesorios/Collar-Perro.png" 
-                              class="img-fluid rounded-3" alt="Shopping item" style="width: 65px;">
-                          </div>
-                          <div class="ms-3">
-                            <h5>Collar de perro</h5>
-                            <p class="small mb-0">Descirpcion aqui</p>
-                          </div>
-                        </div>
-                        <div class="d-flex flex-row align-items-center">
-                          <div style="width: 50px;">
-                            <h5 class="fw-normal mb-0">1</h5>
-                          </div>
-                          <div style="width: 80px;">
-                            <h5 class="mb-0">$1199</h5>
-                          </div>
-                          <a href="#!" style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-  
-                  <div class="card mb-3 mb-lg-0">
-                    <div class="card-body">
-                      <div class="d-flex justify-content-between">
-                        <div class="d-flex flex-row align-items-center">
-                          <div>
-                            <img
-                              src="../../../assets/imagenes/Accesorios/Rascador.png"
-                              class="img-fluid rounded-3" alt="Shopping item" style="width: 65px;">
-                          </div>
-                          <div class="ms-3">
-                            <h5>Rascador</h5>
-                            <p class="small mb-0">Descripcion aqui</p>
-                          </div>
-                        </div>
-                        <div class="d-flex flex-row align-items-center">
-                          <div style="width: 50px;">
-                            <h5 class="fw-normal mb-0">1</h5>
-                          </div>
-                          <div style="width: 80px;">
-                            <h5 class="mb-0">$1799</h5>
-                          </div>
-                          <a href="#!" style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
+                          <button (click)="removeFromCart(product.id)" style="color: #cecece;">
+                            <i class="fas fa-trash-alt"></i>
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -220,7 +141,7 @@
     
                         <div class="d-flex justify-content-between">
                           <p class="mb-2">Subtotal</p>
-                          <p class="mb-2">$4798.00</p>
+                          <p class="mb-2">${{ calculateTotal() }}</p>
                         </div>
     
                         <div class="d-flex justify-content-between">
@@ -230,12 +151,12 @@
     
                         <div class="d-flex justify-content-between mb-4">
                           <p class="mb-2">Total(Incl. taxes)</p>
-                          <p class="mb-2">$4818.00</p>
+                          <p class="mb-2">${{ calculateTotal() + 20.00 }}</p>
                         </div>
     
                         <button  type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-info btn-block btn-lg">
                           <div class="d-flex justify-content-between">
-                            <span>$4818.00 </span>
+                            <span>${{ calculateTotal() + 20.00 }}</span>
                             <span> Finalizar compra <i class="fas fa-long-arrow-alt-right ms-2"></i></span>
                           </div>
                         </button>

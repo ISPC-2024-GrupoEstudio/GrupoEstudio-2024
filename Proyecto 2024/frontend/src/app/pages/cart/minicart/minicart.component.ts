@@ -1,40 +1,36 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
+import { Product } from '../../../services/models/product-api.interface';
+import { CartService } from '../../../services/cart.service';
 
 @Component({
   selector: 'app-minicart',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterOutlet],
+  imports: [CommonModule, RouterLink, RouterOutlet,],
   templateUrl: './minicart.component.html',
   styleUrl: './minicart.component.css'
 })
-export class MinicartComponent {
+export class MinicartComponent implements OnInit {
   isCartOpen: boolean = false; // Indica si el carrito está abierto o cerrado
-  products: any[] = [
-    { 
-      name: 'Product 1', 
-      price: 10, 
-      image: "../../../assets/imagenes/Accesorios/Transportador.png"
-    },
-    { 
-      name: 'Product 2', 
-      price: 15, 
-      image: 'assets/product2.jpg'
-    },
-  ]
+  products: Product[] = [];
 
-  constructor() {
-    // Puedes inicializar aquí los productos del carrito si lo necesitas
-    // this.products = [{ name: 'Product 1', price: 10, image: 'path_to_image' }, { name: 'Product 2', price: 20, image: 'path_to_image' }];
+
+  constructor(private cartService: CartService) { }
+
+  ngOnInit(): void {
+    this.cartService.getProducts().subscribe(products => {
+      this.products = products;
+    });
   }
 
   toggleCart() {
     this.isCartOpen = !this.isCartOpen;
   }
 
+  //revisar de acá para abajo
   removeFromCart(product: any) {
     // Lógica para eliminar el producto del carrito
     const index = this.products.indexOf(product);
@@ -59,8 +55,19 @@ export class MinicartComponent {
   checkout() {
     // Lógica para proceder al proceso de pago
     // Puedes navegar a la página de pago o ejecutar otras acciones necesarias
-     // Cerrar el slide del carrito
-     this.toggleCart();
-
+  
+    this.cartService.checkout().subscribe(
+      response => {
+        console.log('Compra finalizada:', response);
+        // Lógica adicional después de finalizar la compra
+      },
+      error => {
+        console.error('Error al finalizar la compra:', error);
+        // Lógica para manejar el error
+      }
+    );
+  
+    // Cerrar el slide del carrito
+    this.toggleCart();
   }
 }
