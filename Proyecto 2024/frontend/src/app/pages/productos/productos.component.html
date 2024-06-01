@@ -21,6 +21,7 @@
 
 <body class="body__galeria">
 
+
 	<!-- Encabezado-->
 	<header class="header__galeria">
 		<section class="textos-header">
@@ -35,6 +36,25 @@
 	<!-- Accesorios -->
 
 
+	@for (producto of productos; track $index) {
+
+		<section class="categoria__titulo--section">
+			<h2 class="categoria__titulo">{{producto.categoria.nombre}}</h2>
+		</section>	
+		<div class="col-md-4 col-sm-12 pt-3 pb-3">
+				<div class="item">
+					<figure class="items__figure">
+						<img class="items__img" src="../../../assets/imagenes/Accesorios/Collar-Gato.png" alt="producto">
+					</figure>
+					<div>
+						<h2 class="titulo__productos">{{producto.nombre}}</h2>
+						<p class="descripcion__productos">{{producto.descripcion}}</p>
+						<p class="price">{{producto.precio}}</p>
+					</div>	
+				</div>
+			</div>
+
+	}
 	<section class="categoria__titulo--section">
 		<h2 class="categoria__titulo">Accesorios</h2>
 	</section>
