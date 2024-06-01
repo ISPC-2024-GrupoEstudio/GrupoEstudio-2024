@@ -6,81 +6,66 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="https://fonts.googleapis.com/css2?family=Diphylleia&family=Open+Sans:ital,wght@0,300;0,800;1,300;1,400&display=swap" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-xQ5gbFT2OdR6o5wTWmjWV0zDsS6ojW8ZaQkbP3lJCVKQGlxr6L5FGPvG+eRbG0Ht4u8C/vp+xUd0xKR8DsURuw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <title>Dashboard</title>
     </head>
 
-    <body>
-        
-            <h1 class="texto-historial">Historial de Compras</h1>
-            <table class="table tabla-historial" >
+    <body class="body-dashboard">
 
-                <thead>
-                  <tr>
-                    <th scope="col"></th>
-                    <th scope="col">Codigo de Compra</th>
-                    <th scope="col">Fecha</th>
-                    <th scope="col">Estado</th>
-                  </tr>
-                </thead>
-                <tbody >
-                  <tr>
-                    <th scope="row">1</th>
-                    <td> <a class="ver-todo" [routerLink]="['/compra01']" >#0001</a></td>
-                    <td>18/01/2024</td>
-                    <td>Enviado</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td><a href="#" class="ver-todo" [routerLink]="['/compra02']">#0002</a></td>
-                    <td>23/02/2024</td>
-                    <td>Enviado</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td> <a href="#" class="ver-todo" [routerLink]="['/compra03']">#0003</a></td>
-                    <td>10/03/2024</td>
-                    <td>Enviado</td>
-        
-                  </tr>
-                
-                </tbody>
-            </table>
-            
-            <section class="seccion-cupon">
-                <div class="cupon-container pulse">
-                    <div class="texto-cupon">
-                        <h2 class="texto-cupon-primero">Tenemos un cupón de descuento para tu próxima compra !!</h2>
-                        <h1 class="texto-off">30% off</h1>
-                    </div>
-                    <div class="div-deco-cupon">
-                        <img src="../../../assets/imagenes/huella.png" alt="huella" class="huella">
-                        <h2 class="codigo-cupon">PERROS30</h2>
-                    </div>
+            <header class="header-dash">
+                <div class="d-flex div-header-dash">
+
+                    <h1 class="titulo-header text-start align-baseline scale-up-hor-left ">🐾Bienvenido/a a tu espacio personal🐾 </h1> 
+                    <img src="./../../../assets/imagenes/Dashboard/Diseño sin título.png" alt="imagen de mascotas" class="align-text-bottom img-thumbnail rounded float-end img-header-dash">
                 </div>
+            </header>
+            
+            <section class="div-historial text-center">
+                <a routerLink="/dashboard/historial-compras" class="texto-historial text-decoration-none text-center ">Historial de Compras</a>
+                <img src="./../../../assets/imagenes/Dashboard/flecha-desplegable.png" alt="flecha desplegable" class="flecha grow">
+                <router-outlet></router-outlet>
             </section>
+            
+            <section class="seccion-cupon d-flex justify-content-around" *ngIf="showSections" id="cupones">
 
-            <section class="seccion-carrusel">
+                <h2 class="titulo-cupon pulse">Obtené un 30% de descuento en tu próxima compra</h2>
+                <a routerLink="/cupones" class="btn-cupon swing" tabindex="-1" role="button" aria-disabled="true">Mis cupones</a>
+               
+            </section>
+            <router-outlet></router-outlet>
 
-                <h2 class="titulo-recomendacion">Recomendaciones para vos:</h2>
-    
-                <div class="carousel-container">
-                    <div class="carousel-slide">
-                        <div class="carrusel-recomendacion">
-                            <img class="swing" src="../../../assets/imagenes/Accesorios/Collar-Gato.png" alt="Recomendacion 1">
-                            <p>Collar para gato</p>
-                        </div>
-    
-                        <div class="carrusel-recomendacion">
-                            <img class="swing" src="../../../assets/imagenes/Cuchas/Calabaza.png" alt="Recomendacion 2">
-                            <p>Cucha tipo calabaza</p>
-                        </div>
-    
-                        <div class="carrusel-recomendacion">
-                            <img class="swing" src="../../../assets/imagenes/Juguetes/Huesos.png" alt="Recomendacion 3">
-                            <p>Huesos para morder</p>
-                        </div>
-    
+
+            <section class="recomendaciones w-100 d-flex flex-column" *ngIf="showSections">
+                <div class="recomendaciones-div-title text-center">
+                    <h1 class="recomendaciones-titulo">Recomendaciones para vos:</h1>
+                </div>
+
+                <div id="carouselExampleControls" class="carousel slide align-self-center text-center"  data-bs-ride="carousel">
+                    <div  class="carousel-inner">
+                      <div class="carousel-item active ">
+                        <img src="../../../assets/imagenes/Cuchas/Calabaza.png" alt=""class="img-carousel">
+                        <h2 class="titulo-card-carousel">Cucha Calabaza</h2>
+                        <button class="btn btn-primary btn-producto-carousel pulse"><a [routerLink]="['/galeria']" class="link-btn-carousel">Ver Producto</a></button>
+                      </div>
+                      <div class="carousel-item">
+                        <img src="../../../assets/imagenes/Ropa/BuzoFelpa.png" alt="" class="img-carousel">
+                        <h2 class="titulo-card-carousel">Buzo de Felpa</h2>
+                        <button class="btn btn-primary btn-producto-carousel pulse"><a [routerLink]="['/galeria']" class="link-btn-carousel">Ver Producto</a></button>
+                      </div>
+                      <div class="carousel-item">
+                        <img src="../../../assets/imagenes/Juguetes/PelucheGato.png" alt="" class="img-carousel">
+                        <h2 class="titulo-card-carousel">Juguete de Peluche</h2>
+                        <button class="btn btn-primary btn-producto-carousel pulse"><a [routerLink]="['/galeria']" class="link-btn-carousel">Ver Producto</a></button>
+                      </div>
                     </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Next</span>
+                    </button>
                 </div>
             </section>
 
