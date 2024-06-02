@@ -5,6 +5,7 @@ import { RouterOutlet } from '@angular/router';
 import { CartService} from '../../../services/cart.service';
 import { Product } from '../../../services/models/product-api.interface';
 import { NgFor } from '@angular/common';
+import { IProducto } from '../../../models/producto.interface';
 
 @Component({
   selector: 'app-checkout',
@@ -33,7 +34,7 @@ export class CheckoutComponent implements OnInit{
   }
 }
    */
-  products: Product[] = [];
+  productos: IProducto[] = [];
   form!: FormGroup;
   constructor(private _formBuilder: FormBuilder,private cartService: CartService) {
     this.form = this._formBuilder.group({
@@ -45,18 +46,18 @@ export class CheckoutComponent implements OnInit{
   }
   ngOnInit(): void {
     this.cartService.products$.subscribe(products => {
-      this.products = products;
+      this.productos = products;
     });
   }
   
   calculateTotal(): number {
-    return this.products.reduce((acc, product) => acc + product.price * product.quantity, 0);
+    return this.productos.reduce((acc, product) => acc + product.precio * product.id_producto, 0);
   }
 
   removeFromCart(productId: number): void {
     this.cartService.removeProduct(productId).subscribe(() => {
       this.cartService.getProducts().subscribe(products => {
-        this.products = products;
+        this.productos = products;
       });
     });
   }
