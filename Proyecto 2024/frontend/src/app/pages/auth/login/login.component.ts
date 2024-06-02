@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 
 @Component({
@@ -11,41 +11,32 @@ import { Router, RouterModule } from '@angular/router';
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-  email= new FormControl("");
-  password= new FormControl("");
-  emailError= "";
-  passwordError="";
 
-  constructor(private router:Router){}
+  form:FormGroup;
 
+  constructor(
+    private readonly formBuilder: FormBuilder
+  ){
+    this.form = this.formBuilder.group({
+      email: ["", [Validators.required, Validators.email]],
+      password: ["", [Validators.required, Validators.minLength(8)]],
+    })
+  }
 
-  public autenticar() {
-        let valid = true;
-        if (this.email.value === null || this.password.value === null){
-          valid= false;
-          return;
-        }
+  get Password() {
+    return this.form.get("password");
+  }
 
-        // Validación de correo electrónico
-        if (!/^\S+@\S+\.\S+$/.test(this.email.value)) {
-          this.emailError = 'Por favor, ingrese un correo electrónico válido.';
-          valid = false;
-        } else {
-          this.emailError = '';
-        }
+  get Email() {
+    return this.form.get("email");
+  }
 
-        // Validación de contraseña
-        if (this.password.value.length < 6 || this.password.value.length > 20) {
-          this.passwordError = 'La contraseña debe tener entre 6 y 20 caracteres.';
-          valid = false;
-        } else {
-          this.passwordError = '';
-        }
-
-        if (!valid) {
-        } else {
-          alert("Iniciando sesión exitosamente");
-          this.router.navigateByUrl("/");
-        }
+  public onFormSubmit(event:Event) {
+    event.preventDefault();
+    if (this.form.valid) {
+      alert("Enviando al servidor...");
+    } else {
+      this.form.markAllAsTouched();
+    }
   }
 }

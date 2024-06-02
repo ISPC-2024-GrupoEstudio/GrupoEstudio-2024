@@ -1,11 +1,12 @@
 from django.urls import path, include
-from .views import LoginView, LogoutView
+from rest_framework import routers
+from PetBoutiqueApp import views
+
+router=routers.DefaultRouter()
+router.register(r'productos', views.ProductoViewSet)
+router.register(r'categorias', views.CategoriaProductoViewSet)
+router.register(r'proveedores', views.ProveedorViewSet)
 
 urlpatterns = [
-    # Auth views
-    path('auth/login/',
-        LoginView.as_view(), name='auth_login'), 
-
-    path('auth/logout/',
-         LogoutView.as_view(), name='auth_logout'),
+    path('', include(router.urls))
 ]
