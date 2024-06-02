@@ -1,0 +1,55 @@
+.not-found-container {
+  width: 100%;
+  text-align: center;
+  padding: 300px;
+}
+
+h1 {
+  font-size: 3rem;
+  margin: 2rem 0 4rem 0;
+  text-decoration: none;
+  color: black;
+  background-color: #5a2ebfa6;
+  padding: 1.5rem;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  border-radius: 50px;
+}
+
+p {
+  font-size: 50px;
+  margin-bottom: 75px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+.bottom-btn {
+  text-align: center;
+  margin-bottom: 75px; /* Ajuste el margen según sea necesario */
+}
+
+.bottom-btn ul {
+  list-style: none;
+  padding: 0;
+}
+
+.bottom-btn li {
+  display: inline-block;
+  margin-right: 75px; /* Ajuste el espacio entre botones según sea necesario */
+}
+
+.bottom-btn a {
+  display: inline-block;
+  padding: 25px 50px; /* Ajuste el relleno de los botones según sea necesario */
+  background-color: #8360c3a6; /* Color de fondo */
+  font-size: 35px;
+  color: black; /* Color del texto */
+  text-decoration: none;
+  border: none;
+}
+
+.bottom-btn a:hover {
+  background-color: #8360c3a6;; /* Color de fondo al pasar el cursor */
+}

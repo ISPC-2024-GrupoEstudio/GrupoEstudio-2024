@@ -29,7 +29,8 @@
 						<h2 class="titulo__productos">{{producto.nombre}}</h2>
 						<p class="descripcion__productos">{{producto.descripcion}}</p>
 						<p class="price">${{producto.precio}}</p>
-					</div>	
+					</div>
+					<button (click)="addToCart(producto)" class="btn btn-primary custom-btn">Agregar al carrito</button>	
 				</div>
 			</div>
 		}
