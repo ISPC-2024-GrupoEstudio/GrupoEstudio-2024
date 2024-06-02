@@ -19,12 +19,17 @@
             <button type="submit">Filtrar</button>
         </form>
     </div>
+
+    @for (pedido of historialPedidos; track $index) {
+
         <div class="card d-flex">
             <img src="../../../../assets/imagenes/Dashboard/pedidos.png" alt="Imagen 1" class="img-pedidos">
             <div class="card-content">
-                <h2>Pedido # 200224</h2>
-                <p>Compra: Cucha de Perro y Vertedero</p>
-                <p>1 de Mayo del 2024</p>
+                <h2>{{pedido.id_pedido}}</h2>
+                @for (producto of productoXPedido; track $index) {
+                    <p>{{producto.id_producto}}</p>
+                }
+                <p>{{pedido.fecha}}</p>
                 <div class="button-group">
                     <button class="view-button"><a routerLink="/dashboard/historial-compras/detalle-compra" class="text-decoration-none" style="color:white;">Ver compra</a></button>
                     <button class="buy-again-button">Volver a comprar</button>
@@ -32,67 +37,8 @@
             </div>
         </div>
         <router-outlet></router-outlet>
+    }
 
-   
-        <div class="card">
-            <img src="../../../../assets/imagenes/Dashboard/pedidos.png" alt="Imagen 1" class="img-pedidos">
-            <div class="card-content">
-                <h2>Pedido # 824332</h2>
-                <p>Compra: Rascador</p>
-                <p>24 de Abril del 2024</p>
-                <div class="button-group">
-                    <button class="view-button"><a routerLink="/dashboard/historial-compras/detalle-compra" class="text-decoration-none" style="color:white;">Ver compra</a></button>
-                    <button class="buy-again-button">Volver a comprar</button>
-                </div>
-            </div>
-        </div>
-        <router-outlet></router-outlet>
-
-
-        <div class="card">
-            <img src="../../../../assets/imagenes/Dashboard/pedidos.png" alt="Imagen 1" class="img-pedidos">
-            <div class="card-content">
-                <h2>Pedido # 075976</h2>
-                <p>Compra: 2 Trasportadores </p>
-                <p>23 de Marzo del 2024</p>
-                <div class="button-group">
-                    <button class="view-button"><a routerLink="/dashboard/historial-compras/detalle-compra" class="text-decoration-none" style="color:white;">Ver compra</a></button>
-                    <button class="buy-again-button">Volver a comprar</button>
-                </div>
-            </div>
-        </div>
-        <router-outlet></router-outlet>
-
-
-        <div class="card">
-            <img src="../../../../assets/imagenes/Dashboard/pedidos.png" alt="Imagen 1" class="img-pedidos">
-            <div class="card-content">
-                <h2>Pedido # 980159</h2>
-                <p>Compra: Correa</p>
-                <p>09 de Febrero del 2024</p>
-                <div class="button-group">
-                    <button class="view-button"><a routerLink="/dashboard/historial-compras/detalle-compra" class="text-decoration-none" style="color:white;">Ver compra</a></button>
-                    <button class="buy-again-button">Volver a comprar</button>
-                </div>
-            </div>
-        </div>
-        <router-outlet></router-outlet>
-
-
-        <div class="card">
-            <img src="../../../../assets/imagenes/Dashboard/pedidos.png" alt="Imagen 1" class="img-pedidos">
-            <div class="card-content">
-                <h2>Pedido # 832654</h2>
-                <p>Compra: Collar para Perro</p>
-                <p>02 de Febrero del 2024</p>
-                <div class="button-group">
-                    <button class="view-button"><a routerLink="/dashboard/historial-compras/detalle-compra" class="text-decoration-none" style="color:white;">Ver compra</a></button>
-                    <button class="buy-again-button">Volver a comprar</button>
-                </div>
-            </div>
-
-        </div>
-        <router-outlet></router-outlet>
 
   
 </body>
