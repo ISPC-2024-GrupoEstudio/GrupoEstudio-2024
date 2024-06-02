@@ -12,7 +12,7 @@ export class proteccionguard implements CanActivate {
       return true;
     }
     //redireccion a login
-    alert('TU NO TIENES PERMISO')
+    alert('NO TIENES PERMISO')
     return false
   }
 
