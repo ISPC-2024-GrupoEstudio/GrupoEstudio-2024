@@ -3,8 +3,8 @@ from django.shortcuts import render
 # Create your views here.
 
 from rest_framework import viewsets
-from .models import Producto, CategoriaProducto, Proveedor
-from .serializer import ProductoSerializer, CategoriaProductoSerializer, ProveedorSerializer
+from .models import Producto, CategoriaProducto, Proveedor, Pedido, EstadoPedido, ProductoXPedido
+from .serializer import ProductoSerializer, CategoriaProductoSerializer, ProveedorSerializer, PedidoSerializer, EstadoPedidoSerializer, ProductoXPedidoSerializer
 
 class ProductoViewSet(viewsets.ModelViewSet):
     queryset = Producto.objects.all()
@@ -18,3 +18,14 @@ class ProveedorViewSet(viewsets.ModelViewSet):
     queryset = Proveedor.objects.all()
     serializer_class = ProveedorSerializer
 
+class PedidoViewSet(viewsets.ModelViewSet):
+    queryset = Pedido.objects.all()
+    serializer_class = PedidoSerializer
+
+class EstadoPedidoViewSet(viewsets.ModelViewSet):
+    queryset = EstadoPedido.objects.all()
+    serializer_class = EstadoPedidoSerializer
+
+class ProductosXPerdidoViewSet(viewsets.ModelViewSet):
+    queryset = ProductoXPedido.objects.all()
+    serializer_class = ProductoXPedidoSerializer
