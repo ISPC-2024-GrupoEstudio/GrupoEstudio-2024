@@ -1,13 +1,11 @@
-import { ICategoria } from "./categoria.interface";
-import { IProveedor } from "./proveedor.interface";
-
 export interface IProducto {
-    idproducto : number,
+    id_producto : number,
     nombre : string,
     descripcion : string,
     precio : number,
     stock_actual : number,
-    stock_min : number,
-    proveedor : IProveedor, 
-    categoria : ICategoria
+    stock_minimo : number,
+    id_proveedor : number,
+    id_categoria_producto : number,
+    image_url : string
 }
