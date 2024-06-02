@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Producto, CategoriaProducto, Proveedor, Pedido, EstadoPedido, ProductoXPedido
+from .models import Producto, CategoriaProducto, Proveedor, Pedido, EstadoPedido, ProductoXPedido, FormaDePago, TipoEnvio
 from .models import Roles
 
 class ProductoSerializer(serializers.ModelSerializer):
@@ -36,3 +36,13 @@ class RolesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Roles
         fields = '_all_'
+
+class FormaDePagoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FormaDePago
+        fields = '__all__'
+
+class TipoEnvioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TipoEnvio
+        fields = '__all__'

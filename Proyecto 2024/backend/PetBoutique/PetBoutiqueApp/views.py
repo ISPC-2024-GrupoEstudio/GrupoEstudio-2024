@@ -9,8 +9,8 @@ from django.http import Http404
 # Create your views here.
 
 from rest_framework import viewsets
-from .models import Producto, CategoriaProducto, Proveedor, Pedido, EstadoPedido, ProductoXPedido
-from .serializer import ProductoSerializer, CategoriaProductoSerializer, ProveedorSerializer, PedidoSerializer, EstadoPedidoSerializer, ProductoXPedidoSerializer
+from .models import Producto, CategoriaProducto, Proveedor, Pedido, EstadoPedido, ProductoXPedido, FormaDePago, TipoEnvio
+from .serializer import ProductoSerializer, CategoriaProductoSerializer, ProveedorSerializer, PedidoSerializer, EstadoPedidoSerializer, ProductoXPedidoSerializer, FormaDePagoSerializer, TipoEnvioSerializer
 
 class ProductoViewSet(viewsets.ModelViewSet):
     queryset = Producto.objects.all()
@@ -35,6 +35,14 @@ class EstadoPedidoViewSet(viewsets.ModelViewSet):
 class ProductosXPerdidoViewSet(viewsets.ModelViewSet):
     queryset = ProductoXPedido.objects.all()
     serializer_class = ProductoXPedidoSerializer
+
+class FormaDePagoViewSet(viewsets.ModelViewSet):
+    queryset = FormaDePago.objects.all()
+    serializer_class = FormaDePagoSerializer
+
+class TipoEnvioViewSet(viewsets.ModelViewSet):
+    queryset = TipoEnvio.objects.all()
+    serializer_class = TipoEnvioSerializer
 
 class ProductoViewSet(viewsets.ModelViewSet):
     queryset = Producto.objects.all()
