@@ -12,12 +12,14 @@ import { HistorialComprasComponent } from './pages/dashboard/historial-compras/h
 import { DetalleComprasComponent } from './pages/dashboard/detalle-compras/detalle-compras.component';
 import { CuponesComponent } from './pages/dashboard/cupones/cupones.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { CheckoutComponent } from './pages/cart/checkout/checkout.component';
 
 export const routes: Routes = [
     {path: "", component: HomeComponent},
     {path: "registro", component:RegistroComponent},
     {path:"galeria", component:ProductosComponent},
     {path: "login", component: LoginComponent},
+    {path: "checkout", component: CheckoutComponent},
     {path: "dashboard", component:DashboardComponent, children: [
         {path:"historial-compras", component: HistorialComprasComponent, children: [
             {path: "detalle-compra", component: DetalleComprasComponent},
@@ -29,4 +31,5 @@ export const routes: Routes = [
     {path: "contacto", component: ContactoComponent},
 
     {path: "**", component: NotFoundComponent}
+   
 ];

@@ -7,12 +7,13 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ProductoService {
+  private apiUrl = 'http://127.0.0.1:8000/api/v1';
 
   constructor(private readonly httpClient : HttpClient) { }
 
-  getProducts() : Observable<IProducto[]> {
-    const url = 'http://127.0.0.1:8000/api/v1/productos/'
-    return this.httpClient.get<IProducto[]>(url)
+   getProducts(): Observable<IProducto[]> {
+    const url = `${this.apiUrl}/productos/`;
+    return this.httpClient.get<IProducto[]>(url);
   }
 
 }

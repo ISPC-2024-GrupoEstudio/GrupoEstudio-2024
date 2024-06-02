@@ -1,0 +1,23 @@
+.btn-primary.custom-btn {
+    background-color: #44f3be; /* Color verde agua */
+    border-color: #20c997; /* Color del borde */
+    color: rgb(37, 0, 58); /* Color del texto */
+    padding: 5px 20px; /* Ajusta el padding según tu preferencia */
+    border-radius: 4px; /* Bordes redondeados */
+    text-align: center; /* Centra el texto */
+    width: fit-content; /* Ajusta el ancho del botón al contenido */
+    white-space: nowrap; /* Evita que el texto se divida en múltiples líneas */
+    margin: 0 auto; /* Centra el botón horizontalmente */
+    display: block; /* Necesario para que margin: auto funcione */
+  }
+  
+  .btn-primary.custom-btn:hover {
+    background-color: #1bb387; /* Color verde más oscuro para el hover */
+    border-color: #1bb387; /* Color del borde en hover */
+  }
+  
+  .item {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra los elementos horizontalmente */
+  }
