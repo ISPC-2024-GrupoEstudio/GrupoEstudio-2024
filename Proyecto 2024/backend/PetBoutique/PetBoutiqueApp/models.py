@@ -97,6 +97,9 @@ class CategoriaProducto(models.Model):
         managed = False
         db_table = 'categoria_producto'
 
+    def __str__(self) -> str:
+        return "{}".format(self.nombre)
+
 
 class DjangoAdminLog(models.Model):
     action_time = models.DateTimeField()
@@ -178,13 +181,14 @@ class Pedido(models.Model):
 
 class Producto(models.Model):
     id_producto = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=45, blank=True, null=True)
-    descripcion = models.CharField(max_length=45, blank=True, null=True)
-    precio = models.CharField(max_length=45, blank=True, null=True)
+    nombre = models.CharField(max_length=255, blank=True, null=True)
+    descripcion = models.TextField(blank=True, null=True)
+    precio = models.FloatField(blank=True, null=True)
     stock_actual = models.IntegerField(blank=True, null=True)
     id_proveedor = models.ForeignKey('Proveedor', models.DO_NOTHING, db_column='id_proveedor', blank=True, null=True)
     stock_minimo = models.IntegerField(blank=True, null=True)
     id_categoria_producto = models.ForeignKey(CategoriaProducto, models.DO_NOTHING, db_column='id_categoria_producto', blank=True, null=True)
+    image_url = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -225,6 +229,9 @@ class Proveedor(models.Model):
     class Meta:
         managed = False
         db_table = 'proveedor'
+
+    def __str__(self) -> str:
+        return "{}".format(self.nombre)
 
 
 class Rol(models.Model):
