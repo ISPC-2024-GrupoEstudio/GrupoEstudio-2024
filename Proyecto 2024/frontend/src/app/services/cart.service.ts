@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Product } from './models/product-api.interface';
+import { IProducto } from '../models/producto.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -10,17 +10,17 @@ export class CartService {
   private apiUrl = ''; // URL base de la API
   private cartUrl = ''; // Assuming a single cart for now
   private checkoutUrl = '';
-  private productsSubject: BehaviorSubject<Product[]> = new BehaviorSubject<Product[]>([]);
-  public products$: Observable<Product[]> = this.productsSubject.asObservable();
+  private productsSubject: BehaviorSubject<IProducto[]> = new BehaviorSubject<IProducto[]>([]);
+  public products$: Observable<IProducto[]> = this.productsSubject.asObservable();
 
   constructor(private readonly httpClient : HttpClient) { }
 
-  getProducts(): Observable<Product[]> {
-    return this.httpClient.get<Product[]>(this.cartUrl);
+  getProducts(): Observable<IProducto[]> {
+    return this.httpClient.get<IProducto[]>(this.cartUrl);
   }
 
-  addToCart(product: Product): Observable<any> {
-    return this.httpClient.post(`${this.cartUrl}add_to_cart/`, { product_id: product.id, quantity: 1 });
+  addToCart(product: IProducto): Observable<any> {
+    return this.httpClient.post(`${this.cartUrl}add_to_cart/`, { product_id: product.id_producto, quantity: 1 });
   }
 
 

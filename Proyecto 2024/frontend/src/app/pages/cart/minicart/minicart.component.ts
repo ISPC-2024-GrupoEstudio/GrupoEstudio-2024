@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
-import { Product } from '../../../services/models/product-api.interface';
+import { IProducto } from '../../../models/producto.interface';
 import { CartService } from '../../../services/cart.service';
 
 @Component({
@@ -15,7 +15,7 @@ import { CartService } from '../../../services/cart.service';
 })
 export class MinicartComponent implements OnInit {
   isCartOpen: boolean = false; // Indica si el carrito está abierto o cerrado
-  products: Product[] = [];
+  products: IProducto[] = [];
 
 
   constructor(private cartService: CartService) { }
@@ -43,7 +43,7 @@ export class MinicartComponent implements OnInit {
     // Lógica para calcular el total de la compra
     let total = 0;
     this.products.forEach(product => {
-      total += product.price;
+      total += product.precio;
     });
     return total;
   }
