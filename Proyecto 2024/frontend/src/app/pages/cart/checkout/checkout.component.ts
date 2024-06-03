@@ -16,8 +16,8 @@ import { Router } from '@angular/router';
   styleUrl: './checkout.component.css'
 })
 export class CheckoutComponent implements OnInit{
-  successMessage: string = 'Pago procesado exitosamente'; // Inicialización para evitar errores de tipo indefinido
-  errorMessage: string = 'Error en procesar el pago'; // Inicialización para evitar errores de tipo indefinido
+  successMessage: string = ''; // Inicialización para evitar errores de tipo indefinido
+  errorMessage: string = ''; // Inicialización para evitar errores de tipo indefinido
 
   /*
   paymentMethods: any[] = [];
@@ -77,11 +77,11 @@ export class CheckoutComponent implements OnInit{
 
       this.cartService.processPayment(paymentDetails).subscribe(
         data => {
-          this.successMessage = 'Payment successful!';
+          this.successMessage = 'Procesamiento de pago exitoso';
           this.router.navigate(['/order-confirmation']);
         },
         error => {
-          this.errorMessage = 'Payment failed. Please try again.';
+          this.errorMessage = 'Error en proscesar el pago';
         }
       );
     } else {
