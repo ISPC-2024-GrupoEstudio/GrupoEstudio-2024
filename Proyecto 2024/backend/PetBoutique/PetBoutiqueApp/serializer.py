@@ -18,6 +18,35 @@ class ProveedorSerializer(serializers.ModelSerializer):
         model = Proveedor
         fields = '__all__'
 
+class PedidoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Pedido
+        fields = '__all__'
+
+class EstadoPedidoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EstadoPedido
+        fields = '__all__'
+
+class ProductoXPedidoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductoXPedido
+        fields = '__all__'
+
+class RolesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Roles
+        fields = '_all_'
+
+class FormaDePagoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FormaDePago
+        fields = '__all__'
+
+class TipoEnvioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TipoEnvio
+        fields = '__all__'
 # conversión json creación usuarios
 class UserSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
