@@ -21,8 +21,8 @@ export const routes: Routes = [
     {path: "registro", component:RegistroComponent},
     {path:"galeria", component:ProductosComponent},
     {path: "login", component: LoginComponent},
-    {path: "checkout", component: CheckoutComponent, canActivate:[permisosguard] },
-    {path: "dashboard", component:DashboardComponent, canActivate: [proteccionguard],  children: [
+    {path: "checkout", component: CheckoutComponent,  },
+    {path: "dashboard", component:DashboardComponent, children: [
         {path:"historial-compras", component: HistorialComprasComponent, children: [
             {path: "detalle-compra", component: DetalleComprasComponent},
 

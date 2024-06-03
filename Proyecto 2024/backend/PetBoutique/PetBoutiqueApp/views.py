@@ -85,3 +85,7 @@ class RoleRetrieveUpdateDestroyAPIView(APIView):
         role = self.get_object(pk)
         role.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+class ProcessPaymentView(APIView):
+    def post(self,resquest, format=None):
+        payment_details = resquest.data
+        return Response ({"status": "success", "message": "Pago procesado exitosamente"}, status=status.HTTP_200_OK)

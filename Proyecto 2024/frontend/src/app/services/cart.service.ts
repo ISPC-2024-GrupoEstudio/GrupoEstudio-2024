@@ -32,6 +32,11 @@ export class CartService {
   removeProduct(productId: number): Observable<any> {
     return this.httpClient.delete(`${this.cartUrl}/${productId}`);
   }
+
+  processPayment(paymentDetails: { cardNumber: string; expirationDate: string; cvv: string }): Observable<any> {
+    // Aquí llamamos a la API para procesar el pago. Ajusta la URL y el formato según tu backend.
+    return this.httpClient.post<any>('/api/payment', paymentDetails);
+  }
   /*
   getPaymentMethods(): Observable<any> {
     return this.http.get(`${this.apiUrl}/forma-de-pago/`);
