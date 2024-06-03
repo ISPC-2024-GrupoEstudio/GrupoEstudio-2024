@@ -291,3 +291,14 @@ class Venta(models.Model):
     class Meta:
         managed = False
         db_table = 'venta'
+
+class Roles(models.Model):
+    nombre = models.CharField(max_length=100, unique=True)
+    descripcion = models.TextField()
+    permisos = models.ManyToManyField(AuthPermission, blank=True)
+    activo = models.BooleanField(default=True)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    fecha_modificacion = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.nombre
