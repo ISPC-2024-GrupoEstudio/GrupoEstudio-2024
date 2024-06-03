@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
+# inclusión API registro
+from PetBoutiqueApp.api import UserAPI
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,6 +28,9 @@ urlpatterns = [
 
     #Add Django site authentication urls (for login, logout, password management)
     path('accounts/', include('django.contrib.auth.urls')),
+
+    # API registro usuarios
+    path('api/1.0/create_user/', UserAPI.as_view(),name= "api_create_user")
 ]
 
 
