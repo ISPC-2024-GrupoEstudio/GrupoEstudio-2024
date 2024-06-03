@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Producto, CategoriaProducto, Proveedor,Pedido, EstadoPedido,ProductoXPedido,Roles,FormaDePago,TipoEnvio
+from .models import Producto, CategoriaProducto, Proveedor,Pedido, EstadoPedido,ProductoXPedido,Roles,FormaDePago,TipoEnvio,Carrito
 # serializador creación usuarios
 from django.contrib.auth.models import User
 
@@ -73,6 +73,11 @@ class UserSerializer(serializers.Serializer):
             raise serializers.ValidationError("Este nombre de usuario ya existe, ingrese uno nuevo.")
         else:
             return data
+class CarritoSerializer(serializers.ModelSerializer):
+    Producto = ProductoSerializer
+    class Meta:
+        model = Carrito
+        fields = '__all__'
         
 
 
