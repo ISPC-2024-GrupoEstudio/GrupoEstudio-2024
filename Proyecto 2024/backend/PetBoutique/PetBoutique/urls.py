@@ -16,8 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.views.generic import TemplateView
-# Inclusión API registro
+from django.views.generic import TemplateView, ProcessPaymentView
+# inclusión API registro
 from PetBoutiqueApp.api import UserAPI
 
 # Incorporo API autenticación
