@@ -43,6 +43,8 @@ Thumbs.db
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
+/Proyecto 2024/backend/PetBoutique/PetBoutique/__pycache__/
+/Proyecto 2024/backend/PetBoutique/PetBoutiqueApp/__pycache__/
 *.py[cod]
 *$py.class
 

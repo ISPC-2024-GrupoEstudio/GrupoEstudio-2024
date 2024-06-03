@@ -3,6 +3,7 @@ import { ProductoService } from '../../services/producto.service';
 import { IProducto } from '../../models/producto.interface';
 import { ICategoriaProducto } from '../../models/categoria.interface';
 import CategoriaService from '../../services/categoria.service';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-productos',
@@ -16,7 +17,7 @@ export class ProductosComponent implements OnInit{
   categorias: ICategoriaProducto[] = [];
   productos: IProducto[] = [];
 
-  constructor( private productoService:ProductoService, private categoriaService:CategoriaService) {}
+  constructor( private productoService:ProductoService, private categoriaService:CategoriaService, private cartService: CartService) {}
 
   ngOnInit(): void {
     this.categoriaService.getCategorias().subscribe((data)=> {
@@ -31,4 +32,16 @@ export class ProductosComponent implements OnInit{
     return this.productos.filter((p) => p.id_categoria_producto === categoriaId);
   }
 
+  addToCart(producto: IProducto) {
+    this.cartService.addToCart(producto).subscribe(
+      response => {
+        console.log('Producto agregado al carrito:', response);
+        // Aquí puedes realizar acciones adicionales después de agregar el producto al carrito, como mostrar un mensaje de éxito.
+      },
+      error => {
+        console.error('Error al agregar producto al carrito:', error);
+        // Aquí puedes manejar el error, como mostrar un mensaje de error al usuario.
+      }
+    );
+  }
 }
