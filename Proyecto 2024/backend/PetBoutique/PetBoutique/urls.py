@@ -17,8 +17,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
-# inclusión API registro
+# Inclusión API registro
 from PetBoutiqueApp.api import UserAPI
+
+# Incorporo API autenticación
+from rest_framework import routers
+
+# API router
+router = routers.DefaultRouter()
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,7 +36,11 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
 
     # API registro usuarios
-    path('api/1.0/create_user/', UserAPI.as_view(),name= "api_create_user")
+    path('api/1.0/create_user/', UserAPI.as_view(),name= "api_create_user"),
+
+    # API autenticación routes
+    path('api/', include('PetBoutiqueApp.urls')),
+    path('api/', include(router.urls)),
 ]
 
 

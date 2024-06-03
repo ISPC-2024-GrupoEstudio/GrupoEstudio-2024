@@ -92,7 +92,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'pet_boutique',
         'USER': 'root',
-        'PASSWORD': 'contra.bd.24',
+        'PASSWORD': 'Atenas00',
         'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {
@@ -150,3 +150,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Redirect to home URL after login (Default redirects to /accounts/profile/)
 LOGIN_REDIRECT_URL = '/'
 
+# Custom user model
+AUTH_USER_MODEL = "PetBoutiqueApp.CustomUser"

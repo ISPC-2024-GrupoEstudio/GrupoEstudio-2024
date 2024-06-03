@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Producto, CategoriaProducto, Proveedor
+from .models import Producto, CategoriaProducto, Proveedor, Pedido, EstadoPedido, ProductoXPedido, Roles, FormaDePago, TipoEnvio
 # serializador creación usuarios
 from django.contrib.auth.models import User
 
@@ -47,6 +47,7 @@ class TipoEnvioSerializer(serializers.ModelSerializer):
     class Meta:
         model = TipoEnvio
         fields = '__all__'
+
 # conversión json creación usuarios
 class UserSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()

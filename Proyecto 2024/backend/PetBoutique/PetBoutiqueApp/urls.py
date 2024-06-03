@@ -2,6 +2,8 @@ from django.urls import path, include
 from rest_framework import routers
 from PetBoutiqueApp import views
 from .views import RoleListCreateAPIView, RoleRetrieveUpdateDestroyAPIView
+# Parte de API autenticación
+from .views import LoginView, LogoutView
 
 router=routers.DefaultRouter()
 router.register(r'productos', views.ProductoViewSet)
@@ -16,5 +18,14 @@ router.register(r'tipoEnvio', views.TipoEnvioViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('roles/', RoleListCreateAPIView.as_view(), name='role-list-create'),
-    path('roles/<int:pk>/', RoleRetrieveUpdateDestroyAPIView.as_view(), name='role-retrieve-update-destroy')
+    path('roles/<int:pk>/', RoleRetrieveUpdateDestroyAPIView.as_view(), name='role-retrieve-update-destroy'),
+
+    # Registro API autenticación
+    path('auth/login/',
+         LoginView.as_view(), name='auth-.login'),
+
+    path('auth/logout/',
+         LogoutView.as_view(), name='auth_logout'),
 ]
+
+
