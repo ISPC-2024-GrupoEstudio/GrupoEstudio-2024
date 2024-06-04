@@ -27,6 +27,12 @@ urlpatterns = [
 
     path('auth/register/', 
        views. RegisterView.as_view(),name= "auth_register"),
+
+    path("add-to-cart/", 
+         views.AddToCartView.as_view(), name="add_to_cart"),
+
+    path("cart/<str:nombre_usuario>/", 
+         views.CartView.as_view(), name="cart"),
 ]
 
 

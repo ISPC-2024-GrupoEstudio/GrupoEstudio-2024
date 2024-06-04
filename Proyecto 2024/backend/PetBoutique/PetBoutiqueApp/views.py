@@ -8,8 +8,8 @@ from .serializer import RolesSerializer
 
 
 from rest_framework import viewsets
-from .models import Producto, CategoriaProducto, Proveedor, Pedido, EstadoPedido, ProductoXPedido, FormaDePago, TipoEnvio
-from .serializer import ProductoSerializer, CategoriaProductoSerializer, ProveedorSerializer, PedidoSerializer, EstadoPedidoSerializer, ProductoXPedidoSerializer, FormaDePagoSerializer, TipoEnvioSerializer, UserSerializer, UsuarioSerializer
+from .models import Producto, CategoriaProducto, Proveedor, Pedido, EstadoPedido, ProductoXPedido, FormaDePago, TipoEnvio, Carrito
+from .serializer import ProductoSerializer, CategoriaProductoSerializer, ProveedorSerializer, PedidoSerializer, EstadoPedidoSerializer, ProductoXPedidoSerializer, FormaDePagoSerializer, TipoEnvioSerializer, UserSerializer, UsuarioSerializer, CarritoSerializer
 from django.views.decorators.csrf import csrf_exempt
 
 # Importaciones API autenticación
@@ -140,5 +140,26 @@ class RegisterView (APIView):
             return Response(usuario_serializer.data, status= status.HTTP_201_CREATED)
         else:
             return Response(admin_user_serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+        
+
+class AddToCartView (APIView):
+    def post (self, request):
+        carrito_serializer = CarritoSerializer(data = request.data)
+
+        if carrito_serializer.is_valid():
+            carrito_serializer.save()
+
+            return Response(carrito_serializer.data, status= status.HTTP_201_CREATED)
+        else:
+            return Response(carrito_serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+        
+
+class CartView(APIView):
+    def get(self, request, nombre_usuario):
+        productos_en_carrito = Carrito.objects.filter(nombre_usuario=nombre_usuario)
+        serializer = CarritoSerializer(productos_en_carrito, many=True)
+        
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 

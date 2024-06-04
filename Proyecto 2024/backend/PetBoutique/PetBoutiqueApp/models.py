@@ -80,8 +80,8 @@ class AuthUserUserPermissions(models.Model):
 
 
 class Carrito(models.Model):
-    nombre_usuario = models.OneToOneField('Usuario', models.DO_NOTHING, db_column='nombre_usuario', primary_key=True)  # The composite primary key (nombre_usuario, id_producto) found, that is not supported. The first column is selected.
-    id_producto = models.ForeignKey('Producto', models.DO_NOTHING, db_column='id_producto')
+    nombre_usuario = models.ForeignKey('Usuario', models.DO_NOTHING, db_column='nombre_usuario')  # The composite primary key (nombre_usuario, id_producto) found, that is not supported. The first column is selected.
+    id_producto = models.ForeignKey('Producto', models.DO_NOTHING, db_column='id_producto',)
     cantidad = models.IntegerField(blank=True, null=True)
 
     class Meta:

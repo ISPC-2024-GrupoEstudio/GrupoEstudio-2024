@@ -17,4 +17,8 @@ export class AuthService {
     isAuthenticated() {
         return !!localStorage.getItem("user")
     }
+
+    getUsername() {
+        return localStorage.getItem("user")
+    }
 }
