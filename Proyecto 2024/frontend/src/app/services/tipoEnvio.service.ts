@@ -10,7 +10,7 @@ export class TipoEnvioService {
     constructor(private readonly httpClient:HttpClient){ }
 
     getTipoEnvio(): Observable<ITipoEnvio[]> {
-        const url = 'http://127.0.0.1:8000/api/v1/tipoEnvio';
+        const url = 'http://127.0.0.1:8000/api/tipoEnvio';
         return this.httpClient.get<ITipoEnvio[]>(url)
     }
 }
