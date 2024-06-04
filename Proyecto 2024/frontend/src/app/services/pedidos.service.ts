@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class PedidosService {
-  private apiUrl = 'http://127.0.0.1:8000/api/v1';
+  private apiUrl = 'http://127.0.0.1:8000/api';
 
   constructor (private readonly httpClient:HttpClient){
   }

@@ -9,7 +9,7 @@ export default class ProveedorService {
     constructor(private readonly httpClient : HttpClient) { }
 
     getProveedores() :Observable<IProveedor[]>   {
-        const url = 'http://127.0.0.1:8000/api/v1/proveedores/'
+        const url = 'http://127.0.0.1:8000/api/proveedores/'
         return this.httpClient.get<IProveedor[]>(url)
     }
 
