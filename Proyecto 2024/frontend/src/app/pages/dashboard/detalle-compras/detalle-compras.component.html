@@ -9,40 +9,43 @@
 </head>
 <body class="body-detalles">
     <div class="container-detalles d-flex flex-column justify-content-center align-items-center">
+        <div *ngFor="let pedido of historialPedidos" class="container-detalles d-flex flex-column justify-content-center align-items-center">
         <div class="card-header">
-            Detalle de la compra 
+            
+            Detalle de la compra {{pedido.id_pedido}}
         </div>
-        <div class="card card1">
+        <div class="card card1" >
             <div class="flex items-center justify-between">
-                <h2 class="text-lg font-semibold">Cucha de Perro</h2>
+                <h2 class="text-lg font-semibold">{{pedido.id_pedido}}</h2>
                 <img src="https://placehold.co/50" alt="Product Image" class="product-image ml-4">
             </div>
             <div class="flex items-center justify-between mt-2">
-                <h2 class="text-lg font-semibold">Vertedero</h2>
+                <h2 class="text-lg font-semibold">{{pedido.id_pedido}}</h2>
                 <img src="https://placehold.co/50" alt="Product Image" class="product-image ml-4">
             </div>
             <a href="" class="boton mt-4 block text-center">Ver detalle</a>
         </div>
         <div class="card card2">
-            <p class="status">Entregado</p>
-            <h3 class="text-xl font-bold">Llego el 5 de marzo</h3>
-            <p>Se entrego a domicilio en <strong>Chaco 300</strong>, Córdoba.</p>
+            <p class="status">{{pedido.id_estado_pedido}}</p>
+            <h3 class="text-xl font-bold">{{pedido.fecha}}</h3>
+            <p>Se entrego a domicilio en <strong>{{pedido.domicilio_envio}}></strong></p>
             <div class="action mt-4">
                 <button>Volver a comprar</button>
             </div>
         </div>
-        <div class="card card3">
+    <div class="card card3">
+            @for (producto of productoXpedido; track $index) {
             <h3 class="text-lg font-semibold">Detalle de la compra</h3>
-            <p class="purchase-date">Se pago el 1 Marzo | # 200224</p>
+            <p class="purchase-date">{{pedido.id_forma_de_pago}}</p>
             <div class="purchase-details mt-2">
                 <table class="w-full">
                     <tr class="detail">
-                        <td class="text-left">Cucha de Perro</td>
-                        <td class="text-right">$ 3.000</td>
+                        <td class="text-left">{{producto.id_producto}}</td>
+                        <td class="text-right">{{producto.precio}}</td>
                     </tr>
                     <tr class="detail">
-                        <td class="text-left">Vertedero</td>
-                        <td class="text-right discount">$ 2.000</td>
+                        <td class="text-left">{{producto.id_producto}}</td>
+                        <td class="text-right discount">{{producto.precio}}</td>
                     </tr>
                     <tr class="detail total">
                         <td class="text-left font-semibold">Monto Total</td>
@@ -51,9 +54,9 @@
                 </table>
                 <a href="#" class="payment-details">Detalles de pago y envío</a>
             </div>
+            }
         </div>
     </div>
-    
-                
+</div>
 </body>
 </html>
