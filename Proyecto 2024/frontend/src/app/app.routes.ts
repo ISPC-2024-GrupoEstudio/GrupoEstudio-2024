@@ -21,17 +21,14 @@ export const routes: Routes = [
     {path: "registro", component:RegistroComponent},
     {path:"galeria", component:ProductosComponent},
     {path: "login", component: LoginComponent},
-    {path: "checkout", component: CheckoutComponent,  },
-    {path: "dashboard", component:DashboardComponent, children: [
-        {path:"historial-compras", component: HistorialComprasComponent, children: [
+    {path: "checkout", component: CheckoutComponent, canActivate:[permisosguard] },
+    {path: "dashboard", component:DashboardComponent,  canActivate:[permisosguard], children: [
+        {path:"historial-compras", component: HistorialComprasComponent, canActivate:[permisosguard], children: [
             {path: "detalle-compra", component: DetalleComprasComponent},
-
         ]},
-
     ]},
     {path:"cupones", component: CuponesComponent},
     {path: "contacto", component: ContactoComponent},
 
     {path: "**", component: NotFoundComponent}
-   
 ];

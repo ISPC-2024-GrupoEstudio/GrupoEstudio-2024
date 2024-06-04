@@ -304,13 +304,3 @@ class Roles(models.Model):
 
     def __str__(self):
         return self.nombre
-
-# clase usuario a autenticar
-class CustomUser(AbstractUser):
-    pass
-
-# Anulados campos para ingresar con email en lugar de usuario
-    #email = models.EmailField(
-    #    max_length=150, unique=True)
-    #USERNAME_FIELD = 'email'
-    #REQUIRED_FIELDS = ['username', 'password']
