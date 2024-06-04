@@ -1,1 +1,27 @@
 /venv312
+/mientornovirtual
+*/__pycache__
+*/__pycache__/
+./__pycache__
+./__pycache__/
+/PetBoutique/__pycache__
+/PetBoutiqueApp/__pycache__
+/PetBoutique/PetBoutique/__pycache__/
+/PetBoutique/PetBoutiqueApp/__pycache__/
+
+/urls.cpython-312.pyc
+/settings.cpython-312.pyc
+/models.cpython-312.pyc
+/wsgi.cpython-312.pyc
+/__init__.cpython-312.pyc
+/admin.cpython-312.pyc
+/models.cpython-312.pyc
+
+Proyecto 2024/backend/PetBoutique/PetBoutique/__pycache__/wsgi.cpython-312.pyc
+Proyecto 2024/backend/PetBoutique/PetBoutique/__pycache__/settings.cpython-312.pyc
+Proyecto 2024/backend/PetBoutique/PetBoutique/__pycache__/urls.cpython-312.pyc
+Proyecto 2024/backend/PetBoutique/PetBoutiqueApp/__pycache__/models.cpython-312.pyc
+Proyecto 2024/backend/PetBoutique/PetBoutiqueApp/__pycache__/__init__.cpython-312.pyc
+Proyecto 2024/backend/PetBoutique/PetBoutiqueApp/__pycache__/admin.cpython-312.pyc
+Proyecto 2024/backend/PetBoutique/PetBoutiqueApp/__pycache__/models.cpython-312.pyc
+

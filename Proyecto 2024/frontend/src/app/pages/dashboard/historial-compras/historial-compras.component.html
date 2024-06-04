@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="historial-compras.component.css">
+    <title>Historial de Compras</title>
+</head>
+<body class="body-historial">
+
+    <div class="container d-flex">
+        <input type="checkbox" id="toggle-filter">
+        <label for="toggle-filter" class="btn btn-primary filter-button">Filtrar búsqueda</label>
+        <form id="filter-form" class="filter-form">
+            <input type="text" id="keyword" placeholder="Palabra clave">
+            <input type="date" id="start-date">
+            <input type="date" id="end-date">
+            <input type="number" id="max-amount" placeholder="Monto máximo">
+            <button type="submit">Filtrar</button>
+        </form>
+    </div>
+
+    @for (pedido of historialPedidos; track $index) {
+
+        <div class="card d-flex">
+            <img src="../../../../assets/imagenes/Dashboard/pedidos.png" alt="Imagen 1" class="img-pedidos">
+            <div class="card-content">
+                <h2>{{pedido.id_pedido}}</h2>
+                @for (producto of productoXPedido; track $index) {
+                    <p>{{producto.id_producto}}</p>
+                }
+                <p>{{pedido.fecha}}</p>
+                <div class="button-group">
+                    <button class="view-button"><a routerLink="/dashboard/historial-compras/detalle-compra" class="text-decoration-none" style="color:white;">Ver compra</a></button>
+                    <button class="buy-again-button">Volver a comprar</button>
+                </div>
+            </div>
+        </div>
+        <router-outlet></router-outlet>
+    }
+
+
+  
+</body>

@@ -14,7 +14,8 @@ from pathlib import Path
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+# BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
@@ -38,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'PetBoutiqueApp'
+    'PetBoutiqueApp',
+    'rest_framework',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -49,6 +52,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+]
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:4200',
 ]
 
 ROOT_URLCONF = 'PetBoutique.urls'
@@ -56,7 +65,10 @@ ROOT_URLCONF = 'PetBoutique.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'), # Ruta a las plantillas de Django
+            os.path.join(BASE_DIR, 'frontend') # Ruta a las plantillas de Angular
+            ], 
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -76,15 +88,11 @@ WSGI_APPLICATION = 'PetBoutique.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'sqlite': {
-    'ENGINE': 'django.db.backends.sqlite3',
-    'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    },
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'pet_boutique',
         'USER': 'root',
-        'PASSWORD': 'Atenas00',
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {
@@ -129,8 +137,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+# Static files (CSS, JavaScript, Images)
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'frontend'),
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Redirect to home URL after login (Default redirects to /accounts/profile/)
+LOGIN_REDIRECT_URL = '/'

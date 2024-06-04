@@ -1,0 +1,70 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css');
+
+/* Estilos para el icono del carrito */
+.mini-cart .cart-icon {
+    position: relative;
+    cursor: pointer;
+    float: right; 
+  }
+  
+  .mini-cart .cart-icon .fas.fa-shopping-cart {
+    font-size: 22px; /* Tamaño del icono, ajusta según sea necesario */
+  }
+  
+  /* Estilos para el badge del carrito */
+  .mini-cart .cart-icon .badge {
+    position: absolute;
+    top: -8px; /* Ajusta la posición vertical del badge según sea necesario */
+    right: -20px; /* Ajusta la posición horizontal del badge según sea necesario */
+    font-size: 12px; /* Tamaño del texto del badge, ajusta según sea necesario */
+    min-width: 20px; /* Ancho mínimo del badge, ajusta según sea necesario */
+    padding: 4px 6px; /* Espaciado interno del badge, ajusta según sea necesario */
+    border-radius: 50%; /* Forma del badge, ajusta según sea necesario */
+    background-color: #8b35dc; /* Color de fondo del badge */
+    color: #fff; /* Color del texto del badge */
+  }
+  
+  /* Estilos para el contenedor del carrito */
+  .mini-cart-container {
+    position: absolute;
+    top: auto; 
+    right: 0; /* Alinea el contenedor a la derecha */
+    z-index: 2000; /* Asegúrate de que el contenedor esté en un z-index superior al del navbar */
+    display: none; /* Oculta el contenedor por defecto */
+    background-color: #fff; /* Color de fondo del contenedor, ajusta según sea necesario */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra del contenedor, ajusta según sea necesario */
+    transform: translateY(-100%);
+  }
+  
+  /* Estilos para mostrar el contenedor del carrito cuando está abierto */
+  .mini-cart.open .mini-cart-container {
+    display: block; /* Muestra el contenedor cuando el carrito está abierto */
+
+  }
+  .cart-dropdown {
+    /* Estilos para el menú desplegable */
+    position: absolute; /* Posicionamiento absoluto */
+    top: 100%; /* Posicionamiento debajo del ícono del carrito */
+    right: 0; /* Posicionamiento a la derecha del ícono del carrito */
+    background-color: #fff; /* Color de fondo */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+    z-index: 2000;
+    /* Añade otros estilos según sea necesario */
+  }
+  .cart-item img {
+    max-width: 5px; /* Ancho máximo de la imagen */
+    height: auto; /* Altura automática para mantener la proporción */
+  }
+  /* Estilos para el botón de eliminar en el carrito */
+  .closeBtn {
+    font-size: 25px;
+    color: black;
+    margin-top: -56px;
+  }
+
+  #checkout {
+    background-color: transparent;
+    background-image: linear-gradient(226.69deg, #E5F8FF8C 38.63%, #F9E0B014 82.88%);
+
+}
+  

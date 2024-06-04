@@ -8,18 +8,27 @@ import { Component } from '@angular/core';
 import { ProductosComponent } from './pages/productos/productos.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ContactoComponent } from './pages/contacto/contacto.component';
-import { Compra01Component } from './pages/dashboard/compra01/compra01.component';
-import { Compra02Component } from './pages/dashboard/compra02/compra02.component';
-import { Compra03Component } from './pages/dashboard/compra03/compra03.component';
+import { HistorialComprasComponent } from './pages/dashboard/historial-compras/historial-compras.component';
+import { DetalleComprasComponent } from './pages/dashboard/detalle-compras/detalle-compras.component';
+import { CuponesComponent } from './pages/dashboard/cupones/cupones.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { CheckoutComponent } from './pages/cart/checkout/checkout.component';
+import { proteccionguard } from './pages/guards/proteccion.guard';
+import { permisosguard } from './pages/guards/permisos.guard';
 
 export const routes: Routes = [
     {path: "", component: HomeComponent},
     {path: "registro", component:RegistroComponent},
     {path:"galeria", component:ProductosComponent},
     {path: "login", component: LoginComponent},
-    {path: "dashboard", component:DashboardComponent},
+    {path: "checkout", component: CheckoutComponent, canActivate:[permisosguard] },
+    {path: "dashboard", component:DashboardComponent,  canActivate:[permisosguard], children: [
+        {path:"historial-compras", component: HistorialComprasComponent, canActivate:[permisosguard], children: [
+            {path: "detalle-compra", component: DetalleComprasComponent},
+        ]},
+    ]},
+    {path:"cupones", component: CuponesComponent},
     {path: "contacto", component: ContactoComponent},
-    {path: "compra01", component: Compra01Component},
-    {path: "compra02", component: Compra02Component},
-    {path: "compra03", component: Compra03Component}
+
+    {path: "**", component: NotFoundComponent}
 ];

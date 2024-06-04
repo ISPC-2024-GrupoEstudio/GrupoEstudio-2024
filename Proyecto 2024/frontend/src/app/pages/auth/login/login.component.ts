@@ -1,51 +1,59 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrl: './login.component.css',
+  providers: [
+    AuthService
+  ]
 })
 export class LoginComponent {
-  email= new FormControl("");
-  password= new FormControl("");
-  emailError= "";
-  passwordError="";
 
-  constructor(private router:Router){}
+  form:FormGroup;
+  loginError?:string;
 
+  constructor(
+    private readonly formBuilder: FormBuilder,
+    private readonly authService: AuthService,
+    private readonly router: Router
+  ){
+    this.form = this.formBuilder.group({
+      username: ["", [Validators.required]],
+      password: ["", [Validators.required, Validators.minLength(8)]],
+    })
+  }
 
-  public autenticar() {
-        let valid = true;
-        if (this.email.value === null || this.password.value === null){
-          valid= false;
-          return;
-        }
+  get Password() {
+    return this.form.get("password");
+  }
 
-        // Validación de correo electrónico
-        if (!/^\S+@\S+\.\S+$/.test(this.email.value)) {
-          this.emailError = 'Por favor, ingrese un correo electrónico válido.';
-          valid = false;
-        } else {
-          this.emailError = '';
-        }
+  get Username() {
+    return this.form.get("username");
+  }
 
-        // Validación de contraseña
-        if (this.password.value.length < 6 || this.password.value.length > 20) {
-          this.passwordError = 'La contraseña debe tener entre 6 y 20 caracteres.';
-          valid = false;
-        } else {
-          this.passwordError = '';
-        }
+  public onFormSubmit(event:Event) {
+    event.preventDefault();
+    if (this.form.valid) {
+      this.login();
+    } else {
+      this.form.markAllAsTouched();
+    }
+  }
 
-        if (!valid) {
-        } else {
-          alert("Iniciando sesión exitosamente");
-          this.router.navigateByUrl("/");
-        }
+  private login() {
+    this.authService.login(this.Username?.value, this.Password?.value).subscribe((data:any) => {
+      localStorage.setItem("user",this.Username?.value)
+      this.router.navigate(["/"]);
+    }, (error) => {
+      localStorage.removeItem("user");
+      this.loginError = "Credenciales incorrectas"
+    })
   }
 }
