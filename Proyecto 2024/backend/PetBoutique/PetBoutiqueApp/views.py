@@ -2,16 +2,17 @@ from django.shortcuts import render
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.contrib.auth import authenticate, login, logout
 from .models import Roles
 from .serializer import RolesSerializer
-from django.http import Http404
+
 
 from rest_framework import viewsets
 from .models import Producto, CategoriaProducto, Proveedor, Pedido, EstadoPedido, ProductoXPedido, FormaDePago, TipoEnvio
-from .serializer import ProductoSerializer, CategoriaProductoSerializer, ProveedorSerializer, PedidoSerializer, EstadoPedidoSerializer, ProductoXPedidoSerializer, FormaDePagoSerializer, TipoEnvioSerializer
+from .serializer import ProductoSerializer, CategoriaProductoSerializer, ProveedorSerializer, PedidoSerializer, EstadoPedidoSerializer, ProductoXPedidoSerializer, FormaDePagoSerializer, TipoEnvioSerializer, UserSerializer, UsuarioSerializer
+from django.views.decorators.csrf import csrf_exempt
 
 # Importaciones API autenticación
-from django.contrib.auth import authenticate, login, logout
 
 # Create your views here.
 class ProductoViewSet(viewsets.ModelViewSet):
@@ -68,7 +69,7 @@ class RoleRetrieveUpdateDestroyAPIView(APIView):
         try:
             return Roles.objects.get(pk=pk)
         except Roles.DoesNotExist:
-            raise Http404
+            raise status.HTTP_404_NOT_FOUND
 
     def get(self, request, pk):
         role = self.get_object(pk)
@@ -92,9 +93,10 @@ class RoleRetrieveUpdateDestroyAPIView(APIView):
 class LoginView(APIView):
     def post (self, request):
         # Recuperamos las credenciales y autenticamos al usuario
-        email = request.data.get('email', None)
+        username = request.data.get('username', None)
         password = request.data.get('password', None)
-        user = authenticate(email=email, password=password)
+
+        user = authenticate(username=username, password=password)
 
         # Si es correcto, añadimos a la request la información de sesión
         if user:
@@ -105,7 +107,7 @@ class LoginView(APIView):
         # Si no es correcto, devolvemos un error en la petición
         return Response(
             status=status.HTTP_404_NOT_FOUND)
-    
+
 class LogoutView(APIView):
     def post(self, request):
         # Borramos de la request la información de sesión
@@ -113,3 +115,25 @@ class LogoutView(APIView):
 
         # Devolvemos la respuesta al cliente
         return Response(status=status.HTTP_200_OK)
+    
+class RegisterView (APIView):
+    def post (self, request):
+        usuario_serializer = UsuarioSerializer(data = request.data)
+        admin_user_data =  {
+            "first_name": request.data.get("nombre"),
+            "last_name": request.data.get("apellido"),
+            "username":  request.data.get("nombre_usuario"),
+            "password": request.data.get("password"),
+            "email": request.data.get("email"),
+        }
+        admin_user_serializer = UserSerializer(data = admin_user_data)
+
+        if usuario_serializer.is_valid() and admin_user_serializer.is_valid():
+            usuario_serializer.save()
+            admin_user_serializer.save()
+
+            return Response(usuario_serializer.data, status= status.HTTP_201_CREATED)
+        else:
+            return Response(admin_user_serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+
+
