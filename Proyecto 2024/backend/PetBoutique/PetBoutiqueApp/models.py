@@ -156,6 +156,9 @@ class EstadoPedido(models.Model):
         managed = False
         db_table = 'estado_pedido'
 
+    def __str__(self):
+        return self.id_estado_pedido
+
 
 class FormaDePago(models.Model):
     id_forma_de_pago = models.IntegerField(primary_key=True)
@@ -164,6 +167,9 @@ class FormaDePago(models.Model):
     class Meta:
         managed = False
         db_table = 'forma_de_pago'
+
+    def __str__(self):
+        return self.id_forma_de_pago
 
 
 class Pedido(models.Model):
@@ -179,6 +185,11 @@ class Pedido(models.Model):
     class Meta:
         managed = False
         db_table = 'pedido'
+
+        
+    def __str__(self):
+        return self.id_pedido
+
 
 
 class Producto(models.Model):
@@ -196,6 +207,10 @@ class Producto(models.Model):
         managed = False
         db_table = 'producto'
 
+    
+    def __str__(self):
+        return self.nombre
+
 
 class ProductoXPedido(models.Model):
     id_producto = models.OneToOneField(Producto, models.DO_NOTHING, db_column='id_producto', primary_key=True)  # The composite primary key (id_producto, id_pedido) found, that is not supported. The first column is selected.
@@ -208,6 +223,9 @@ class ProductoXPedido(models.Model):
         db_table = 'producto_x_pedido'
         unique_together = (('id_producto', 'id_pedido'),)
 
+    def __str__(self):
+        return self.id_producto
+
 
 class ProductoXVenta(models.Model):
     id_venta = models.OneToOneField('Venta', models.DO_NOTHING, db_column='id_venta', primary_key=True)  # The composite primary key (id_venta, id_producto) found, that is not supported. The first column is selected.
@@ -219,6 +237,9 @@ class ProductoXVenta(models.Model):
         managed = False
         db_table = 'producto_x_venta'
         unique_together = (('id_venta', 'id_producto'),)
+
+    def __str__(self):
+        return self.id_venta
 
 
 class Proveedor(models.Model):
@@ -244,6 +265,9 @@ class Rol(models.Model):
         managed = False
         db_table = 'rol'
 
+    def __str__(self):
+        return self.nombre_del_rol
+
 
 class TipoDocumento(models.Model):
     id_tipo_documento = models.AutoField(primary_key=True)
@@ -253,6 +277,9 @@ class TipoDocumento(models.Model):
         managed = False
         db_table = 'tipo_documento'
 
+    def __str__(self):
+        return self.nombre
+
 
 class TipoEnvio(models.Model):
     id_tipo_envio = models.IntegerField(primary_key=True)
@@ -261,6 +288,9 @@ class TipoEnvio(models.Model):
     class Meta:
         managed = False
         db_table = 'tipo_envio'
+
+    def __str__(self):
+        return self.id_tipo_envio
 
 
 class Usuario(models.Model):
@@ -280,6 +310,9 @@ class Usuario(models.Model):
     class Meta:
         managed = False
         db_table = 'usuario'
+
+    def __str__(self):
+        return self.nombre_usuario
 
 
 class Venta(models.Model):
