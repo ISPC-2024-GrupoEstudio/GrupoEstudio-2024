@@ -12,7 +12,6 @@ router.register(r'productoXPedido', views.ProductosXPerdidoViewSet)
 router.register(r'estadoPedido', views.EstadoPedidoViewSet)
 router.register(r'formaDePago', views.FormaDePagoViewSet)
 router.register(r'tipoEnvio', views.TipoEnvioViewSet)
-router.regoster(r'processpaymentview', views.ProcessPaymentView)
 
 urlpatterns = [
     path('', include(router.urls)),
