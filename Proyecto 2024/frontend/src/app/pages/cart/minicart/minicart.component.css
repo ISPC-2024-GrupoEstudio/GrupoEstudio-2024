@@ -49,6 +49,7 @@
     background-color: #fff; /* Color de fondo */
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Sombra sutil */
     z-index: 2000;
+    margin-top: 3rem;
     /* Añade otros estilos según sea necesario */
   }
   .cart-item img {
