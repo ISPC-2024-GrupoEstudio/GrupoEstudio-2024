@@ -1,3 +1,13 @@
 .dropdown-item {
     cursor: pointer;
 }
+
+.item-carrito{
+    height: auto;
+    padding-top: 0.6rem;
+    padding-left: 1rem;
+}
+
+.usuario-nav{
+    margin-right: 1rem;
+}
