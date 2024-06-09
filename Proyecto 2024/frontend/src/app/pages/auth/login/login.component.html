@@ -7,7 +7,7 @@
       </div>
       <div class="form-group">
         <label class="label__login" for="username">Usuario</label>
-        <input type="username" class="form-control" formControlName="username">
+        <input type="username" class="form-control input__login" formControlName="username">
         @if (Username?.errors && Username?.touched) {
           <small class="error-message" id="username-error">
             @if (Username?.hasError("required")) {
@@ -18,7 +18,7 @@
       </div>
       <div class="form-group has-error">
         <label class="label__login" for="password">Contraseña</label>
-        <input id="password" type="password" class="form-control"  formControlName="password">
+        <input id="password" type="password" class="form-control input__login"  formControlName="password">
         @if (Password?.errors && Password?.touched) {
           <small class="error-message" id="password-error">
             @if (Password?.hasError("required")) {
@@ -36,7 +36,9 @@
         </div>
       }
       
-      <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+      <div class="button">
+        <input class="input__registro" type="submit" value="Iniciar Sesión">
+      </div>
       <div class="registrate">
         <h4 class="titulo__login">¿Eres nuevo?, Crea tu cuenta ahora mismo! <a [routerLink]="['/registro']">Registrate aqui</a></h4>
       </div>
