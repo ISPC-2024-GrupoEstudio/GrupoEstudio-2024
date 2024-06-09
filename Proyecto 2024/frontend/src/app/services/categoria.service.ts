@@ -9,7 +9,7 @@ export default class CategoriaService {
     constructor(private readonly httpClient : HttpClient) { }
 
     getCategorias() :Observable<ICategoriaProducto[]>   {
-        const url = 'http://127.0.0.1:8000/api/v1/categorias/'
+        const url = 'http://127.0.0.1:8000/api/categorias/'
         return this.httpClient.get<ICategoriaProducto[]>(url)
     }
 

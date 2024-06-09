@@ -1,6 +1,10 @@
 from django.contrib import admin
 from .models import Venta,  Usuario, TipoEnvio, TipoDocumento, Rol, Proveedor, ProductoXVenta, ProductoXPedido, Carrito, Producto, Pedido, FormaDePago, EstadoPedido,CategoriaProducto
 
+# Importaciones para API autenticación
+from django.contrib.auth import get_user_model
+from django.contrib.auth.admin import UserAdmin
+
 admin.site.register(Producto)
 admin.site.register(CategoriaProducto)
 admin.site.register(EstadoPedido)

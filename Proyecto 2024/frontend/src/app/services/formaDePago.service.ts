@@ -8,7 +8,7 @@ export class FormaDePagoService {
     constructor(private readonly httpClient:HttpClient){ }
 
     getFormaDePago(): Observable<IFormaDePago[]> {
-        const url = 'http://127.0.0.1:8000/api/v1/formaDePago/'
+        const url = 'http://127.0.0.1:8000/api/formaDePago/'
         return this.httpClient.get<IFormaDePago[]>(url)
     }
 }

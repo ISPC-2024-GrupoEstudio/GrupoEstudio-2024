@@ -25,7 +25,11 @@ export class permisosguard implements CanActivate {
   }
 
   hasUser(): boolean {
-    
-    return false;
+    const user = localStorage.getItem("user");
+    if (user) {
+      return true;
+    } {
+      return false;
+    }
   }
 }

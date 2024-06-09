@@ -1,14 +1,16 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { IProducto } from '../models/producto.interface';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
-  private apiUrl = ''; // URL base de la API
-  private cartUrl = ''; // Assuming a single cart for now
+  private apiUrl = 'http://localhost:8000/api/'; // URL base de la API
+  private addToCartUrl = this.apiUrl + 'add-to-cart/';
+  private cartUrl = this.apiUrl + 'cart/';
   private checkoutUrl = '';
   private productsSubject: BehaviorSubject<IProducto[]> = new BehaviorSubject<IProducto[]>([]);
   public products$: Observable<IProducto[]> = this.productsSubject.asObservable();
@@ -16,13 +18,17 @@ export class CartService {
   constructor(private readonly httpClient : HttpClient) { }
 
   getProducts(): Observable<IProducto[]> {
-    return this.httpClient.get<IProducto[]>(this.cartUrl);
+    const username = localStorage.getItem("user");
+    return this.httpClient.get<IProducto[]>(this.cartUrl + username);
   }
 
   addToCart(product: IProducto): Observable<any> {
-    return this.httpClient.post(`${this.cartUrl}add_to_cart/`, { product_id: product.id_producto, quantity: 1 });
+    return this.httpClient.post(this.addToCartUrl, { 
+      id_producto: product.id_producto,
+      nombre_usuario: localStorage.getItem("user"),
+      cantidad: 1
+     });
   }
-
 
 
   checkout(): Observable<any> {
@@ -31,6 +37,11 @@ export class CartService {
   
   removeProduct(productId: number): Observable<any> {
     return this.httpClient.delete(`${this.cartUrl}/${productId}`);
+  }
+
+  processPayment(paymentDetails: { cardNumber: string; expirationDate: string; cvv: string }): Observable<any> {
+    // Aquí llamamos a la API para procesar el pago. Ajusta la URL y el formato según tu backend.
+    return this.httpClient.post<any>('/api/payment', paymentDetails);
   }
   /*
   getPaymentMethods(): Observable<any> {

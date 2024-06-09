@@ -4,17 +4,21 @@ import { RouterLink } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
 import { CartService} from '../../../services/cart.service';
 import { Product } from '../../../services/models/product-api.interface';
-import { NgFor } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { IProducto } from '../../../models/producto.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-checkout',
   standalone: true,
-  imports: [RouterLink,RouterOutlet, ReactiveFormsModule,NgFor],
+  imports: [RouterLink,RouterOutlet, ReactiveFormsModule,NgFor, NgIf],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.css'
 })
 export class CheckoutComponent implements OnInit{
+  successMessage: string = ''; // Inicialización para evitar errores de tipo indefinido
+  errorMessage: string = ''; // Inicialización para evitar errores de tipo indefinido
+
   /*
   paymentMethods: any[] = [];
   shippingMethods: any[] = [];
@@ -36,7 +40,7 @@ export class CheckoutComponent implements OnInit{
    */
   productos: IProducto[] = [];
   form!: FormGroup;
-  constructor(private _formBuilder: FormBuilder,private cartService: CartService) {
+  constructor(private _formBuilder: FormBuilder,private cartService: CartService, private router: Router) {
     this.form = this._formBuilder.group({
       name: ['', Validators.required],
       cardNumber: ['', [Validators.required, Validators.minLength(16), Validators.maxLength(16)]],
@@ -65,12 +69,21 @@ export class CheckoutComponent implements OnInit{
   onEnviar(event: Event): void {
     event.preventDefault();
     if (this.form.valid) {
-      console.log(this.form.value);
-      alert('Finalizando compra...');
-      this.cartService.checkout().subscribe(response => {
-        console.log('Compra finalizada:', response);
-        // Lógica adicional después de finalizar la compra
-      });
+      const paymentDetails = {
+        cardNumber: this.form.value.cardNumber,
+        expirationDate: this.form.value.expiration,
+        cvv: this.form.value.cvv
+      };
+
+      this.cartService.processPayment(paymentDetails).subscribe(
+        data => {
+          this.successMessage = 'Procesamiento de pago exitoso';
+          this.router.navigate(['/order-confirmation']);
+        },
+        error => {
+          this.errorMessage = 'Error en proscesar el pago';
+        }
+      );
     } else {
       this.form.markAllAsTouched();
     }
