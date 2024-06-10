@@ -3,10 +3,9 @@ import { FormGroup, ReactiveFormsModule, FormBuilder, Validators } from '@angula
 import { RouterLink } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
 import { CartService} from '../../../services/cart.service';
-import { Product } from '../../../services/models/product-api.interface';
 import { NgFor, NgIf } from '@angular/common';
-import { IProducto } from '../../../models/producto.interface';
 import { Router } from '@angular/router';
+import { ICarrito } from '../../../models/carrito.interface';
 
 @Component({
   selector: 'app-checkout',
@@ -38,7 +37,7 @@ export class CheckoutComponent implements OnInit{
   }
 }
    */
-  productos: IProducto[] = [];
+  productosCarrito: ICarrito[] = [];
   form!: FormGroup;
   constructor(private _formBuilder: FormBuilder,private cartService: CartService, private router: Router) {
     this.form = this._formBuilder.group({
@@ -49,19 +48,19 @@ export class CheckoutComponent implements OnInit{
   });
   }
   ngOnInit(): void {
-    this.cartService.products$.subscribe(products => {
-      this.productos = products;
+    this.cartService.products$.subscribe(productosCarrito => {
+      this.productosCarrito = productosCarrito;
     });
   }
   
   calculateTotal(): number {
-    return this.productos.reduce((acc, product) => acc + product.precio * product.id_producto, 0);
+    return this.productosCarrito.reduce((acc, productoCarrito) => acc + productoCarrito.producto.precio * productoCarrito.cantidad, 0);
   }
 
   removeFromCart(productId: number): void {
     this.cartService.removeProduct(productId).subscribe(() => {
-      this.cartService.getProducts().subscribe(products => {
-        this.productos = products;
+      this.cartService.getProducts().subscribe(productosCarrito => {
+        this.productosCarrito = productosCarrito;
       });
     });
   }

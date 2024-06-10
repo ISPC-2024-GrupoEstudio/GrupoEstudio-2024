@@ -1,20 +1,20 @@
 <div class="mini-cart">
   <div class="cart-icon" (click)="toggleCart()">
     <i class="fa fa-shopping-cart fs-5 me-1" style="color: #202122;"></i>
-    <span class="badge badge-pill badge-danger">{{ products.length }}</span>
+    <span class="badge badge-pill badge-danger">{{ productosCarrito.length }}</span>
   </div>
   <div class="cart-dropdown" *ngIf="isCartOpen">
-    <div *ngFor="let product of products" class="p-2 border-bottom d-flex justify-content-between align-items-center">
+    <div *ngFor="let productoCarrito of productosCarrito" class="p-2 border-bottom d-flex justify-content-between align-items-center">
       <div>
-        <img [src]="product.image_url" class="img-fluid p-2" alt="" style="height: 70px !important;width: 100px !important;">
+        <img [src]="productoCarrito.producto.image_url" class="img-fluid p-2" alt="" style="height: 70px !important;width: 100px !important;">
       </div>
       <div class="flex-grow-1 ms-3">
         <a href="#" class="text-decoration-none text-black fw-semibold">
-          <p class="m-0 p-0">{{ product.nombre }}</p>
+          <p class="m-0 p-0">{{ productoCarrito.producto.nombre }}</p>
         </a>
-        <p>1 <i class="fa-solid fa-xmark" style="color: #0d0d0d;"></i> ${{ product.precio }}</p>
+        <p>1 <i class="fa-solid fa-xmark" style="color: #0d0d0d;"></i> ${{ productoCarrito.producto.precio }}</p>
       </div>
-      <button type="button" class="btn fs-5 closeBtn" (click)="removeFromCart(product)"><i  class="fas fa-times" ></i></button>
+      <button type="button" class="btn fs-5 closeBtn" (click)="removeFromCart(productoCarrito)"><i  class="fas fa-times" ></i></button>
     </div>
     <div class="p-2 d-flex justify-content-between">
       <h6>SubTotal :</h6>
