@@ -64,6 +64,7 @@ export class CheckoutComponent implements OnInit{
   }
 
   onEnviar(event: Event): void {
+    console.log('Botón de envío clickeado'); // Verificar si la función se ejecuta al hacer clic en el botón
     event.preventDefault();
     if (this.form.valid) {
       const paymentDetails = {
@@ -72,19 +73,25 @@ export class CheckoutComponent implements OnInit{
         cvv: this.form.value.cvv
       };
 
-      this.cartService.processPayment(paymentDetails).subscribe(
+      const itemsComprados: ICarrito[] = this.cartService.obtenerProductosCarrito();
+      console.log('Items Comprados:', itemsComprados);  // Verificar productos
+      console.log('Payment Details:', paymentDetails);  // Verificar detalles de pago
+      this.cartService.checkout(itemsComprados, paymentDetails).subscribe(
         data => {
           this.successMessage = 'Procesamiento de pago exitoso';
-          this.router.navigate(['/order-confirmation']);
+          this.errorMessage = ''; // Limpiar mensaje de error
+          this.form.reset(); // Limpiar el formulario después del éxito
         },
         error => {
-          this.errorMessage = 'Error en proscesar el pago';
+          this.errorMessage = 'Error al procesar el pago';
+          this.successMessage = ''; // Limpiar mensaje de éxito
         }
       );
     } else {
       this.form.markAllAsTouched();
     }
   }
+
 
 
   get Name(){
