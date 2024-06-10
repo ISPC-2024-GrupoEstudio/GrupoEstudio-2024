@@ -33,6 +33,9 @@ urlpatterns = [
 
     path("cart/<str:nombre_usuario>/", 
          views.CartView.as_view(), name="cart"),
+        
+    path("delete-from-cart/<int:id_carrito>/",
+         views.DeleteFromCartView.as_view(), name="cart"),
 ]
 
 

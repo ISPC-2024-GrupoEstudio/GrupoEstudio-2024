@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
-import { IProducto } from '../../../models/producto.interface';
 import { CartService } from '../../../services/cart.service';
+import { ICarrito } from '../../../models/carrito.interface';
 
 @Component({
   selector: 'app-minicart',
@@ -15,14 +14,14 @@ import { CartService } from '../../../services/cart.service';
 })
 export class MinicartComponent implements OnInit {
   isCartOpen: boolean = false; // Indica si el carrito está abierto o cerrado
-  products: IProducto[] = [];
+  productosCarrito: ICarrito[] = [];
 
 
   constructor(private cartService: CartService) { }
 
   ngOnInit(): void {
-    this.cartService.getProducts().subscribe(products => {
-      this.products = products;
+    this.cartService.productosCarrito.subscribe(productosCarrito => {
+      this.productosCarrito = productosCarrito;
     });
   }
 
@@ -30,20 +29,15 @@ export class MinicartComponent implements OnInit {
     this.isCartOpen = !this.isCartOpen;
   }
 
-  //revisar de acá para abajo
-  removeFromCart(product: any) {
-    // Lógica para eliminar el producto del carrito
-    const index = this.products.indexOf(product);
-    if (index !== -1) {
-      this.products.splice(index, 1);
-    }
+  removeFromCart(productoCarritoId:number) {
+    this.cartService.quitarProducto(productoCarritoId);
   }
 
   calculateTotal() {
     // Lógica para calcular el total de la compra
     let total = 0;
-    this.products.forEach(product => {
-      total += product.precio;
+    this.productosCarrito.forEach(productosCarrito => {
+      total += productosCarrito.producto.precio;
     });
     return total;
   }

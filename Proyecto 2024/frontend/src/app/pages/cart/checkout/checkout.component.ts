@@ -3,10 +3,9 @@ import { FormGroup, ReactiveFormsModule, FormBuilder, Validators } from '@angula
 import { RouterLink } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
 import { CartService} from '../../../services/cart.service';
-import { Product } from '../../../services/models/product-api.interface';
 import { NgFor, NgIf } from '@angular/common';
-import { IProducto } from '../../../models/producto.interface';
 import { Router } from '@angular/router';
+import { ICarrito } from '../../../models/carrito.interface';
 
 @Component({
   selector: 'app-checkout',
@@ -38,32 +37,30 @@ export class CheckoutComponent implements OnInit{
   }
 }
    */
-  productos: IProducto[] = [];
+  productosCarrito: ICarrito[] = [];
   form!: FormGroup;
+
   constructor(private _formBuilder: FormBuilder,private cartService: CartService, private router: Router) {
     this.form = this._formBuilder.group({
       name: ['', Validators.required],
       cardNumber: ['', [Validators.required, Validators.minLength(16), Validators.maxLength(16)]],
       expiration: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(5)]],
       cvv: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
-  });
-  }
-  ngOnInit(): void {
-    this.cartService.products$.subscribe(products => {
-      this.productos = products;
     });
-  }
-  
-  calculateTotal(): number {
-    return this.productos.reduce((acc, product) => acc + product.precio * product.id_producto, 0);
   }
 
-  removeFromCart(productId: number): void {
-    this.cartService.removeProduct(productId).subscribe(() => {
-      this.cartService.getProducts().subscribe(products => {
-        this.productos = products;
-      });
+  ngOnInit(): void {
+    this.cartService.productosCarrito.subscribe(productosCarrito => {
+      this.productosCarrito = productosCarrito;
     });
+  }
+
+  calculateTotal(): number {
+    return this.productosCarrito.reduce((acc, productoCarrito) => acc + productoCarrito.producto.precio * productoCarrito.cantidad, 0);
+  }
+
+  removeFromCart(productoCarritoId: number): void {
+    this.cartService.quitarProducto(productoCarritoId);
   }
 
   onEnviar(event: Event): void {

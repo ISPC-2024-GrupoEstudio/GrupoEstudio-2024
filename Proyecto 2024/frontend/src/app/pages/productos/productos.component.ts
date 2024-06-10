@@ -33,10 +33,9 @@ export class ProductosComponent implements OnInit{
   }
 
   addToCart(producto: IProducto) {
-    this.cartService.addToCart(producto).subscribe(
+    this.cartService.agregarProducto(producto).subscribe(
       response => {
-        console.log('Producto agregado al carrito:', response);
-        // Aquí puedes realizar acciones adicionales después de agregar el producto al carrito, como mostrar un mensaje de éxito.
+        this.cartService.actualizarCarrito();
       },
       error => {
         console.error('Error al agregar producto al carrito:', error);

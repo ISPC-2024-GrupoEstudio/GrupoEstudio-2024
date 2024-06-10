@@ -78,16 +78,15 @@ class AuthUserUserPermissions(models.Model):
         db_table = 'auth_user_user_permissions'
         unique_together = (('user', 'permission'),)
 
-
 class Carrito(models.Model):
-    nombre_usuario = models.ForeignKey('Usuario', models.DO_NOTHING, db_column='nombre_usuario')  # The composite primary key (nombre_usuario, id_producto) found, that is not supported. The first column is selected.
-    id_producto = models.ForeignKey('Producto', models.DO_NOTHING, db_column='id_producto',)
+    id_carrito = models.BigAutoField(primary_key=True)
+    id_producto = models.ForeignKey('Producto', models.DO_NOTHING, db_column='id_producto')
+    nombre_usuario = models.ForeignKey('Usuario', models.DO_NOTHING, db_column='nombre_usuario')
     cantidad = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'carrito'
-        unique_together = (('nombre_usuario', 'id_producto'),)
 
 
 class CategoriaProducto(models.Model):
