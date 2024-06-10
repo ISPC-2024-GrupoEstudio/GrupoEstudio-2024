@@ -3,7 +3,6 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { IProducto } from '../models/producto.interface';
 import { ICarrito } from '../models/carrito.interface';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -12,7 +11,7 @@ export class CartService {
   private addToCartUrl = this.apiUrl + 'add-to-cart/';
   private cartUrl = this.apiUrl + 'cart/';
   private deleteFromCartUrl = this.apiUrl + 'delete-from-cart/';
-  private checkoutUrl = '';
+  private checkoutUrl =  this.apiUrl + 'checkout/';
  
   private productosCarritoSubject: BehaviorSubject<ICarrito[]> = new BehaviorSubject<ICarrito[]>([]);
   public productosCarrito: Observable<ICarrito[]> = this.productosCarritoSubject.asObservable();
@@ -25,6 +24,7 @@ export class CartService {
     const username = localStorage.getItem("user");
     const url = this.cartUrl + username
     this.httpClient.get<ICarrito[]>(url).subscribe((products) => {
+      console.log('Productos obtenidos del carrito:', products);
       this.productosCarritoSubject.next(products);
     });
   }
@@ -43,14 +43,20 @@ export class CartService {
     });
   }
 
-  checkout(): Observable<any> {
-    return this.httpClient.post(this.checkoutUrl, {});
+  checkout(itemsComprados: ICarrito[], paymentDetails: any): Observable<any> {
+    const body = {
+      items_comprados: itemsComprados,
+      payment_details: paymentDetails
+    };
+    console.log('Cuerpo de la solicitud de checkout:', body);
+    return this.httpClient.post<any>(this.checkoutUrl, body);
   }
 
-  processPayment(paymentDetails: { cardNumber: string; expirationDate: string; cvv: string }): Observable<any> {
-    // Aquí llamamos a la API para procesar el pago. Ajusta la URL y el formato según tu backend.
-    return this.httpClient.post<any>('/api/payment', paymentDetails);
+
+  obtenerProductosCarrito(): ICarrito[] {
+  return this.productosCarritoSubject.value;
   }
+
   /*
   getPaymentMethods(): Observable<any> {
     return this.http.get(`${this.apiUrl}/forma-de-pago/`);

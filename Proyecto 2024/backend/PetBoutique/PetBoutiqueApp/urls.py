@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework import routers
 from PetBoutiqueApp import views
-from .views import RoleListCreateAPIView, RoleRetrieveUpdateDestroyAPIView ,ProcessPaymentView
+from .views import RoleListCreateAPIView, RoleRetrieveUpdateDestroyAPIView ,ProcessPaymentView,CheckoutView
 
 router=routers.DefaultRouter()
 router.register(r'productos', views.ProductoViewSet)
@@ -36,6 +36,8 @@ urlpatterns = [
         
     path("delete-from-cart/<int:id_carrito>/",
          views.DeleteFromCartView.as_view(), name="cart"),
+         
+    path('checkout/', CheckoutView.as_view(), name='checkout')
 ]
 
 
