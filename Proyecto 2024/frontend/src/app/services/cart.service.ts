@@ -48,6 +48,7 @@ export class CartService {
       items_comprados: itemsComprados,
       payment_details: paymentDetails
     };
+    console.log('Cuerpo de la solicitud de checkout:', body);
     return this.httpClient.post<any>(this.checkoutUrl, body);
   }
 

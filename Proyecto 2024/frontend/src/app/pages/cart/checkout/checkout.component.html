@@ -90,12 +90,12 @@
                           @if (Cardnumber?.errors && Cardnumber?.touched){
                             @if (Cardnumber?.hasError("required")) {
                               <p class="text-danger">
-                                El nñumero de tarjeta es requerido.
+                                El numero de tarjeta es requerido.
                               </p>
                             }
                             @else if (Cardnumber?.hasError("minlength")) {
                               <p class="text-danger">
-                                Número de tarjeta es requerido y debe ser de 16 dígitos.
+                                Número de tarjeta es requerido y debe ser de 19  dígitos (incluye espacios).
                               </p>
                             }
                           }
@@ -105,7 +105,7 @@
                           <div class="col-md-6">
                             <div data-mdb-input-init class="form-outline form-white">
                               <input type="text" id="typeExp" class="form-control form-control-lg"
-                                placeholder="MM/YYYY" size="7" id="exp" minlength="7" maxlength="7" formControlName="expiration"/>
+                                placeholder="MM/YY" size="5" id="exp" minlength="5" maxlength="5" formControlName="expiration"/>
                               <label class="form-label" for="typeExp">Expiración</label>
                               @if (Expiration?.errors && Expiration?.touched) {
                                 @if (Expiration?.hasError("required")) {

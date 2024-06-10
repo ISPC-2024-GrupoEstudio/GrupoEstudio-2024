@@ -43,7 +43,7 @@ export class CheckoutComponent implements OnInit{
   constructor(private _formBuilder: FormBuilder,private cartService: CartService, private router: Router) {
     this.form = this._formBuilder.group({
       name: ['', Validators.required],
-      cardNumber: ['', [Validators.required, Validators.minLength(16), Validators.maxLength(16)]],
+      cardNumber: ['', [Validators.required, Validators.minLength(19), Validators.maxLength(19)]],
       expiration: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(5)]],
       cvv: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
     });
@@ -67,30 +67,53 @@ export class CheckoutComponent implements OnInit{
     console.log('Botón de envío clickeado'); // Verificar si la función se ejecuta al hacer clic en el botón
     event.preventDefault();
     if (this.form.valid) {
-      const paymentDetails = {
-        cardNumber: this.form.value.cardNumber,
-        expirationDate: this.form.value.expiration,
-        cvv: this.form.value.cvv
-      };
+        console.log('Formulario válido'); // Verificar que el formulario es válido
+        const paymentDetails = {
+            cardNumber: this.form.value.cardNumber.replace(/\s+/g, ''),
+            expirationDate: this.form.value.expiration,
+            cvv: this.form.value.cvv
+        };
 
-      const itemsComprados: ICarrito[] = this.cartService.obtenerProductosCarrito();
-      console.log('Items Comprados:', itemsComprados);  // Verificar productos
-      console.log('Payment Details:', paymentDetails);  // Verificar detalles de pago
-      this.cartService.checkout(itemsComprados, paymentDetails).subscribe(
-        data => {
-          this.successMessage = 'Procesamiento de pago exitoso';
-          this.errorMessage = ''; // Limpiar mensaje de error
-          this.form.reset(); // Limpiar el formulario después del éxito
-        },
-        error => {
-          this.errorMessage = 'Error al procesar el pago';
-          this.successMessage = ''; // Limpiar mensaje de éxito
+        const itemsComprados: ICarrito[] = this.cartService.obtenerProductosCarrito();
+        console.log('Items Comprados:', itemsComprados);  // Verificar productos
+        console.log('Payment Details:', paymentDetails);  // Verificar detalles de pago
+
+        if (itemsComprados.length === 0) {
+            console.log('El carrito está vacío'); // Verificar si hay productos en el carrito
+            this.errorMessage = 'El carrito está vacío';
+            return;
         }
-      );
+
+        this.cartService.checkout(itemsComprados, paymentDetails).subscribe(
+            data => {
+                console.log('Respuesta del servidor:', data); // Verificar respuesta del servidor
+                this.successMessage = 'Procesamiento de pago exitoso';
+                this.errorMessage = ''; // Limpiar mensaje de error
+                this.form.reset(); // Limpiar el formulario después del éxito
+            },
+            error => {
+                console.log('Error del servidor:', error); // Verificar error del servidor
+                this.errorMessage = 'Error al procesar el pago';
+                this.successMessage = ''; // Limpiar mensaje de éxito
+            }
+        );
     } else {
-      this.form.markAllAsTouched();
+        console.log('Formulario inválido'); // Verificar que el formulario es inválido
+        this.form.markAllAsTouched();
+        this.logFormErrors(); // Llamar a la función para registrar los errores del formulario
     }
-  }
+}
+
+logFormErrors(): void {
+    Object.keys(this.form.controls).forEach(key => {
+        const controlErrors = this.form.get(key)?.errors;
+        if (controlErrors) {
+            Object.keys(controlErrors).forEach(keyError => {
+                console.log('Error en el control ' + key + ': ' + keyError);
+            });
+        }
+    });
+}
 
 
 
