@@ -14,7 +14,7 @@
         </a>
         <p>1 <i class="fa-solid fa-xmark" style="color: #0d0d0d;"></i> ${{ productoCarrito.producto.precio }}</p>
       </div>
-      <button type="button" class="btn fs-5 closeBtn" (click)="removeFromCart(productoCarrito)"><i  class="fas fa-times" ></i></button>
+      <button type="button" class="btn fs-5 closeBtn" (click)="removeFromCart(productoCarrito.id_carrito)"><i  class="fas fa-times" ></i></button>
     </div>
     <div class="p-2 d-flex justify-content-between">
       <h6>SubTotal :</h6>
