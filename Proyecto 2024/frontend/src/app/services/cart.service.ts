@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { IProducto } from '../models/producto.interface';
 import { AuthService } from './auth.service';
+import { ICarrito } from '../models/carrito.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -12,14 +13,15 @@ export class CartService {
   private addToCartUrl = this.apiUrl + 'add-to-cart/';
   private cartUrl = this.apiUrl + 'cart/';
   private checkoutUrl = '';
-  private productsSubject: BehaviorSubject<IProducto[]> = new BehaviorSubject<IProducto[]>([]);
-  public products$: Observable<IProducto[]> = this.productsSubject.asObservable();
+  private productsSubject: BehaviorSubject<ICarrito[]> = new BehaviorSubject<ICarrito[]>([]);
+  public products$: Observable<ICarrito[]> = this.productsSubject.asObservable();
 
   constructor(private readonly httpClient : HttpClient) { }
 
-  getProducts(): Observable<IProducto[]> {
+  getProducts(): Observable<ICarrito[]> {
     const username = localStorage.getItem("user");
-    return this.httpClient.get<IProducto[]>(this.cartUrl + username);
+    const url = this.cartUrl + username
+    return this.httpClient.get<ICarrito[]>(url);
   }
 
   addToCart(product: IProducto): Observable<any> {

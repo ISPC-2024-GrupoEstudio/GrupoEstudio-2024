@@ -156,10 +156,18 @@ class AddToCartView (APIView):
 
 class CartView(APIView):
     def get(self, request, nombre_usuario):
-        productos_en_carrito = Carrito.objects.filter(nombre_usuario=nombre_usuario)
-        serializer = CarritoSerializer(productos_en_carrito, many=True)
+        carritos = Carrito.objects.filter(nombre_usuario=nombre_usuario).select_related('id_producto')
+        carrito_serializer = CarritoSerializer(carritos, many=True)
+       
+        producto_ids = [carrito.id_producto.id_producto for carrito in carritos]
+        productos = Producto.objects.filter(id_producto__in=producto_ids)
+        producto_serializer = ProductoSerializer(productos, many=True)
         
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
+        productos_data = {producto.id_producto: producto_serializer.data[index] for index, producto in enumerate(productos)}
+        for carrito_data in carrito_serializer.data:
+            id_producto = carrito_data['id_producto']
+            carrito_data['producto'] = productos_data.get(id_producto, {})
+       
+        return Response(carrito_serializer.data, status=status.HTTP_200_OK)
 
 
