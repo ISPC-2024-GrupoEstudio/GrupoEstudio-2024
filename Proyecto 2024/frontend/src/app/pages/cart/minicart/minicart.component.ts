@@ -20,7 +20,7 @@ export class MinicartComponent implements OnInit {
   constructor(private cartService: CartService) { }
 
   ngOnInit(): void {
-    this.cartService.getProducts().subscribe(productosCarrito => {
+    this.cartService.productosCarrito.subscribe(productosCarrito => {
       this.productosCarrito = productosCarrito;
     });
   }
@@ -29,13 +29,8 @@ export class MinicartComponent implements OnInit {
     this.isCartOpen = !this.isCartOpen;
   }
 
-  //revisar de acá para abajo
-  removeFromCart(product: any) {
-    // Lógica para eliminar el producto del carrito
-    const index = this.productosCarrito.indexOf(product);
-    if (index !== -1) {
-      this.productosCarrito.splice(index, 1);
-    }
+  removeFromCart(productoCarritoId:number) {
+    this.cartService.quitarProducto(productoCarritoId);
   }
 
   calculateTotal() {

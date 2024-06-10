@@ -152,8 +152,15 @@ class AddToCartView (APIView):
             return Response(carrito_serializer.data, status= status.HTTP_201_CREATED)
         else:
             return Response(carrito_serializer.errors, status= status.HTTP_400_BAD_REQUEST)
-        
 
+class DeleteFromCartView (APIView):
+    def delete (self, request, id_carrito):
+        carrito = Carrito.objects.get(id_carrito=id_carrito)
+        carrito.delete()
+
+        return Response(status= status.HTTP_200_OK)
+
+        
 class CartView(APIView):
     def get(self, request, nombre_usuario):
         carritos = Carrito.objects.filter(nombre_usuario=nombre_usuario).select_related('id_producto')

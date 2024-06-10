@@ -39,30 +39,28 @@ export class CheckoutComponent implements OnInit{
    */
   productosCarrito: ICarrito[] = [];
   form!: FormGroup;
+
   constructor(private _formBuilder: FormBuilder,private cartService: CartService, private router: Router) {
     this.form = this._formBuilder.group({
       name: ['', Validators.required],
       cardNumber: ['', [Validators.required, Validators.minLength(16), Validators.maxLength(16)]],
       expiration: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(5)]],
       cvv: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
-  });
+    });
   }
+
   ngOnInit(): void {
-    this.cartService.products$.subscribe(productosCarrito => {
+    this.cartService.productosCarrito.subscribe(productosCarrito => {
       this.productosCarrito = productosCarrito;
     });
   }
-  
+
   calculateTotal(): number {
     return this.productosCarrito.reduce((acc, productoCarrito) => acc + productoCarrito.producto.precio * productoCarrito.cantidad, 0);
   }
 
-  removeFromCart(productId: number): void {
-    this.cartService.removeProduct(productId).subscribe(() => {
-      this.cartService.getProducts().subscribe(productosCarrito => {
-        this.productosCarrito = productosCarrito;
-      });
-    });
+  removeFromCart(productoCarritoId: number): void {
+    this.cartService.quitarProducto(productoCarritoId);
   }
 
   onEnviar(event: Event): void {
