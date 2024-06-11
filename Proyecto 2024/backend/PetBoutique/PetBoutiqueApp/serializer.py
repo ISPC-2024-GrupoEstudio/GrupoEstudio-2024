@@ -80,8 +80,9 @@ class UserSerializer(serializers.Serializer):
             raise serializers.ValidationError("Este nombre de usuario ya existe, ingrese uno nuevo.")
         else:
             return data
+        
 class CarritoSerializer(serializers.ModelSerializer):
-    Producto = ProductoSerializer
+
     class Meta:
         model = Carrito
         fields = '__all__'
