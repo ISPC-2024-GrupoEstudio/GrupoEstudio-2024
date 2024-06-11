@@ -7,7 +7,7 @@
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 # importación para API autenticación
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User, AbstractUser
 
 
 class AuthGroup(models.Model):
@@ -336,3 +336,15 @@ class Roles(models.Model):
 
     def __str__(self):
         return self.nombre
+    
+# Custom User para la creación de nuevos usuarios
+class CustomUser(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+    username = models.CharField(max_length=150, unique=True)
+    password = models.CharField(max_length=128)
+    email = models.EmailField(unique=True)
+
+    def __str__(self):
+        return self.username

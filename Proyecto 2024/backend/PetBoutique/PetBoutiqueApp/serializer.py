@@ -1,5 +1,8 @@
 from rest_framework import serializers
 from .models import Producto, CategoriaProducto, Proveedor, Pedido, EstadoPedido, ProductoXPedido, Roles, FormaDePago, TipoEnvio, Carrito, Usuario
+# Importaciones referentes a Custom User
+from .models import CustomUser
+from django.contrib.auth.models import User
 
 # serializador creación usuarios
 from django.contrib.auth.models import User
@@ -82,10 +85,22 @@ class UserSerializer(serializers.Serializer):
             return data
         
 class CarritoSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Carrito
         fields = '__all__'
+
+# Custom User serializer
+class CustomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['first_name', 'last_name', 'username', 'password', 'email', 'user']
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def create(self, validated_data):
+        user_data = validated_data.pop('user')
+        user = User.objects.create_user(**user_data)
+        custom_user = CustomUser.objects.create(user=user, **validated_data)
+        return custom_user
         
 
 

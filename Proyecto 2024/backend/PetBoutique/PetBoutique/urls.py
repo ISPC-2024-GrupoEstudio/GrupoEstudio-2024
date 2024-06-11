@@ -19,11 +19,12 @@ from django.urls import path, include
 from django.views.generic import TemplateView
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    # Sirve el index de Angular
+    path('', TemplateView.as_view(template_name='index.html'), name='index'),
     
-    path('', TemplateView.as_view(template_name='index.html'), name='index'), # sirve el index de Angular
+    path('admin/', admin.site.urls),
 
-    #Add Django site authentication urls (for login, logout, password management)
+    # Add Django site authentication urls (for login, logout, password management)
     path('accounts/', include('django.contrib.auth.urls')),
 
     # API autenticación routes

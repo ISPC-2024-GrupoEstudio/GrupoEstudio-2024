@@ -2,6 +2,7 @@ from django.urls import path, include
 from rest_framework import routers
 from PetBoutiqueApp import views
 from .views import RoleListCreateAPIView, RoleRetrieveUpdateDestroyAPIView ,ProcessPaymentView,CheckoutView
+from .views import registrar_usuario
 
 router=routers.DefaultRouter()
 router.register(r'productos', views.ProductoViewSet)
@@ -27,6 +28,9 @@ urlpatterns = [
 
     path('auth/register/', 
        views. RegisterView.as_view(),name= "auth_register"),
+
+# Segundo intento de registro de usuarios
+    path('register/', registrar_usuario, name='registrar_usuario'),
 
     path("add-to-cart/", 
          views.AddToCartView.as_view(), name="add_to_cart"),
