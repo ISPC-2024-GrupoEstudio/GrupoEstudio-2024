@@ -97,7 +97,59 @@ class RoleRetrieveUpdateDestroyAPIView(APIView):
 class ProcessPaymentView(APIView):
     def post(self,resquest, format=None):
         payment_details = resquest.data
-        return Response ({"status": "success", "message": "Pago procesado exitosamente"}, status=status.HTTP_200_OK)     
+        return Response ({"status": "success", "message": "Pago procesado exitosamente"}, status=status.HTTP_200_OK)
+    
+# Vistas login / logout
+class LoginView(APIView):
+    def post (self, request):
+        # Recuperamos las credenciales y autenticamos al usuario
+        username = request.data.get('username', None)
+        password = request.data.get('password', None)
+
+        user = authenticate(username=username, password=password)
+
+        # Si es correcto, añadimos a la request la información de sesión
+        if user:
+            login(request, user)
+            return Response(
+                status=status.HTTP_200_OK)
+        
+        # Si no es correcto, devolvemos un error en la petición
+        return Response(
+            status=status.HTTP_404_NOT_FOUND)
+
+class LogoutView(APIView):
+    def post(self, request):
+        # Borramos de la request la información de sesión
+        logout(request)
+
+        # Devolvemos la respuesta al cliente
+        return Response(status=status.HTTP_200_OK)
+    
+class RegisterView (APIView):
+    def post (self, request):
+        nuevo_usuario = request.data
+        nuevo_usuario["id_rol"] = 2
+
+        usuario_serializer = UsuarioSerializer(data = nuevo_usuario)
+        
+        admin_user_data =  {
+            "first_name": request.data.get("nombre"),
+            "last_name": request.data.get("apellido"),
+            "username":  request.data.get("nombre_usuario"),
+            "password": request.data.get("password"),
+            "email": request.data.get("email"),
+        }
+        admin_user_serializer = UserSerializer(data = admin_user_data)
+
+        if admin_user_serializer.is_valid() and usuario_serializer.is_valid():
+            usuario_serializer.save()
+            admin_user_serializer.save()
+
+            return Response(usuario_serializer.data, status= status.HTTP_201_CREATED)
+        else:
+            return Response(admin_user_serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+        
 
 class AddToCartView (APIView):
     def post (self, request):
