@@ -116,9 +116,10 @@ CREATE TABLE `auth_user` (
   `is_staff` tinyint(1) NOT NULL,
   `is_active` tinyint(1) NOT NULL,
   `date_joined` datetime(6) NOT NULL,
+  `telefono` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -127,7 +128,7 @@ CREATE TABLE `auth_user` (
 
 LOCK TABLES `auth_user` WRITE;
 /*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
-INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$600000$BmaOyS8u0DmYzloEcHhA76$Vu+vEccgqjgD8QDiNcLynXQTEBemOxDoVzl+mtFaB/c=','2024-05-27 19:13:16.126368',1,'admin','','','ea.samsam@gmail.com',1,1,'2024-05-14 00:53:14.233295');
+INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$600000$BmaOyS8u0DmYzloEcHhA76$Vu+vEccgqjgD8QDiNcLynXQTEBemOxDoVzl+mtFaB/c=','2024-06-09 23:00:29.254879',1,'admin','','','ea.samsam@gmail.com',1,1,'2024-05-14 00:53:14.233295',NULL),(2,'pbkdf2_sha256$600000$eyB9dYwVYYodufs4QFTzHr$7xXtzA5c65B2YvyN3lhwN9MkHDvIj0MODmqZMqgouNI=','2024-06-04 03:22:12.816197',1,'superusuario','','','superusuario@mail.com',1,1,'2024-06-03 23:44:29.429245',NULL),(3,'pbkdf2_sha256$600000$zrkcbuDDZKTedHPtiuwh4i$4jS3iNmIr1iP3EMaTQG+OgsUTkV6+sXPEMwMuIYrfVI=',NULL,0,'migue','','','',0,1,'2024-06-03 23:46:09.689472',NULL),(4,'pbkdf2_sha256$600000$EeFB2w4aapVeq3H0DgeTQ4$MvV8uoqPEk3z8kwqyA8p66m0vd0//FpzyvwW9RF1jts=',NULL,0,'flor','flor','flor','flor@mail.com',0,1,'2024-06-04 00:32:40.461467',NULL),(5,'pbkdf2_sha256$600000$WG0RmOL1aO9aZEwm1zepcc$CUMwBEPxv2HQ6mdRK9fuE99nZAvoZhsd5g9HIV9lQdg=',NULL,0,'flor1','flor1','flor1','flor1@mail.com',0,1,'2024-06-04 00:36:32.181809',NULL),(6,'pbkdf2_sha256$600000$afbvXs8anBIWFxnzr9OVgs$sVNjP4CKb1zubTQ+mr1g2BzhDPSlaO21SBO7F2F5gEw=','2024-06-04 03:29:53.657443',0,'changuito4','changuito4','changuito4','changuito4@mail.com',0,1,'2024-06-04 01:07:23.802085',NULL);
 /*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -195,14 +196,16 @@ DROP TABLE IF EXISTS `carrito`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `carrito` (
-  `nombre_usuario` varchar(12) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+  `id_carrito` bigint NOT NULL AUTO_INCREMENT,
   `id_producto` int NOT NULL,
+  `nombre_usuario` varchar(100) NOT NULL,
   `cantidad` int DEFAULT NULL,
-  PRIMARY KEY (`nombre_usuario`,`id_producto`),
-  KEY `fk_prodxcar_idProducto_idx` (`id_producto`),
+  PRIMARY KEY (`id_carrito`),
+  KEY `carrito_producto_FK` (`id_producto`),
+  KEY `carrito_usuario_FK` (`nombre_usuario`),
   CONSTRAINT `carrito_producto_FK` FOREIGN KEY (`id_producto`) REFERENCES `producto` (`id_producto`),
   CONSTRAINT `carrito_usuario_FK` FOREIGN KEY (`nombre_usuario`) REFERENCES `usuario` (`nombre_usuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -211,6 +214,7 @@ CREATE TABLE `carrito` (
 
 LOCK TABLES `carrito` WRITE;
 /*!40000 ALTER TABLE `carrito` DISABLE KEYS */;
+INSERT INTO `carrito` VALUES (1,18,'admin',1),(2,19,'admin',1),(3,19,'admin',1);
 /*!40000 ALTER TABLE `carrito` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -261,7 +265,7 @@ CREATE TABLE `django_admin_log` (
   CONSTRAINT `django_admin_log_content_type_id_c4bce8eb_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`),
   CONSTRAINT `django_admin_log_user_id_c564eba6_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`),
   CONSTRAINT `django_admin_log_chk_1` CHECK ((`action_flag` >= 0))
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -270,7 +274,7 @@ CREATE TABLE `django_admin_log` (
 
 LOCK TABLES `django_admin_log` WRITE;
 /*!40000 ALTER TABLE `django_admin_log` DISABLE KEYS */;
-INSERT INTO `django_admin_log` VALUES (1,'2024-05-14 01:17:03.365380','1','Tipodoc object (1)',1,'[{\"added\": {}}]',13,1);
+INSERT INTO `django_admin_log` VALUES (1,'2024-05-14 01:17:03.365380','1','Tipodoc object (1)',1,'[{\"added\": {}}]',13,1),(2,'2024-06-03 23:46:09.847634','3','migue',1,'[{\"added\": {}}]',4,2),(3,'2024-06-09 23:27:29.119341','admin','admin',1,'[{\"added\": {}}]',24,1);
 /*!40000 ALTER TABLE `django_admin_log` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -287,7 +291,7 @@ CREATE TABLE `django_content_type` (
   `model` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `django_content_type_app_label_model_76bd3d3b_uniq` (`app_label`,`model`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -296,7 +300,7 @@ CREATE TABLE `django_content_type` (
 
 LOCK TABLES `django_content_type` WRITE;
 /*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
-INSERT INTO `django_content_type` VALUES (1,'admin','logentry'),(3,'auth','group'),(2,'auth','permission'),(4,'auth','user'),(5,'contenttypes','contenttype'),(7,'PetBoutiqueApp','categoriaproductos'),(8,'PetBoutiqueApp','estadopedido'),(9,'PetBoutiqueApp','formadepago'),(10,'PetBoutiqueApp','pedidos'),(17,'PetBoutiqueApp','productos'),(15,'PetBoutiqueApp','productosxcarrito'),(18,'PetBoutiqueApp','productosxpedido'),(19,'PetBoutiqueApp','productosxventa'),(11,'PetBoutiqueApp','proveedores'),(12,'PetBoutiqueApp','roles'),(13,'PetBoutiqueApp','tipodoc'),(14,'PetBoutiqueApp','tipoenvio'),(16,'PetBoutiqueApp','usuarios'),(20,'PetBoutiqueApp','ventas'),(6,'sessions','session');
+INSERT INTO `django_content_type` VALUES (1,'admin','logentry'),(3,'auth','group'),(2,'auth','permission'),(4,'auth','user'),(5,'contenttypes','contenttype'),(7,'PetBoutiqueApp','categoriaproductos'),(8,'PetBoutiqueApp','estadopedido'),(9,'PetBoutiqueApp','formadepago'),(10,'PetBoutiqueApp','pedidos'),(21,'PetBoutiqueApp','producto'),(17,'PetBoutiqueApp','productos'),(15,'PetBoutiqueApp','productosxcarrito'),(18,'PetBoutiqueApp','productosxpedido'),(19,'PetBoutiqueApp','productosxventa'),(11,'PetBoutiqueApp','proveedores'),(22,'PetBoutiqueApp','rol'),(12,'PetBoutiqueApp','roles'),(13,'PetBoutiqueApp','tipodoc'),(23,'PetBoutiqueApp','tipodocumento'),(14,'PetBoutiqueApp','tipoenvio'),(24,'PetBoutiqueApp','usuario'),(16,'PetBoutiqueApp','usuarios'),(20,'PetBoutiqueApp','ventas'),(6,'sessions','session');
 /*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -348,7 +352,7 @@ CREATE TABLE `django_session` (
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
-INSERT INTO `django_session` VALUES ('4rmchzwvkk6jm8sax6fhds6bz36kau24','.eJxVjDsOwjAQBe_iGln-4B8lfc5grb1rHEC2FCcV4u4QKQW0b2bei0XY1hq3QUuckV2YZKffLUF-UNsB3qHdOs-9rcuc-K7wgw4-daTn9XD_DiqM-q2NDzIkp61XGYyyxqezU4TFOqERPTiLpgRFXgrIMocihba5CFKSyBj2_gDGwzeB:1sBfmW:sVVGLXMP0y47CK7cTKX8lk1vqbX5xdRaBQuUWkqDokU','2024-06-10 19:13:16.127972'),('gpoco1wslmm20tjtik1jb7pjf8qusn81','.eJxVjDsOwjAQBe_iGln-4B8lfc5grb1rHEC2FCcV4u4QKQW0b2bei0XY1hq3QUuckV2YZKffLUF-UNsB3qHdOs-9rcuc-K7wgw4-daTn9XD_DiqM-q2NDzIkp61XGYyyxqezU4TFOqERPTiLpgRFXgrIMocihba5CFKSyBj2_gDGwzeB:1s6ghN:5iN-87VmLnj9rHozF-5Tf_LCA2LJRoYOr_LpI0AHMkU','2024-05-28 01:11:21.309976');
+INSERT INTO `django_session` VALUES ('010eis9ppjga0wgli93yglkm8dku03h0','.eJxVjMsOwiAQRf-FtSEd3rh07zcQBhipGkhKuzL-uzbpQrf3nHNfLMRtrWEbZQlzZmcm2Ol3w5gepe0g32O7dZ56W5cZ-a7wgw5-7bk8L4f7d1DjqN9aCuXAZQSnAKzMwieJNEmFxmpvDAkPSUePGomokNQ2FQVRWaA0FcHeH8ICN6c:1sEJV9:qvc1rrSiXy9QHn8H_VZHlHNqwra1lpnwXjV5uDJRamk','2024-06-18 02:02:15.023347'),('0g1n19o3351him3acedaq41n57ktp95v','.eJxVjMsOwiAQRf-FtSEd3rh07zcQBhipGkhKuzL-uzbpQrf3nHNfLMRtrWEbZQlzZmcm2Ol3w5gepe0g32O7dZ56W5cZ-a7wgw5-7bk8L4f7d1DjqN9aCuXAZQSnAKzMwieJNEmFxmpvDAkPSUePGomokNQ2FQVRWaA0FcHeH8ICN6c:1sEJqh:gwas0tXmdZIO8QzRAUlc4NAiX3rInTe7N8iFHzis8ys','2024-06-18 02:24:31.469433'),('4nh7g25aac7vmhy32gy00f5so17ugdfs','.eJxVjMsOwiAQRf-FtSEd3rh07zcQBhipGkhKuzL-uzbpQrf3nHNfLMRtrWEbZQlzZmcm2Ol3w5gepe0g32O7dZ56W5cZ-a7wgw5-7bk8L4f7d1DjqN9aCuXAZQSnAKzMwieJNEmFxmpvDAkPSUePGomokNQ2FQVRWaA0FcHeH8ICN6c:1sEIlB:uSflTvxq3QgmTY3wTkkXEu5FrkXdWvuM8xhXPtHLbms','2024-06-18 01:14:45.104524'),('bxbddoq7iq9cmkp5oylxjcrx78b0kdwq','.eJxVjMsOwiAQRf-FtSEd3rh07zcQBhipGkhKuzL-uzbpQrf3nHNfLMRtrWEbZQlzZmcm2Ol3w5gepe0g32O7dZ56W5cZ-a7wgw5-7bk8L4f7d1DjqN9aCuXAZQSnAKzMwieJNEmFxmpvDAkPSUePGomokNQ2FQVRWaA0FcHeH8ICN6c:1sEJFl:0YYvd70nUbbcThj_Lbx22ji9DdJwBIbJg5bbtnNipQ8','2024-06-18 01:46:21.611989'),('efcgqb5mv3se6jyebmih7fup85o38muk','.eJxVjMsOwiAQRf-FtSEd3rh07zcQBhipGkhKuzL-uzbpQrf3nHNfLMRtrWEbZQlzZmcm2Ol3w5gepe0g32O7dZ56W5cZ-a7wgw5-7bk8L4f7d1DjqN9aCuXAZQSnAKzMwieJNEmFxmpvDAkPSUePGomokNQ2FQVRWaA0FcHeH8ICN6c:1sEKkW:TGFl6BEstn6v_JQKmSYhnqs8czWhu4YmLbbFzKfQAKU','2024-06-18 03:22:12.817398'),('f566mxmsy0rb80yuj8wxcc2caqjdlavz','.eJxVjDsOwjAQBe_iGln-4B8lfc5grb1rHEC2FCcV4u4QKQW0b2bei0XY1hq3QUuckV2YZKffLUF-UNsB3qHdOs-9rcuc-K7wgw4-daTn9XD_DiqM-q2NDzIkp61XGYyyxqezU4TFOqERPTiLpgRFXgrIMocihba5CFKSyBj2_gDGwzeB:1sFNJs:4dPBONTWpapfTjDPwff2IMuDGlEUvcIyZ044iaVqODw','2024-06-21 00:19:00.019106'),('ftiq4pn2hcj5hm4jgywoon33ok6erdao','.eJxVjDsOwjAQBe_iGln-4B8lfc5grb1rHEC2FCcV4u4QKQW0b2bei0XY1hq3QUuckV2YZKffLUF-UNsB3qHdOs-9rcuc-K7wgw4-daTn9XD_DiqM-q2NDzIkp61XGYyyxqezU4TFOqERPTiLpgRFXgrIMocihba5CFKSyBj2_gDGwzeB:1sGRWX:sc8J1Oki6F1By_dDF19_Y03Yc-YSHgISRVk_zf_bjfw','2024-06-23 23:00:29.256069'),('giast6t3jg0dnhzrsemcbbrke5s55iie','.eJxVjE0OwiAYBe_C2pCWFgou3XsGwvcnVQNJaVfGu2uTLnT7Zua9VEzbmuPWeIkzqbNy6vS7QcIHlx3QPZVb1VjLusygd0UftOlrJX5eDvfvIKeWv7UPNpBxyKlHz8EQosFEMHU-sFhCARkna8E7BHbCQiLGDAOOfQcyqPcHHyc5mA:1sEKrx:8DSHaEzqI97dWOY8XufItGuhra6BJ-MjZRd57Gqlodo','2024-06-18 03:29:53.658782'),('goeen5pibwxuxwy965ihg6ew6lqt51oy','.eJxVjMsOwiAQRf-FtSEd3rh07zcQBhipGkhKuzL-uzbpQrf3nHNfLMRtrWEbZQlzZmcm2Ol3w5gepe0g32O7dZ56W5cZ-a7wgw5-7bk8L4f7d1DjqN9aCuXAZQSnAKzMwieJNEmFxmpvDAkPSUePGomokNQ2FQVRWaA0FcHeH8ICN6c:1sEJ3U:8-_ACTGKWe80BwBgwtjlDSYKj6XK_3sESld8dirTwhk','2024-06-18 01:33:40.718490'),('gpoco1wslmm20tjtik1jb7pjf8qusn81','.eJxVjDsOwjAQBe_iGln-4B8lfc5grb1rHEC2FCcV4u4QKQW0b2bei0XY1hq3QUuckV2YZKffLUF-UNsB3qHdOs-9rcuc-K7wgw4-daTn9XD_DiqM-q2NDzIkp61XGYyyxqezU4TFOqERPTiLpgRFXgrIMocihba5CFKSyBj2_gDGwzeB:1s6ghN:5iN-87VmLnj9rHozF-5Tf_LCA2LJRoYOr_LpI0AHMkU','2024-05-28 01:11:21.309976'),('h3p6ditnsbbh3vo3fzsfmh89edj3nvmh','.eJxVjMsOwiAQRf-FtSEd3rh07zcQBhipGkhKuzL-uzbpQrf3nHNfLMRtrWEbZQlzZmcm2Ol3w5gepe0g32O7dZ56W5cZ-a7wgw5-7bk8L4f7d1DjqN9aCuXAZQSnAKzMwieJNEmFxmpvDAkPSUePGomokNQ2FQVRWaA0FcHeH8ICN6c:1sEIiK:jhCVtjqST-fFBz0OEcPgQX6hwdSZ-KJteKgmkvRnWR8','2024-06-18 01:11:48.675244'),('jhuwkn2oznylug8d92hy85eucqxbx86i','.eJxVjMsOwiAQRf-FtSEd3rh07zcQBhipGkhKuzL-uzbpQrf3nHNfLMRtrWEbZQlzZmcm2Ol3w5gepe0g32O7dZ56W5cZ-a7wgw5-7bk8L4f7d1DjqN9aCuXAZQSnAKzMwieJNEmFxmpvDAkPSUePGomokNQ2FQVRWaA0FcHeH8ICN6c:1sEJ8Q:qWp5X7qkP_meDec-S9a0wsP8QyDplXvpiEMjODo-ljQ','2024-06-18 01:38:46.265614'),('lhsxk2dzbudum5ztejx58mz7vrl7zvvu','.eJxVjMsOwiAQRf-FtSEd3rh07zcQBhipGkhKuzL-uzbpQrf3nHNfLMRtrWEbZQlzZmcm2Ol3w5gepe0g32O7dZ56W5cZ-a7wgw5-7bk8L4f7d1DjqN9aCuXAZQSnAKzMwieJNEmFxmpvDAkPSUePGomokNQ2FQVRWaA0FcHeH8ICN6c:1sEHNt:XB90rHOZBlY2S4s0m29xsIahCPCrpn0AanXt9QzefBo','2024-06-17 23:46:37.848610'),('mg2gq8fh572z7ga1piy8tdadma515kdx','.eJxVjDsOwjAQBe_iGln-4B8lfc5grb1rHEC2FCcV4u4QKQW0b2bei0XY1hq3QUuckV2YZKffLUF-UNsB3qHdOs-9rcuc-K7wgw4-daTn9XD_DiqM-q2NDzIkp61XGYyyxqezU4TFOqERPTiLpgRFXgrIMocihba5CFKSyBj2_gDGwzeB:1sFMyD:QqcaH-yW7c239a8-eGhmaixScfeVgicE5OP3POf79Wg','2024-06-20 23:56:37.918892'),('nzu9gly3w7alp86e7tekk1csa6ur8g1s','.eJxVjMsOwiAQRf-FtSEd3rh07zcQBhipGkhKuzL-uzbpQrf3nHNfLMRtrWEbZQlzZmcm2Ol3w5gepe0g32O7dZ56W5cZ-a7wgw5-7bk8L4f7d1DjqN9aCuXAZQSnAKzMwieJNEmFxmpvDAkPSUePGomokNQ2FQVRWaA0FcHeH8ICN6c:1sEJTX:UOA4brNSWmG5DIKXV8GEKjG5TNj5BYjsFIhkTisVCBc','2024-06-18 02:00:35.934325'),('ok30qfnt83lw5gyqvkzf97l2uxbyj6kj','.eJxVjMsOwiAQRf-FtSEd3rh07zcQBhipGkhKuzL-uzbpQrf3nHNfLMRtrWEbZQlzZmcm2Ol3w5gepe0g32O7dZ56W5cZ-a7wgw5-7bk8L4f7d1DjqN9aCuXAZQSnAKzMwieJNEmFxmpvDAkPSUePGomokNQ2FQVRWaA0FcHeH8ICN6c:1sEKYC:T8KnpFFsDzgc-QkdyNkTbak3ylCGKGHZ_xPOGj1pLbg','2024-06-18 03:09:28.587213'),('w2jge9tp0i76a9lusiscxs9kihj4cfwm','.eJxVjDsOwjAQBe_iGln-4B8lfc5grb1rHEC2FCcV4u4QKQW0b2bei0XY1hq3QUuckV2YZKffLUF-UNsB3qHdOs-9rcuc-K7wgw4-daTn9XD_DiqM-q2NDzIkp61XGYyyxqezU4TFOqERPTiLpgRFXgrIMocihba5CFKSyBj2_gDGwzeB:1sGRN2:jxNk2Kkvw_GsH40k4qfD1iVTRV2F3lWp0T3aX7jzf3g','2024-06-23 22:50:40.672530'),('wupweyndjeh97mwg5vpsvuaewnti3pyb','.eJxVjDsOwjAQBe_iGln-4B8lfc5grb1rHEC2FCcV4u4QKQW0b2bei0XY1hq3QUuckV2YZKffLUF-UNsB3qHdOs-9rcuc-K7wgw4-daTn9XD_DiqM-q2NDzIkp61XGYyyxqezU4TFOqERPTiLpgRFXgrIMocihba5CFKSyBj2_gDGwzeB:1sFN5E:jv5TbWghMPLQj7uSS-vGhCN09gkHVGUPqW_L3KOweYs','2024-06-21 00:03:52.809016'),('z5mlugvfe7n88gnm0gnwbums8nnsz45j','.eJxVjMsOwiAQRf-FtSEd3rh07zcQBhipGkhKuzL-uzbpQrf3nHNfLMRtrWEbZQlzZmcm2Ol3w5gepe0g32O7dZ56W5cZ-a7wgw5-7bk8L4f7d1DjqN9aCuXAZQSnAKzMwieJNEmFxmpvDAkPSUePGomokNQ2FQVRWaA0FcHeH8ICN6c:1sEIzd:aNFjmED8LbS5rjf16IfSM5eKc29jK3wIXJsWOXZONec','2024-06-18 01:29:41.186781');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -434,6 +438,95 @@ CREATE TABLE `pedido` (
 LOCK TABLES `pedido` WRITE;
 /*!40000 ALTER TABLE `pedido` DISABLE KEYS */;
 /*!40000 ALTER TABLE `pedido` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `petboutiqueapp_customuser`
+--
+
+DROP TABLE IF EXISTS `petboutiqueapp_customuser`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `petboutiqueapp_customuser` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `password` varchar(128) DEFAULT NULL,
+  `last_login` datetime DEFAULT NULL,
+  `is_superuser` tinyint(1) DEFAULT '0',
+  `username` varchar(150) NOT NULL,
+  `first_name` varchar(150) DEFAULT NULL,
+  `last_name` varchar(150) DEFAULT NULL,
+  `is_staff` tinyint(1) DEFAULT '0',
+  `is_active` tinyint(1) DEFAULT '1',
+  `date_joined` datetime DEFAULT NULL,
+  `email` varchar(150) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `customuser_unique` (`username`),
+  UNIQUE KEY `customuser_unique_1` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `petboutiqueapp_customuser`
+--
+
+LOCK TABLES `petboutiqueapp_customuser` WRITE;
+/*!40000 ALTER TABLE `petboutiqueapp_customuser` DISABLE KEYS */;
+INSERT INTO `petboutiqueapp_customuser` VALUES (3,'pbkdf2_sha256$600000$Tnznn5MhmJMwrazCmT7doY$ySIxbt6hx3Jr/+l4FkJSPXYpIu+GO/H9VJ4Z6enydsY=','2024-06-03 23:34:46',1,'admin','','',1,1,'2024-06-03 23:23:18','admin@admin.com');
+/*!40000 ALTER TABLE `petboutiqueapp_customuser` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `PetBoutiqueApp_roles`
+--
+
+DROP TABLE IF EXISTS `PetBoutiqueApp_roles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `PetBoutiqueApp_roles` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(100) NOT NULL,
+  `descripcion` longtext NOT NULL,
+  `activo` tinyint(1) NOT NULL,
+  `fecha_creacion` datetime(6) NOT NULL,
+  `fecha_modificacion` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `nombre` (`nombre`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `PetBoutiqueApp_roles`
+--
+
+LOCK TABLES `PetBoutiqueApp_roles` WRITE;
+/*!40000 ALTER TABLE `PetBoutiqueApp_roles` DISABLE KEYS */;
+/*!40000 ALTER TABLE `PetBoutiqueApp_roles` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `PetBoutiqueApp_roles_permisos`
+--
+
+DROP TABLE IF EXISTS `PetBoutiqueApp_roles_permisos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `PetBoutiqueApp_roles_permisos` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `roles_id` bigint NOT NULL,
+  `authpermission_id` bigint NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `PetBoutiqueApp_roles_per_roles_id_authpermission__c85b8cb8_uniq` (`roles_id`,`authpermission_id`),
+  CONSTRAINT `PetBoutiqueApp_roles_roles_id_4303ebfc_fk_PetBoutiq` FOREIGN KEY (`roles_id`) REFERENCES `PetBoutiqueApp_roles` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `PetBoutiqueApp_roles_permisos`
+--
+
+LOCK TABLES `PetBoutiqueApp_roles_permisos` WRITE;
+/*!40000 ALTER TABLE `PetBoutiqueApp_roles_permisos` DISABLE KEYS */;
+/*!40000 ALTER TABLE `PetBoutiqueApp_roles_permisos` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -566,7 +659,7 @@ CREATE TABLE `rol` (
   `id_rol` int NOT NULL AUTO_INCREMENT,
   `nombre_del_rol` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id_rol`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -575,6 +668,7 @@ CREATE TABLE `rol` (
 
 LOCK TABLES `rol` WRITE;
 /*!40000 ALTER TABLE `rol` DISABLE KEYS */;
+INSERT INTO `rol` VALUES (1,'admin'),(2,'user');
 /*!40000 ALTER TABLE `rol` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -660,6 +754,7 @@ CREATE TABLE `usuario` (
 
 LOCK TABLES `usuario` WRITE;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
+INSERT INTO `usuario` VALUES ('admin','admin','admin',11111,'admin@admin','admin',1,11111111,1,1,_binary '\0','admin1234'),('changuito','changuito',NULL,NULL,'changuito@mail.com','changuito',1,123456789,NULL,NULL,NULL,'changuito1234$'),('changuito2','changuito2',NULL,NULL,'changuito2@mail.com','changuito2',1,222222,NULL,NULL,NULL,'changuito21234$'),('changuito3','changuito3',NULL,NULL,'changuito3@mail.com','changuito3',1,3333333,NULL,NULL,NULL,'changuito31234$'),('changuito4','changuito4',NULL,NULL,'changuito4@mail.com','changuito4',1,44444,NULL,NULL,NULL,'changuito41234$'),('florcita','florcita','casa',303456,'florcita@gmail.com','florcita',1,12345678,1,2,_binary '','florcita');
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -703,4 +798,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-06-01 20:43:54
+-- Dump completed on 2024-06-09 21:08:39

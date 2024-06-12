@@ -17,23 +17,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
-from PetBoutiqueApp.views import ProcessPaymentView
-# inclusión API registro
-from PetBoutiqueApp.api import UserAPI
-
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/v1/', include('PetBoutiqueApp.urls')),
+    # Sirve el index de Angular
+    path('', TemplateView.as_view(template_name='index.html'), name='index'),
     
-    path('', TemplateView.as_view(template_name='index.html'), name='index'), # sirve el index de Angular
+    path('admin/', admin.site.urls),
 
-    #Add Django site authentication urls (for login, logout, password management)
+    # Add Django site authentication urls (for login, logout, password management)
     path('accounts/', include('django.contrib.auth.urls')),
 
-    # API registro usuarios
-    path('api/1.0/create_user/', UserAPI.as_view(),name= "api_create_user"),
-
+    # API autenticación routes
+    path('api/', include('PetBoutiqueApp.urls')),
 ]
 
 
