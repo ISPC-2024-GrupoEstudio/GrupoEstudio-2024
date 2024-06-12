@@ -47,20 +47,6 @@ export class MinicartComponent implements OnInit {
   }
 
   checkout() {
-    // Lógica para proceder al proceso de pago
-    // Puedes navegar a la página de pago o ejecutar otras acciones necesarias
-  
-    this.cartService.checkout().subscribe(
-      response => {
-        console.log('Compra finalizada:', response);
-        // Lógica adicional después de finalizar la compra
-      },
-      error => {
-        console.error('Error al finalizar la compra:', error);
-        // Lógica para manejar el error
-      }
-    );
-  
     // Cerrar el slide del carrito
     this.toggleCart();
   }

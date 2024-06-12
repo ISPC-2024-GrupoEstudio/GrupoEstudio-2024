@@ -5,8 +5,7 @@ from rest_framework.views import APIView
 from django.contrib.auth import authenticate, login, logout
 from .models import Roles
 from .serializer import RolesSerializer
-
-
+from django.db import transaction
 from rest_framework import viewsets
 from .models import Producto, CategoriaProducto, Proveedor, Pedido, EstadoPedido, ProductoXPedido, FormaDePago, TipoEnvio, Carrito
 from .serializer import ProductoSerializer, CategoriaProductoSerializer, ProveedorSerializer, PedidoSerializer, EstadoPedidoSerializer, ProductoXPedidoSerializer, FormaDePagoSerializer, TipoEnvioSerializer, UserSerializer, UsuarioSerializer, CarritoSerializer
@@ -177,4 +176,47 @@ class CartView(APIView):
        
         return Response(carrito_serializer.data, status=status.HTTP_200_OK)
 
+class CheckoutView(APIView):
+    def post(self, request):
+        items_comprados = request.data.get('items_comprados', [])  # Obtener los productos comprados
+        payment_details = request.data.get('payment_details', {})  # Detalles del pago
+        print("Items comprados:", items_comprados)  # Debugging line
+        print("Payment details:", payment_details)  # Debugging line
+        process_payment_response = self.process_payment(payment_details)  # Procesar el pago
 
+        if process_payment_response.status_code != status.HTTP_200_OK:
+            return process_payment_response  # Si el pago falla, retornar la respuesta de la pasarela de pago
+
+        try:
+            with transaction.atomic():
+                # Actualizar el stock de los productos comprados
+                for item in items_comprados:
+                    producto_id = item.get('id_producto')
+                    cantidad = item.get('cantidad')
+                    producto = Producto.objects.get(id_producto=producto_id)
+                    producto.stock_actual -= cantidad
+                    producto.save()
+
+                # Crear el pedido
+                pedido_serializer = PedidoSerializer(data={
+                    'items_comprados': items_comprados,
+                    'payment_details': payment_details,
+                    'usuario': request.user.id  # Suponiendo que tienes un sistema de autenticación configurado
+                })
+                if pedido_serializer.is_valid():
+                    pedido_serializer.save()
+                else:
+                    return Response({"error": "Error al crear el pedido"}, status=status.HTTP_400_BAD_REQUEST)
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        return Response({"message": "Proceso de pago completado y stock actualizado correctamente"}, status=status.HTTP_200_OK)
+
+    def process_payment(self, payment_details):
+        card_number = payment_details.get('cardNumber')
+        expiration_date = payment_details.get('expirationDate')
+        cvv = payment_details.get('cvv')
+        if not card_number or not expiration_date or not cvv:
+            return Response ({"error": "Detalles de pagos incompletos"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response ({"message": "Pago procesado exitosamente"}, status=status.HTTP_200_OK)
