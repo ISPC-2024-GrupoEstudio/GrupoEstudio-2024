@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate, login, logout
 from rest_framework.decorators import api_view
 from .models import CustomUser
 from .serializer import CustomUserSerializer
-#
+# Fin importaciones registro #
 from .models import Roles, Usuario
 from .serializer import RolesSerializer
 from django.db import transaction
@@ -148,8 +148,7 @@ class RegisterView (APIView):
 
             return Response(usuario_serializer.data, status= status.HTTP_201_CREATED)
         else:
-            return Response(admin_user_serializer.errors, status= status.HTTP_400_BAD_REQUEST)
-        
+            return Response(admin_user_serializer.errors, status= status.HTTP_400_BAD_REQUEST)     
 
 class AddToCartView (APIView):
     def post (self, request):
@@ -228,8 +227,7 @@ class CheckoutView(APIView):
         cvv = payment_details.get('cvv')
         if not card_number or not expiration_date or not cvv:
             return Response ({"error": "Detalles de pagos incompletos"}, status=status.HTTP_400_BAD_REQUEST)
-        return Response ({"message": "Pago procesado exitosamente"}, status=status.HTTP_200_OK)
-    
+        return Response ({"message": "Pago procesado exitosamente"}, status=status.HTTP_200_OK)  
 
 # Vistas login / logout #####################################################################################
 class LoginView(APIView):

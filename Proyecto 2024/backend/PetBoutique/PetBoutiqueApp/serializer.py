@@ -89,7 +89,7 @@ class CarritoSerializer(serializers.ModelSerializer):
         model = Carrito
         fields = '__all__'
 
-# Custom User serializer
+# Custom User serializer / sin uso en el servicio
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser

@@ -29,7 +29,7 @@ urlpatterns = [
     path('auth/register/', 
        views. RegisterView.as_view(),name= "auth_register"),
 
-# Segundo intento de registro de usuarios
+    # Segundo intento de registro de usuarios
     path('register/', registrar_usuario, name='registrar_usuario'),
 
     path("add-to-cart/", 
