@@ -122,7 +122,11 @@ class LogoutView(APIView):
     
 class RegisterView (APIView):
     def post (self, request):
-        usuario_serializer = UsuarioSerializer(data = request.data)
+        nuevo_usuario = request.data
+        nuevo_usuario["id_rol"] = 2
+
+        usuario_serializer = UsuarioSerializer(data = nuevo_usuario)
+        
         admin_user_data =  {
             "first_name": request.data.get("nombre"),
             "last_name": request.data.get("apellido"),
@@ -132,7 +136,7 @@ class RegisterView (APIView):
         }
         admin_user_serializer = UserSerializer(data = admin_user_data)
 
-        if usuario_serializer.is_valid() and admin_user_serializer.is_valid():
+        if admin_user_serializer.is_valid() and usuario_serializer.is_valid():
             usuario_serializer.save()
             admin_user_serializer.save()
 
