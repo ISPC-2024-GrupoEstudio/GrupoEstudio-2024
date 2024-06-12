@@ -197,7 +197,7 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
-
+**/__pycache__
 __pycache__/
 
 # PyCharm
@@ -212,6 +212,11 @@ Proyecto 2024/backend/PetBoutique/PetBoutique/__pycache__/settings.cpython-312.p
 Proyecto 2024/backend/PetBoutique/PetBoutique/__pycache__/wsgi.cpython-312.pyc
 Proyecto 2024/backend/PetBoutique/PetBoutiqueApp/__pycache__/admin.cpython-312.pyc
 Proyecto 2024/backend/PetBoutique/PetBoutiqueApp/__pycache__/models.cpython-312.pyc
+/Proyecto 2024/backend/PetBoutique/PetBoutique/__pycache__
+/Proyecto 2024/backend/PetBoutique/PetBoutiqueApp/__pycache__
+Proyecto 2024/backend/PetBoutique/PetBoutiqueApp/__pycache__/__init__.cpython-312.pyc
+Proyecto 2024/backend/PetBoutique/PetBoutiqueApp/__pycache__/admin.cpython-312.pyc
+/Proyecto 2024/backend/PetBoutique/PetBoutiqueApp/migrations/__pycache__
 Proyecto 2024/backend/PetBoutique/PetBoutique/__pycache__/__init__.cpython-312.pyc
 Proyecto 2024/backend/PetBoutique/PetBoutique/__pycache__/settings.cpython-312.pyc
 Proyecto 2024/backend/PetBoutique/PetBoutique/__pycache__/urls.cpython-312.pyc

@@ -2,17 +2,20 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
+import { IUsuario } from '../../../models/usuario.interface';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-registro',
   standalone: true,
   imports: [ReactiveFormsModule, RouterLink],
+  providers: [AuthService],
   templateUrl: './registro.component.html',
   styleUrl: './registro.component.css'
 })
 export class RegistroComponent {
   form!: FormGroup;
-  constructor(private _formBuilder: FormBuilder) {
+  constructor(private _formBuilder: FormBuilder, private authService:AuthService, private router: Router) {
     this.form = this._formBuilder.group({
       names: ["", Validators.required],
       lastName: ["", Validators.required],
@@ -26,17 +29,25 @@ export class RegistroComponent {
   });
   }
 
-  onEnviar(event:Event)
-  {
-    console.log(this.form.value)
-
-
+  onEnviar(event:Event) {
     event.preventDefault;
-    if(this.form.valid){
-      alert("Enviar al servidor...");
+    
+    const usuario:IUsuario = {
+      nombre: this.form.value.names,
+      apellido: this.form.value.lastName,
+      id_tipo_documento: this.form.value.tipodni,
+      numero_documento: this.form.value.dni,
+      nombre_usuario: this.form.value.username,
+      email: this.form.value.email,
+      password: this.form.value.password,
     }
-    else
-    {
+
+    if(this.form.valid){
+      this.authService.register(usuario).subscribe(data => {
+        this.router.navigate(["/login"]);
+      })
+    }
+    else {
       this.form.markAllAsTouched()
     }
   }

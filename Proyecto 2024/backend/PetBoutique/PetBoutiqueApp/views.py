@@ -2,8 +2,14 @@ from django.shortcuts import render
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+# Importaciones para registro usuario
+from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from .models import Roles
+from rest_framework.decorators import api_view
+from .models import CustomUser
+from .serializer import CustomUserSerializer
+# Fin importaciones registro #
+from .models import Roles, Usuario
 from .serializer import RolesSerializer
 from django.db import transaction
 from rest_framework import viewsets
@@ -122,7 +128,11 @@ class LogoutView(APIView):
     
 class RegisterView (APIView):
     def post (self, request):
-        usuario_serializer = UsuarioSerializer(data = request.data)
+        nuevo_usuario = request.data
+        nuevo_usuario["id_rol"] = 2
+
+        usuario_serializer = UsuarioSerializer(data = nuevo_usuario)
+        
         admin_user_data =  {
             "first_name": request.data.get("nombre"),
             "last_name": request.data.get("apellido"),
@@ -132,14 +142,13 @@ class RegisterView (APIView):
         }
         admin_user_serializer = UserSerializer(data = admin_user_data)
 
-        if usuario_serializer.is_valid() and admin_user_serializer.is_valid():
+        if admin_user_serializer.is_valid() and usuario_serializer.is_valid():
             usuario_serializer.save()
             admin_user_serializer.save()
 
             return Response(usuario_serializer.data, status= status.HTTP_201_CREATED)
         else:
-            return Response(admin_user_serializer.errors, status= status.HTTP_400_BAD_REQUEST)
-        
+            return Response(admin_user_serializer.errors, status= status.HTTP_400_BAD_REQUEST)     
 
 class AddToCartView (APIView):
     def post (self, request):
@@ -158,7 +167,6 @@ class DeleteFromCartView (APIView):
         carrito.delete()
 
         return Response(status= status.HTTP_200_OK)
-
         
 class CartView(APIView):
     def get(self, request, nombre_usuario):
@@ -219,4 +227,83 @@ class CheckoutView(APIView):
         cvv = payment_details.get('cvv')
         if not card_number or not expiration_date or not cvv:
             return Response ({"error": "Detalles de pagos incompletos"}, status=status.HTTP_400_BAD_REQUEST)
-        return Response ({"message": "Pago procesado exitosamente"}, status=status.HTTP_200_OK)
+        return Response ({"message": "Pago procesado exitosamente"}, status=status.HTTP_200_OK)  
+
+# Vistas login / logout #####################################################################################
+class LoginView(APIView):
+    def post (self, request):
+        # Recuperamos las credenciales y autenticamos al usuario
+        username = request.data.get('username', None)
+        password = request.data.get('password', None)
+
+        user = authenticate(username=username, password=password)
+
+        # Si es correcto, añadimos a la request la información de sesión
+        if user:
+            login(request, user)
+            return Response(
+                status=status.HTTP_200_OK)
+        
+        # Si no es correcto, devolvemos un error en la petición
+        return Response(
+            status=status.HTTP_404_NOT_FOUND)
+
+class LogoutView(APIView):
+    def post(self, request):
+        # Borramos de la request la información de sesión
+        logout(request)
+
+        # Devolvemos la respuesta al cliente
+        return Response(status=status.HTTP_200_OK)
+    
+class RegisterView (APIView):
+    def post (self, request):
+        usuario_serializer = UsuarioSerializer(data = request.data)
+        admin_user_data =  {
+            "first_name": request.data.get("nombre"),
+            "last_name": request.data.get("apellido"),
+            "username":  request.data.get("nombre_usuario"),
+            "password": request.data.get("password"),
+            "email": request.data.get("email"),
+        }
+        admin_user_serializer = UserSerializer(data = admin_user_data)
+
+        if usuario_serializer.is_valid() and admin_user_serializer.is_valid():
+            usuario_serializer.save()
+            admin_user_serializer.save()
+
+            return Response(usuario_serializer.data, status= status.HTTP_201_CREATED)
+        else:
+            return Response(admin_user_serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+
+# Para registrar usuarios en BDD
+@api_view(['POST'])
+def registrar_usuario(request):
+    user_data = {
+        'username': request.data.get('username'),
+        'password': request.data.get('password'),
+        'email': request.data.get('email'),
+    }
+    
+    user_serializer = UserSerializer(data=user_data)
+    if user_serializer.is_valid():
+        user = user_serializer.save()
+        
+        # Aquí creamos el perfil asociado
+        custom_user_data = {
+            'user': user.id,
+            'first_name': request.data.get('first_name'),
+            'last_name': request.data.get('last_name'),
+            'username': request.data.get('username'),
+            'password': request.data.get('password'),
+            'email': request.data.get('email')
+        }
+        custom_user_serializer = CustomUserSerializer(data=custom_user_data)
+        if custom_user_serializer.is_valid():
+            custom_user_serializer.save()
+            return Response(user_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            user.delete()  # Si el perfil no es válido, borramos el usuario creado
+            return Response(custom_user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        

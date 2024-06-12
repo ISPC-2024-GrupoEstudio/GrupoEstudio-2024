@@ -93,10 +93,14 @@ DATABASES = {
         'NAME': 'pet_boutique',
         'USER': 'root',
 <<<<<<< HEAD
+<<<<<<< HEAD
         'PASSWORD': '1191',
 =======
         'PASSWORD': '',
 >>>>>>> 805217c41abe718e583625f713b44aebdb219fac
+=======
+        'PASSWORD': '',
+>>>>>>> 1f223b4d4a36769402dc5da4dc7f0e59635600bd
         'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {
