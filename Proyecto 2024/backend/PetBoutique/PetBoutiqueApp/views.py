@@ -189,24 +189,21 @@ class CartView(APIView):
         return Response(carrito_serializer.data, status=status.HTTP_200_OK)
 
 class CheckoutView(APIView):
-    authentication_classes = []
-
     def post(self, request):
         items_comprados = request.data.get('items_comprados', [])  # Obtener los productos comprados
         payment_details = request.data.get('payment_details', {})  # Detalles del pago
-        usuario = request.user
+        nombre_usuario = request.data.get("nombre_usuario")
         print("Items comprados:", items_comprados)  # Debugging line
         print("Payment details:", payment_details)  # Debugging line
-        
-        # Verificar la estructura básica de items_comprados
-        if not isinstance(items_comprados, list):
-            return Response({"error": "La estructura de 'items_comprados' debe ser una lista"}, status=status.HTTP_400_BAD_REQUEST)
-        
-        for item in items_comprados:
-            if not isinstance(item, dict):
-                return Response({"error": "Cada elemento de 'items_comprados' debe ser un diccionario"}, status=status.HTTP_400_BAD_REQUEST)
-            if 'id_producto' not in item or 'cantidad' not in item:
-                return Response({"error": "Cada elemento de 'items_comprados' debe tener 'id_producto' y 'cantidad'"}, status=status.HTTP_400_BAD_REQUEST)
+        print("Nombre de usuario:", nombre_usuario)
+            
+        if not items_comprados or not payment_details or not nombre_usuario:
+            return Response({"error": "Datos incompletos en la solicitud"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            usuario = User.objects.get(username=nombre_usuario)
+        except User.DoesNotExist:
+            return Response({"error": f"Usuario con nombre {nombre_usuario} no encontrado"}, status=status.HTTP_404_NOT_FOUND)
 
         # Validar detalles de pago
         if not all(key in payment_details for key in ['cardNumber', 'expirationDate', 'cvv']):
@@ -237,7 +234,7 @@ class CheckoutView(APIView):
                 numero_pedido = uuid.uuid4().hex[:10]
 
                 pedido_data = {
-                    'nombre_usuario': usuario.username if usuario.is_authenticated else 'Anónimo',
+                    'nombre_usuario': usuario.id,
                     'fecha': timezone.now(),
                     'id_estado_pedido': 1,  # Puedes establecer un valor predeterminado
                     'numero_pedido': numero_pedido,  # Necesitarás una lógica para generar un número de pedido único

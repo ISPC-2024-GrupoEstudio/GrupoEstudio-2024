@@ -103,9 +103,14 @@ export class CheckoutComponent implements OnInit{
           (username: string | null) => { // Inicio del suscribe de getUsername()
             if (username) {
               console.log('Usuario autenticado:', username);
+              const pedidoData = {
+                nombre_usuario: username,
+                items_comprados: itemsCompradosTransformados,
+                payment_details: paymentDetails
+              };
     
               // Hacer checkout de los productos
-              this.cartService.checkout(itemsCompradosTransformados, paymentDetails).subscribe(
+              this.cartService.checkout(pedidoData).subscribe(
                 data => { // Inicio del suscribe de checkout()
                   console.log('Respuesta del servidor:', data);
                   this.successMessage = 'Procesamiento de pago exitoso';
