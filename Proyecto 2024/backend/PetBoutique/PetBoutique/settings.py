@@ -94,6 +94,7 @@ DATABASES = {
         'USER': 'root',
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         'PASSWORD': '1191',
 =======
         'PASSWORD': '',
@@ -101,6 +102,9 @@ DATABASES = {
 =======
         'PASSWORD': '',
 >>>>>>> 1f223b4d4a36769402dc5da4dc7f0e59635600bd
+=======
+        'PASSWORD': 'mibasededatos',
+>>>>>>> 35cf0b2033fbb2d6e3377e717d74c38ac85906e4
         'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {
