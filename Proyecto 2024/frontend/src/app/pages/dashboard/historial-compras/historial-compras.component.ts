@@ -32,6 +32,7 @@ export class HistorialComprasComponent {
   ngOnInit(): void {
     this.pedidoService.getPedidos().subscribe((data) => {
       this.historialPedidos = data;
+      console.log(this.historialPedidos)
     })
     this.productoXPedidoService.getProductoXPedido().subscribe((data) => {
       this.productoXPedido = data;

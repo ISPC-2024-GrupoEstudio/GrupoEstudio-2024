@@ -12,7 +12,7 @@ export class PedidosService {
   constructor (private readonly httpClient:HttpClient){
   }
   getPedidos(): Observable<IPedido[]> {
-    const url = `${this.apiUrl}/pedido/`;
+    const url = `${this.apiUrl}/pedidos/`;
     return this.httpClient.get<IPedido[]>(url)
   }
 
