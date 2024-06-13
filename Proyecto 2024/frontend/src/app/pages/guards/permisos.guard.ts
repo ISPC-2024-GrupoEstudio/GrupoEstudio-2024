@@ -6,11 +6,11 @@ export const permisosGuard = (
   router: Router
 ): ((route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree) => {
   return (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
-    const isLoggedIn = localStorage.getItem('user') !== null; // Check for user presence
+    const isLoggedIn = localStorage.getItem('user') !== null; //se comprueba la presencia de usuario
 
     return new Observable<boolean>(observer => {
       if (isLoggedIn) {
-        observer.next(true); // Allow access if logged in
+        observer.next(true); // permite el acceso si estas logueado
         observer.complete();
         return;
       }
@@ -19,7 +19,7 @@ export const permisosGuard = (
         router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
       }
 
-      observer.next(false); // Deny access if not logged in
+      observer.next(false); // denega el accesos sino iniciaste sesion
       observer.complete();
     });
   };
