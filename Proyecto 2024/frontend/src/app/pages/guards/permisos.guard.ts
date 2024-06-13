@@ -1,35 +1,27 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
+import { Observable, of } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class permisosguard implements CanActivate { 
+export const permisosGuard = (
+  router: Router
+): ((route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree) => {
+  return (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
+    const isLoggedIn = localStorage.getItem('user') !== null; //se comprueba la presencia de usuario
 
-  constructor(private router: Router) { }
+    return new Observable<boolean>(observer => {
+      if (isLoggedIn) {
+        observer.next(true); // permite el acceso si estas logueado
+        observer.complete();
+        return;
+      }
 
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    if (this.hasUser()) {
-      return true;
-    }
+      if (confirm('Necesitas iniciar sesión para acceder al carrito. ¿Deseas ingresar?')) {
+        router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
+      }
 
-    if (confirm('Necesitas iniciar sesión para acceder al carrito. ¿Deseas ingresar?')) {
-      this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } }); 
-    }
+      observer.next(false); // denega el accesos sino iniciaste sesion
+      observer.complete();
+    });
+  };
+};
 
-    return false;
-  }
-
-  hasUser(): boolean {
-    const user = localStorage.getItem("user");
-    if (user) {
-      return true;
-    } {
-      return false;
-    }
-  }
-}
