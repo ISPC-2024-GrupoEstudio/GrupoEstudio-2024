@@ -2,6 +2,10 @@ from django.shortcuts import render
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.utils import timezone
+import uuid
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.permissions import IsAuthenticated
 # Importaciones para registro usuario
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -185,13 +189,30 @@ class CartView(APIView):
         return Response(carrito_serializer.data, status=status.HTTP_200_OK)
 
 class CheckoutView(APIView):
+    authentication_classes = []
+
     def post(self, request):
         items_comprados = request.data.get('items_comprados', [])  # Obtener los productos comprados
         payment_details = request.data.get('payment_details', {})  # Detalles del pago
+        usuario = request.user
         print("Items comprados:", items_comprados)  # Debugging line
         print("Payment details:", payment_details)  # Debugging line
-        process_payment_response = self.process_payment(payment_details)  # Procesar el pago
+        
+        # Verificar la estructura básica de items_comprados
+        if not isinstance(items_comprados, list):
+            return Response({"error": "La estructura de 'items_comprados' debe ser una lista"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        for item in items_comprados:
+            if not isinstance(item, dict):
+                return Response({"error": "Cada elemento de 'items_comprados' debe ser un diccionario"}, status=status.HTTP_400_BAD_REQUEST)
+            if 'id_producto' not in item or 'cantidad' not in item:
+                return Response({"error": "Cada elemento de 'items_comprados' debe tener 'id_producto' y 'cantidad'"}, status=status.HTTP_400_BAD_REQUEST)
 
+        # Validar detalles de pago
+        if not all(key in payment_details for key in ['cardNumber', 'expirationDate', 'cvv']):
+            return Response({"error": "Los detalles de pago son incompletos"}, status=status.HTTP_400_BAD_REQUEST)
+
+        process_payment_response = self.process_payment(payment_details)  # Procesar el pago
         if process_payment_response.status_code != status.HTTP_200_OK:
             return process_payment_response  # Si el pago falla, retornar la respuesta de la pasarela de pago
 
@@ -201,20 +222,39 @@ class CheckoutView(APIView):
                 for item in items_comprados:
                     producto_id = item.get('id_producto')
                     cantidad = item.get('cantidad')
-                    producto = Producto.objects.get(id_producto=producto_id)
+                      # Verificar si el producto existe
+                    try:
+                        producto = Producto.objects.get(id_producto=producto_id)
+                    except Producto.DoesNotExist:
+                        return Response({"error": f"Producto con id {producto_id} no encontrado"}, status=status.HTTP_404_NOT_FOUND)
+                    
+                    # Verificar stock suficiente
+                    if producto.stock_actual < cantidad:
+                        return Response({"error": f"Stock insuficiente para el producto {producto_id}"}, status=status.HTTP_400_BAD_REQUEST)
                     producto.stock_actual -= cantidad
                     producto.save()
 
-                # Crear el pedido
-                pedido_serializer = PedidoSerializer(data={
-                    'items_comprados': items_comprados,
-                    'payment_details': payment_details,
-                    'usuario': request.user.id  # Suponiendo que tienes un sistema de autenticación configurado
-                })
+                numero_pedido = uuid.uuid4().hex[:10]
+
+                pedido_data = {
+                    'nombre_usuario': usuario.username if usuario.is_authenticated else 'Anónimo',
+                    'fecha': timezone.now(),
+                    'id_estado_pedido': 1,  # Puedes establecer un valor predeterminado
+                    'numero_pedido': numero_pedido,  # Necesitarás una lógica para generar un número de pedido único
+                }
+
+                pedido_serializer = PedidoSerializer(data=pedido_data)
                 if pedido_serializer.is_valid():
-                    pedido_serializer.save()
+                    pedido = pedido_serializer.save()
+                    for item in items_comprados:
+                        ProductoXPedido.objects.create(
+                            id_producto_id=item.get('id_producto'),
+                            id_pedido=pedido,
+                            cantidad=item.get('cantidad'),
+                            precio=Producto.objects.get(id_producto=item.get('id_producto')).precio
+                        )
                 else:
-                    return Response({"error": "Error al crear el pedido"}, status=status.HTTP_400_BAD_REQUEST)
+                    return Response({"error": pedido_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -227,8 +267,7 @@ class CheckoutView(APIView):
         cvv = payment_details.get('cvv')
         if not card_number or not expiration_date or not cvv:
             return Response ({"error": "Detalles de pagos incompletos"}, status=status.HTTP_400_BAD_REQUEST)
-        return Response ({"message": "Pago procesado exitosamente"}, status=status.HTTP_200_OK)  
-
+        return Response ({"message": "Pago procesado exitosamente"}, status=status.HTTP_200_OK) 
 # Vistas login / logout #####################################################################################
 class LoginView(APIView):
     def post (self, request):

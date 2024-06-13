@@ -6,6 +6,7 @@ import { CartService} from '../../../services/cart.service';
 import { NgFor, NgIf } from '@angular/common';
 import { Router } from '@angular/router';
 import { ICarrito } from '../../../models/carrito.interface';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-checkout',
@@ -40,7 +41,10 @@ export class CheckoutComponent implements OnInit{
   productosCarrito: ICarrito[] = [];
   form!: FormGroup;
 
-  constructor(private _formBuilder: FormBuilder,private cartService: CartService, private router: Router) {
+  constructor(private _formBuilder: FormBuilder,
+    private cartService: CartService,
+    private authService : AuthService, 
+    private router: Router) {
     this.form = this._formBuilder.group({
       name: ['', Validators.required],
       cardNumber: ['', [Validators.required, Validators.minLength(19), Validators.maxLength(19)]],
@@ -62,6 +66,13 @@ export class CheckoutComponent implements OnInit{
   removeFromCart(productoCarritoId: number): void {
     this.cartService.quitarProducto(productoCarritoId);
   }
+  private transformarItems(items: any[]): any[] {
+    // Transforma los items del carrito para que solo contengan id_producto y cantidad
+    return items.map(item => ({
+      id_producto: item.id_producto,
+      cantidad: item.cantidad
+    }));
+  }
 
   onEnviar(event: Event): void {
     console.log('Botón de envío clickeado'); // Verificar si la función se ejecuta al hacer clic en el botón
@@ -74,35 +85,62 @@ export class CheckoutComponent implements OnInit{
             cvv: this.form.value.cvv
         };
 
-        const itemsComprados: ICarrito[] = this.cartService.obtenerProductosCarrito();
-        console.log('Items Comprados:', itemsComprados);  // Verificar productos
+      const itemsComprados: any[] = this.cartService.obtenerProductosCarrito();
+      console.log('Items Comprados antes de transformación:', itemsComprados);  // Verificar productos antes de transformación
+
+      // Transformar los items comprados para enviar solo id_producto y cantidad
+      const itemsCompradosTransformados = this.transformarItems(itemsComprados);
+      console.log('Items Comprados después de transformación:', itemsCompradosTransformados);  // Verificar productos después de transformación
+
         console.log('Payment Details:', paymentDetails);  // Verificar detalles de pago
 
-        if (itemsComprados.length === 0) {
+        if (itemsCompradosTransformados.length === 0) {
             console.log('El carrito está vacío'); // Verificar si hay productos en el carrito
             this.errorMessage = 'El carrito está vacío';
             return;
         }
-
-        this.cartService.checkout(itemsComprados, paymentDetails).subscribe(
-            data => {
-                console.log('Respuesta del servidor:', data); // Verificar respuesta del servidor
-                this.successMessage = 'Procesamiento de pago exitoso';
-                this.errorMessage = ''; // Limpiar mensaje de error
-                this.form.reset(); // Limpiar el formulario después del éxito
-            },
-            error => {
-                console.log('Error del servidor:', error); // Verificar error del servidor
-                this.errorMessage = 'Error al procesar el pago';
-                this.successMessage = ''; // Limpiar mensaje de éxito
+        this.authService.getUsername().subscribe(
+          (username: string | null) => { // Inicio del suscribe de getUsername()
+            if (username) {
+              console.log('Usuario autenticado:', username);
+    
+              // Hacer checkout de los productos
+              this.cartService.checkout(itemsCompradosTransformados, paymentDetails).subscribe(
+                data => { // Inicio del suscribe de checkout()
+                  console.log('Respuesta del servidor:', data);
+                  this.successMessage = 'Procesamiento de pago exitoso';
+                  this.errorMessage = ''; // Limpiar mensaje de error si hubiera
+                  this.form.reset(); // Reiniciar formulario después de éxito
+                },
+                error => { // Fin del suscribe de checkout(), inicio del error handler
+                  console.log('Error del servidor:', error);
+                  this.errorMessage = 'Error al procesar el pago';
+                  this.successMessage = ''; // Limpiar mensaje de éxito si hubiera
+                } // Fin del error handler
+              ); // Fin del suscribe de checkout()
+    
+            } else {
+              // Si no hay usuario autenticado, manejar el caso aquí
+              console.log('Usuario no autenticado');
+              this.errorMessage = 'Usuario no autenticado';
+              // Puedes redirigir a la página de inicio de sesión u otra acción
+              this.router.navigate(['/login']);
             }
-        );
-    } else {
-        console.log('Formulario inválido'); // Verificar que el formulario es inválido
-        this.form.markAllAsTouched();
-        this.logFormErrors(); // Llamar a la función para registrar los errores del formulario
+          }, // Fin del suscribe de getUsername(), inicio del error handler
+          error => {
+            console.log('Error al obtener el nombre de usuario:', error);
+            this.errorMessage = 'Error al obtener el nombre de usuario';
+            // Manejar el error si falla la obtención del nombre de usuario
+          } // Fin del error handler
+        ); // Fin del suscribe de getUsername()
+    
+      } else {
+        console.log('Formulario inválido');
+        this.form.markAllAsTouched(); // Marcar todos los campos del formulario como tocados
+        this.logFormErrors(); // Aquí podrías llamar a una función para manejar los errores del formulario si fuera necesario
+      }
     }
-}
+
 
 logFormErrors(): void {
     Object.keys(this.form.controls).forEach(key => {
