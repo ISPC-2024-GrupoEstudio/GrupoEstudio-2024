@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IProducto } from '../models/producto.interface';
 import { ICarrito } from '../models/carrito.interface';
 @Injectable({
@@ -43,13 +43,12 @@ export class CartService {
     });
   }
 
-  checkout(itemsComprados: ICarrito[], paymentDetails: any): Observable<any> {
-    const body = {
-      items_comprados: itemsComprados,
-      payment_details: paymentDetails
-    };
-    console.log('Cuerpo de la solicitud de checkout:', body);
-    return this.httpClient.post<any>(this.checkoutUrl, body);
+  checkout(pedidoData : any): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.httpClient.post<any>(this.checkoutUrl, pedidoData, { headers });
   }
 
 
