@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { IUsuario } from "../models/usuario.interface";
+import { Observable, of } from "rxjs";
 
 @Injectable()
 export class AuthService {
@@ -24,8 +25,8 @@ export class AuthService {
         return !!localStorage.getItem("user")
     }
 
-    getUsername() {
-        return localStorage.getItem("user")
-    }
+    getUsername(): Observable<string | null> {
+        return of(localStorage.getItem('user'));
+      }
 
 }
