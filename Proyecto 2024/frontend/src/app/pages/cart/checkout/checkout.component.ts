@@ -116,6 +116,7 @@ export class CheckoutComponent implements OnInit{
                   this.successMessage = 'Procesamiento de pago exitoso';
                   this.errorMessage = ''; // Limpiar mensaje de error si hubiera
                   this.form.reset(); // Reiniciar formulario después de éxito
+                  this.cartService.limpiarCarrito();
                 },
                 error => { // Fin del suscribe de checkout(), inicio del error handler
                   console.log('Error del servidor:', error);
@@ -147,6 +148,9 @@ export class CheckoutComponent implements OnInit{
     }
 
 
+  irAlDashboard(): void {
+    this.router.navigate(['/dashboard']); // Redirigir al dashboard
+  }
 logFormErrors(): void {
     Object.keys(this.form.controls).forEach(key => {
         const controlErrors = this.form.get(key)?.errors;

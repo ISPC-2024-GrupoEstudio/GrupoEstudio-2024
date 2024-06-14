@@ -50,7 +50,10 @@ export class CartService {
 
     return this.httpClient.post<any>(this.checkoutUrl, pedidoData, { headers });
   }
-
+  
+  limpiarCarrito(): void {
+    this.productosCarritoSubject.next([]);
+  }
 
   obtenerProductosCarrito(): ICarrito[] {
   return this.productosCarritoSubject.value;
