@@ -1,4 +1,4 @@
-CREATE DATABASE  IF NOT EXISTS `pet_boutique` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE  IF NOT EXISTS `pet_boutique` /*!40100 DEFAULT CHARACTER SET utf8mb4 */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `pet_boutique`;
 -- MySQL dump 10.13  Distrib 8.0.36, for macos14 (arm64)
 --
@@ -584,7 +584,7 @@ CREATE TABLE `producto_x_pedido` (
   KEY `producto_x_pedido_pedido_FK` (`id_pedido`),
   CONSTRAINT `producto_x_pedido_pedido_FK` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id_pedido`),
   CONSTRAINT `producto_x_pedido_producto_FK` FOREIGN KEY (`id_producto`) REFERENCES `producto` (`id_producto`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -615,7 +615,7 @@ CREATE TABLE `producto_x_venta` (
   KEY `producto_x_venta_producto_FK` (`id_producto`),
   CONSTRAINT `producto_x_venta_producto_FK` FOREIGN KEY (`id_producto`) REFERENCES `producto` (`id_producto`),
   CONSTRAINT `producto_x_venta_venta_FK` FOREIGN KEY (`id_venta`) REFERENCES `venta` (`id_venta`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

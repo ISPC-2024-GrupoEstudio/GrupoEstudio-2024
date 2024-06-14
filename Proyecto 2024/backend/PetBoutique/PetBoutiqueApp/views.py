@@ -111,12 +111,15 @@ class LoginView(APIView):
         password = request.data.get('password', None)
 
         user = authenticate(username=username, password=password)
+        print(username)   
+        print(password) 
 
         # Si es correcto, añadimos a la request la información de sesión
         if user:
             login(request, user)
             return Response(
                 status=status.HTTP_200_OK)
+            
         
         # Si no es correcto, devolvemos un error en la petición
         return Response(
