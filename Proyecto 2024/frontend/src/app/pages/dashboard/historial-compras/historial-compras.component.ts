@@ -45,5 +45,10 @@ export class HistorialComprasComponent {
       console.log("Nombre de usuario:", this.nombreUsuarioLogin);  // Muestra en la consola (opcional)
     });
   }
+
+  verDetalleCompra(idPedido: number): void {
+    this.router.navigate(['/dashboard/historial-compras/detalle-compra', idPedido]);
+    console.log("ID PEDIDO EN HISTORIAL" + idPedido)
+  }
   
 }
