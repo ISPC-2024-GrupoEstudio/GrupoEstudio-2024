@@ -27,7 +27,7 @@ export class DetalleComprasComponent implements OnInit{
   ) {}
 
   ngOnInit(): void {
-    this.pedidoService.getPedidos().subscribe((data: IPedido[]) => {
+    this.pedidoService.getPedidos().subscribe((data) => {
       this.historialPedidos = data;
 
     });

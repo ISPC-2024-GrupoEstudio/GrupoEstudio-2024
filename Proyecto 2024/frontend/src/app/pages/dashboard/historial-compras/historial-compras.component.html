@@ -21,9 +21,10 @@
     </div>
 
 
-            <div class="card d-flex" *ngFor="let pedido of historialPedidos">
+            <div class="card d-flex" *ngFor="let pedido of historialPedidos" >
                 <img src="../../../../assets/imagenes/Dashboard/pedidos.png" alt="Imagen 1" class="img-pedidos">
-                <div class="card-content">
+                <div class="card-content" *ngIf="nombreUsuarioLogin">
+                    <h1>{{nombreUsuarioLogin}}</h1>
                     <h2>{{pedido.id_pedido}}</h2>
                     <p>{{pedido.nombre_usuario}}</p>
                     <p>{{pedido.fecha}}</p>
