@@ -15,7 +15,7 @@
                   <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
                       <p class="mb-1">Carrito de compras</p>
-                      <p class="mb-0">Tienes {{ productos.length }}  productos en tu carrito</p>
+                      <p class="mb-0">Tienes {{ productosCarrito.length }}  productos en tu carrito</p>
                     </div>
                     <div>
                       <p class="mb-0"><span class="text-muted">Sort by:</span> <a href="#!"
@@ -23,28 +23,25 @@
                     </div>
                   </div>
   
-                  <div *ngFor="let product of productos" class="card mb-3">
+                  <div *ngFor="let productoCarrito of productosCarrito" class="card mb-3">
                     <div class="card-body">
                       <div class="d-flex justify-content-between">
                         <div class="d-flex flex-row align-items-center">
                           <div>
                             <img
-                              src="product.image" alt="producto"
+                              src="{{ productoCarrito.producto.image_url }}" alt="producto"
                               class="img-fluid rounded-3" alt="Shopping item" style="width: 65px;">
                           </div>
                           <div class="ms-3">
-                            <h5>{{ product.nombre }}</h5>
-                            <p class="small mb-0">{{ product.descripcion }}</p>
+                            <h5>{{ productoCarrito.producto.nombre }}</h5>
+                            <p class="small mb-0">{{ productoCarrito.producto.descripcion }}</p>
                           </div>
                         </div>
                         <div class="d-flex flex-row align-items-center">
-                          <div style="width: 50px;">
-                            <h5 class="fw-normal mb-0">{{ product.id_producto }}</h5>
+                          <div style="width: 100px;">
+                            <h5 class="mb-0">${{ productoCarrito.producto.precio }}</h5>
                           </div>
-                          <div style="width: 80px;">
-                            <h5 class="mb-0">${{ product.precio }}</h5>
-                          </div>
-                          <button (click)="removeFromCart(product.id_producto)" style="color: #cecece;">
+                          <button (click)="removeFromCart(productoCarrito.id_carrito)" style="color: #cecece;">
                             <i class="fas fa-trash-alt"></i>
                           </button>
                         </div>
@@ -93,12 +90,12 @@
                           @if (Cardnumber?.errors && Cardnumber?.touched){
                             @if (Cardnumber?.hasError("required")) {
                               <p class="text-danger">
-                                El nñumero de tarjeta es requerido.
+                                El numero de tarjeta es requerido.
                               </p>
                             }
                             @else if (Cardnumber?.hasError("minlength")) {
                               <p class="text-danger">
-                                Número de tarjeta es requerido y debe ser de 16 dígitos.
+                                Número de tarjeta es requerido y debe ser de 19  dígitos (incluye espacios).
                               </p>
                             }
                           }
@@ -108,7 +105,7 @@
                           <div class="col-md-6">
                             <div data-mdb-input-init class="form-outline form-white">
                               <input type="text" id="typeExp" class="form-control form-control-lg"
-                                placeholder="MM/YYYY" size="7" id="exp" minlength="7" maxlength="7" formControlName="expiration"/>
+                                placeholder="MM/YY" size="5" id="exp" minlength="5" maxlength="5" formControlName="expiration"/>
                               <label class="form-label" for="typeExp">Expiración</label>
                               @if (Expiration?.errors && Expiration?.touched) {
                                 @if (Expiration?.hasError("required")) {
@@ -156,13 +153,12 @@
     
                         <button  type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-info btn-block btn-lg">
                           <div class="d-flex justify-content-between">
-                            <span>${{ calculateTotal() + 20.00 }}</span>
                             <span> Finalizar compra <i class="fas fa-long-arrow-alt-right ms-2"></i></span>
                           </div>
                         </button>
                       </form>
                       <div *ngIf="errorMessage" class="error text-danger mt-2">{{ errorMessage }}</div>
-                    <div *ngIf="successMessage" class="success text-success mt-2">{{ successMessage }}</div>
+                    <div *ngIf="successMessage" class="success-message">{{ successMessage }}  <button (click)="irAlDashboard()" class="btn btn-primary">Ir al Dashboard para ver tus compras</button></div>
                     </div>
                   </div>
   

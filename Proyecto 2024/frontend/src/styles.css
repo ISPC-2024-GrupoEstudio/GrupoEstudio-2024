@@ -80,89 +80,6 @@ nav > a:hover{
     background-color: #00000000;
 }
 
-/* Form contacto */
-
-.form__contacto {
-    background-color: #fff;
-    width: 90%;
-    max-width: 400px;
-    border-radius: 1em;
-    padding: 3.5em 1.5em;
-    margin: auto;
-    margin-bottom: 80px;
-
-}
-
-.form__contacto--container {
-    width: 100%;
-    display: grid;
-    gap: 1em;
-    grid-auto-columns: 100%;
-}
-
-.form__contacto--title {
-    text-align: center;
-    font-size: 1.9rem;
-    font-size: 1.3rem;
-    font-weight: bolder;
-    margin-bottom: .4em;
-}
-
-.form__contacto--input {
-    font-size: 1rem;
-    padding: .8em 1em;
-    outline: none;
-    border: none;
-    border: 1px solid #bbb0b0;
-    border-radius: 0.2em;
-}
-
-.form__contacto--input:hover {
-    outline: auto;
-    outline-color:#089fe0 ;
-}
-
-.form__contacto--input--message {
-    resize: none;
-    padding: 1.8em 1em;
-    margin-bottom: .5em;
-}
-
-.form__contacto--btn {
-    background-color: #089fe0;
-    color: white;
-    border: none;
-    font-size: 1rem;
-    font-weight: 700;
-    padding: .7em 0;
-    border-radius: .2em;
-    cursor: pointer;
-    transition: background-color .3s;
-}
-
-.form__contacto--btn:hover {
-    background-color: #04587c;
-}
-
-.cta {
-    text-decoration: none;
-    transition: color .3s;
-}
-
-.cta:hover {
-    color: #905dc0;
-}
-
-i {
-    margin-right: 30px;
-}
-
-@media (max-width: 450px) {
-    .form__contacto {
-        padding: 3.5em 1em;
-    }
-}
-
 /* ---------------------------------------*/
 
 /* Estilos galeria* */
@@ -432,25 +349,27 @@ i {
     width: calc(100% / 2 - 20px);
 }
 
-.label__registro{
+.label__registro, .label__contacto, .label__login{
     display: block;
     font-weight: 500;
     margin-bottom: 5px;
 }
 
-.input__registro{
+.input__registro, .input__login{
     height: 45px;
     width: 100%;
     outline: none;
-    font-size: 16px;
+    font-size: 1rem;
     border-radius: 5px;
     padding-left: 15px;
     border: 1px solid #ccc;
     border-bottom-width: 2px;
     transition: all 0.3s ease;
+    resize: none;
+
 }
 
-.user-details .input-box input:focus, .user-details .input-box input:valid{
+.user-details .input-box input:focus, .user-details .input-box input:valid, .input-box{
     border-color: #9b59b6;
 }
 
@@ -465,16 +384,17 @@ form input[type="radio"]{
      display: none;
 }
 
-form .button{
+form .button, .btn-login, .form__contacto--btn{
      height: 45px;
      margin: 35px 0
 }
 
-form .button input{
+form .button input, .btn-login, .form__contacto--btn{
      height: 100%;
      width: 100%;
      border-radius: 5px;
      border: none;
+     border-color: none;
      color: #fff;
      font-size: 18px;
      font-weight: 500;
@@ -484,7 +404,7 @@ form .button input{
      background: linear-gradient(135deg, #71b7e6, #9b59b6);
 }
 
-form .button input:hover{
+form .button input:hover, .btn-login:hover, .form__contacto--btn:hover{
     background: linear-gradient(-135deg, #71b7e6, #9b59b6);
 }
 
@@ -573,11 +493,7 @@ form .button input:hover{
     text-align: left;
 }
 
-.label__login{
-    font-weight: bold;
-    color: #333;
 
-}
 
 .form-control {
     box-sizing: border-box;
@@ -593,20 +509,6 @@ form .button input:hover{
     color: red;
     font-size: 0.875rem;
     margin-top: 0.3125rem;
-}
-
-.btn-primary {
-    background-color: #007bff;
-    color: #fff;
-    padding: 0.625rem 1.25rem;
-    font-size: 1rem;
-    border: none;
-    border-radius: 0.25rem;
-    cursor: pointer;
-}
-
-.btn-primary:hover {
-    background-color: #0056b3;
 }
 
 .login__cuerpo {

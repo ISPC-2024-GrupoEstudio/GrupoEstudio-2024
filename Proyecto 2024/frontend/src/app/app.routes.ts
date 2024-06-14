@@ -13,18 +13,17 @@ import { DetalleComprasComponent } from './pages/dashboard/detalle-compras/detal
 import { CuponesComponent } from './pages/dashboard/cupones/cupones.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { CheckoutComponent } from './pages/cart/checkout/checkout.component';
-import { proteccionguard } from './pages/guards/proteccion.guard';
-import { permisosguard } from './pages/guards/permisos.guard';
+import { permisosGuard } from './pages/guards/permisos.guard';
 
 export const routes: Routes = [
     {path: "", component: HomeComponent},
     {path: "registro", component:RegistroComponent},
     {path:"galeria", component:ProductosComponent},
     {path: "login", component: LoginComponent},
-    {path: "checkout", component: CheckoutComponent, canActivate:[permisosguard] },
-    {path: "dashboard", component:DashboardComponent,  canActivate:[permisosguard], children: [
-        {path:"historial-compras", component: HistorialComprasComponent, canActivate:[permisosguard], children: [
-            {path: "detalle-compra", component: DetalleComprasComponent},
+    {path: "checkout", component: CheckoutComponent, canActivate :[permisosGuard] },
+    {path: "dashboard", component:DashboardComponent,  canActivate:[permisosGuard], children: [
+        {path:"historial-compras", component: HistorialComprasComponent, canActivate:[permisosGuard], children: [
+            {path: "detalle-compra/:id", component: DetalleComprasComponent},
         ]},
     ]},
     {path:"cupones", component: CuponesComponent},
@@ -32,3 +31,4 @@ export const routes: Routes = [
 
     {path: "**", component: NotFoundComponent}
 ];
+  
