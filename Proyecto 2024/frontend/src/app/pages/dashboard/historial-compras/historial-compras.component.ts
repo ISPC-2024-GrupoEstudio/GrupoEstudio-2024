@@ -37,9 +37,6 @@ export class HistorialComprasComponent {
       this.historialPedidos = data.filter(pedido => pedido.nombre_usuario === this.nombreUsuarioLogin);
       console.log(this.historialPedidos);
     });
-    this.productoXPedidoService.getProductoXPedido().subscribe((data) => {
-      this.productoXPedido = data;
-    })
     this.pedidoService.getUsuario().subscribe(username => {
       this.nombreUsuarioLogin = username;  // Asigna el valor al componente
       console.log("Nombre de usuario:", this.nombreUsuarioLogin);  // Muestra en la consola (opcional)
@@ -47,7 +44,7 @@ export class HistorialComprasComponent {
   }
 
   verDetalleCompra(idPedido: number): void {
-    this.router.navigate(['/dashboard/historial-compras/detalle-compra', idPedido]);
+    this.router.navigate(['/id', { id: idPedido }]);
     console.log("ID PEDIDO EN HISTORIAL" + idPedido)
   }
   

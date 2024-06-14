@@ -11,9 +11,15 @@ export class ProductoService {
 
   constructor(private readonly httpClient : HttpClient) { }
 
-   getProducts(): Observable<IProducto[]> {
-    const url = `${this.apiUrl}/productos/`;
-    return this.httpClient.get<IProducto[]>(url);
-  }
+    getProducts(): Observable<IProducto[]> {
+      const url = `${this.apiUrl}/productos/`;
+      return this.httpClient.get<IProducto[]>(url);
+    }
+
+    getProductoById(idProducto: number): Observable<IProducto> {
+      const url = `${this.apiUrl}/productos/${idProducto}`;
+      return this.httpClient.get<IProducto>(url);
+    }
+  
 
 }

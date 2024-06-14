@@ -23,7 +23,7 @@ export const routes: Routes = [
     {path: "checkout", component: CheckoutComponent, canActivate :[permisosGuard] },
     {path: "dashboard", component:DashboardComponent,  canActivate:[permisosGuard], children: [
         {path:"historial-compras", component: HistorialComprasComponent, canActivate:[permisosGuard], children: [
-            {path: "detalle-compra", component: DetalleComprasComponent},
+            {path: "detalle-compra/:id", component: DetalleComprasComponent},
         ]},
     ]},
     {path:"cupones", component: CuponesComponent},

@@ -1,5 +1,4 @@
-
-<body class="body-historial">
+<div class="body-historial">
 
     <div class="container d-flex">
         <input type="checkbox" id="toggle-filter">
@@ -14,17 +13,23 @@
     </div>
 
 
-            <div class="card d-flex" *ngFor="let pedido of historialPedidos" >
-                <img src="../../../../assets/imagenes/Dashboard/pedidos.png" alt="Imagen 1" class="img-pedidos">
-                <div class="card-content" *ngIf="nombreUsuarioLogin">
-                    <h1>{{nombreUsuarioLogin}}</h1>
-                    <h2>{{pedido.id_pedido}}</h2>
-                    <p>{{pedido.nombre_usuario}}</p>
-                    <p>{{pedido.fecha}}</p>
-                    <div class="button-group">
-                        <button class="view-button"><a routerLink="/dashboard/historial-compras/detalle-compra" class="text-decoration-none" style="color:white;">Ver compra</a></button>
-                        <button class="buy-again-button">Volver a comprar</button>
-                    </div>
-                </div>
+    <div class="card d-flex" *ngFor="let pedido of historialPedidos" >
+        <img src="../../../../assets/imagenes/Dashboard/pedidos.png" alt="Imagen 1" class="img-pedidos">
+        <div class="card-content" >
+            <h2>Pedido N°: {{pedido.id_pedido}}</h2>
+            <p>Usuario: {{pedido.nombre_usuario}}</p>
+            <p>Fecha: {{pedido.fecha}}</p>
+            @if (pedido.id_estado_pedido === 1){
+                <p>Pedido Creado</p>
+            }@else {
+                <p>Pedido Finalizado</p>
+            }
+            <p>Entregado en: {{pedido.domicilio_envio}}</p>
+            <div class="button-group">
+                <button class="view-button" ><a routerLink="/dashboard/historial-compras/detalle-compra/{{pedido.id_pedido}}" class="text-decoration-none" style="color:white;">Ver compra</a></button>
             </div>
-</body>
+        </div>
+    </div>
+    <router-outlet></router-outlet>
+
+</div>
