@@ -1,0 +1,6 @@
+.success-message {
+    color: rgb(124, 243, 124); /* Cambia esto al color que desees */
+    font-weight: bold; /* Cambia esto para ajustar el grosor */
+    font-size: 16px; /* Opcional: para ajustar el tamaño de la fuente */
+    margin-top: 20px; /* Opcional: para agregar espacio arriba del mensaje */
+  }
