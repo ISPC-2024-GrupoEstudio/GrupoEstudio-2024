@@ -12,7 +12,13 @@ La tienda en línea de productos para mascotas es una aplicación web que permit
 
 - **Catálogo de Productos**: Los usuarios pueden navegar por una amplia selección de productos que incluyen indumentaria, juguetes, accesorios y más.
 
+- **Carrito de compras y checkout** : Los usuarios tienen la funcionalidad disponible para agregar productos al carrito y despues comprarlos a traves de una pasarela de pagos simulada.
+
+- **Dashboard** : Los usuarios registrados tienen a su disponibilidad un dashboard que muestra el historial de compras echas por ese usuario. 
+
 - **Registro de Usuarios**: Los usuarios pueden registrarse en la plataforma y acceder a su cuenta para realizar un seguimiento de sus compras.
+
+- **Login** : Los usuarios pueden iniciar sesión con las credenciales obtenidas del registro.
 
 - **Contacto**: Los usuarios pueden poner sus datos para facilitar el contacto, y tienen facilitado los numeros de contacto si ellos quisieran contactarse con la empresa directamente.
 
@@ -20,11 +26,10 @@ La tienda en línea de productos para mascotas es una aplicación web que permit
 
 Este proyecto se ha desarrollado utilizando una variedad de tecnologías web, que incluyen:
 
-- HTML y CSS para la estructura y el diseño de la interfaz de usuario.
-- JavaScript para la funcionalidad interactiva en el lado del cliente.
-- MySQL como base de datos para almacenar información de productos y usuarios.
-- Framework Bootstrap para el diseño responsivo y la interfaz de usuario.
-
+- Angular CLI 17
+- Django 4.2
+- Node.js
+- MySQL Workbench
 ## Instalación
 
 Si deseas probar este proyecto en tu propio entorno, sigue estos pasos:
@@ -51,7 +56,3 @@ Agradecemos a nuestros profesores y compañeros de clase por su apoyo y orientac
 Este proyecto es puramente académico y no se destina a su uso en producción ni a la venta de productos reales para mascotas.
 
 **Tecnicatura en Desarrollo web y Aplicaciones digitales** &copy; 2023. Todos los derechos reservados.
-
-## Ingresar a la página:
-
-En el siguiente link se puede abrir la pagina web del pet bobutique: [link a la pagina](https://iscp-2023-equipo-estudio.github.io/Grupo_TSDWAD_2do_Semestre/Proyecto%202%C2%BA%20Semestre/Paginas/index.html)
