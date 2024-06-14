@@ -20,6 +20,7 @@ from rest_framework import viewsets
 from .models import Producto, CategoriaProducto, Proveedor, Pedido, EstadoPedido, ProductoXPedido, FormaDePago, TipoEnvio, Carrito
 from .serializer import ProductoSerializer, CategoriaProductoSerializer, ProveedorSerializer, PedidoSerializer, EstadoPedidoSerializer, ProductoXPedidoSerializer, FormaDePagoSerializer, TipoEnvioSerializer, UserSerializer, UsuarioSerializer, CarritoSerializer
 from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import get_object_or_404
 
 # Importaciones API autenticación
 
@@ -67,6 +68,10 @@ class RoleListCreateAPIView(APIView):
         return Response(serializer.data)
 
     def post(self, request):
+        user = request.user
+        if not user.is_superuser: 
+            return Response({'message': 'No tienes permisos para crear roles.'}, status=status.HTTP_403_FORBIDDEN)
+
         serializer = RolesSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -75,10 +80,7 @@ class RoleListCreateAPIView(APIView):
 
 class RoleRetrieveUpdateDestroyAPIView(APIView):
     def get_object(self, pk):
-        try:
-            return Roles.objects.get(pk=pk)
-        except Roles.DoesNotExist:
-            raise status.HTTP_404_NOT_FOUND
+        return get_object_or_404(Roles, pk=pk)
 
     def get(self, request, pk):
         role = self.get_object(pk)
@@ -86,6 +88,10 @@ class RoleRetrieveUpdateDestroyAPIView(APIView):
         return Response(serializer.data)
 
     def put(self, request, pk):
+        user = request.user
+        if not user.is_superuser:
+            return Response({'message': 'No tienes permisos para actualizar roles.'}, status=status.HTTP_403_FORBIDDEN)
+
         role = self.get_object(pk)
         serializer = RolesSerializer(role, data=request.data)
         if serializer.is_valid():
@@ -94,6 +100,10 @@ class RoleRetrieveUpdateDestroyAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
+        user = request.user
+        if not user.is_superuser: 
+            return Response({'message': 'No tienes permisos para eliminar roles.'}, status=status.HTTP_403_FORBIDDEN)
+
         role = self.get_object(pk)
         role.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
