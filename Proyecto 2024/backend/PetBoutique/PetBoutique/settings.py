@@ -95,6 +95,7 @@ DATABASES = {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         'PASSWORD': '1191',
 =======
         'PASSWORD': '',
@@ -105,6 +106,9 @@ DATABASES = {
 =======
         'PASSWORD': 'mibasededatos',
 >>>>>>> 35cf0b2033fbb2d6e3377e717d74c38ac85906e4
+=======
+        'PASSWORD': 'contra.bd.24',
+>>>>>>> 264d23458e6e39036fb111d9f83d75b5125cd1bd
         'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {

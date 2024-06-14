@@ -1,62 +1,16 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="utf-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="detalle-compras.component.css">
-    <title>Detalle de Compra</title>
-</head>
-<body class="body-detalles">
-    <div class="container-detalles d-flex flex-column justify-content-center align-items-center">
-        <div *ngFor="let pedido of historialPedidos" class="container-detalles d-flex flex-column justify-content-center align-items-center">
-        <div class="card-header">
+<div class="container-fluid container-detalles d-flex flex-column" >
+    <h1 class="text-lg font-semibold titulo-detalles">Detalle de compra N°: {{idPedido}}</h1>
+    <h2 class="align-self">Productos:</h2>
+    @for (producto of productosConNombres; track $index) {
+        <div class="div-productosNombres" *ngIf="producto.producto.id_pedido === idPedido">
+            <p>{{producto.producto.cantidad}}</p>
+            <p class="text-left">{{ producto.nombre }}</p>
+            <p class="text-right">${{producto.producto.precio}}</p>
+        </div>
             
-            Detalle de la compra {{pedido.id_pedido}}
-        </div>
-        <div class="card card1" >
-            <div class="flex items-center justify-between">
-                <h2 class="text-lg font-semibold">{{pedido.id_pedido}}</h2>
-                <img src="https://placehold.co/50" alt="Product Image" class="product-image ml-4">
-            </div>
-            <div class="flex items-center justify-between mt-2">
-                <h2 class="text-lg font-semibold">{{pedido.id_pedido}}</h2>
-                <img src="https://placehold.co/50" alt="Product Image" class="product-image ml-4">
-            </div>
-            <a href="" class="boton mt-4 block text-center">Ver detalle</a>
-        </div>
-        <div class="card card2">
-            <p class="status">{{pedido.id_estado_pedido}}</p>
-            <h3 class="text-xl font-bold">{{pedido.fecha}}</h3>
-            <p>Se entrego a domicilio en <strong>{{pedido.domicilio_envio}}></strong></p>
-            <div class="action mt-4">
-                <button>Volver a comprar</button>
-            </div>
-        </div>
-    <div class="card card3">
-            @for (producto of productoXpedido; track $index) {
-            <h3 class="text-lg font-semibold">Detalle de la compra</h3>
-            <p class="purchase-date">{{pedido.id_forma_de_pago}}</p>
-            <div class="purchase-details mt-2">
-                <table class="w-full">
-                    <tr class="detail">
-                        <td class="text-left">{{producto.id_producto}}</td>
-                        <td class="text-right">{{producto.precio}}</td>
-                    </tr>
-                    <tr class="detail">
-                        <td class="text-left">{{producto.id_producto}}</td>
-                        <td class="text-right discount">{{producto.precio}}</td>
-                    </tr>
-                    <tr class="detail total">
-                        <td class="text-left font-semibold">Monto Total</td>
-                        <td class="text-right font-semibold">$ 5.000</td>
-                    </tr>
-                </table>
-                <a href="#" class="payment-details">Detalles de pago y envío</a>
-            </div>
-            }
-        </div>
+    }
+    <div class="div-total">
+        <h3 class="total">Total compra: </h3>
+        <h3 class="total-precio">${{totalCompra}}</h3>
     </div>
 </div>
-</body>
-</html>

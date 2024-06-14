@@ -27,6 +27,6 @@ export class AuthService {
 
     getUsername(): Observable<string | null> {
         return of(localStorage.getItem('user'));
-      }
+    }
 
 }

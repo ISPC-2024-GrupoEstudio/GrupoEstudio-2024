@@ -194,32 +194,33 @@ class Producto(models.Model):
         return self.nombre
 
 class ProductoXPedido(models.Model):
-    id_producto = models.OneToOneField(Producto, models.DO_NOTHING, db_column='id_producto', primary_key=True)  # The composite primary key (id_producto, id_pedido) found, that is not supported. The first column is selected.
-    id_pedido = models.ForeignKey(Pedido, models.DO_NOTHING, db_column='id_pedido')
-    cantidad = models.IntegerField()
+    id = models.BigAutoField(primary_key=True)
+    id_producto = models.ForeignKey(Producto, models.DO_NOTHING, db_column='id_producto', blank=True, null=True)
+    id_pedido = models.ForeignKey(Pedido, models.DO_NOTHING, db_column='id_pedido', blank=True, null=True)
+    cantidad = models.IntegerField(blank=True, null=True)
     precio = models.FloatField(blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'producto_x_pedido'
-        unique_together = (('id_producto', 'id_pedido'),)
 
     def __str__(self):
-        return self.id_producto
+        return self.id
+
 
 class ProductoXVenta(models.Model):
-    id_venta = models.OneToOneField('Venta', models.DO_NOTHING, db_column='id_venta', primary_key=True)  # The composite primary key (id_venta, id_producto) found, that is not supported. The first column is selected.
-    precio_unitario = models.FloatField(blank=True, null=True)
+    id = models.BigAutoField(primary_key=True)
+    id_producto = models.ForeignKey(Producto, models.DO_NOTHING, db_column='id_producto', blank=True, null=True)
+    id_venta = models.ForeignKey('Venta', models.DO_NOTHING, db_column='id_venta', blank=True, null=True)
     cantidad = models.IntegerField(blank=True, null=True)
-    id_producto = models.ForeignKey(Producto, models.DO_NOTHING, db_column='id_producto')
+    precio_unitario = models.FloatField(blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'producto_x_venta'
-        unique_together = (('id_venta', 'id_producto'),)
 
     def __str__(self):
-        return self.id_venta
+        return self.id
 
 class Proveedor(models.Model):
     id_proveedor = models.AutoField(primary_key=True)

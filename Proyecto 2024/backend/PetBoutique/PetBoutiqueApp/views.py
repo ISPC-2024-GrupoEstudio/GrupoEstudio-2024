@@ -111,12 +111,15 @@ class LoginView(APIView):
         password = request.data.get('password', None)
 
         user = authenticate(username=username, password=password)
+        print(username)   
+        print(password) 
 
         # Si es correcto, añadimos a la request la información de sesión
         if user:
             login(request, user)
             return Response(
                 status=status.HTTP_200_OK)
+            
         
         # Si no es correcto, devolvemos un error en la petición
         return Response(
@@ -193,9 +196,6 @@ class CheckoutView(APIView):
         items_comprados = request.data.get('items_comprados', [])  # Obtener los productos comprados
         payment_details = request.data.get('payment_details', {})  # Detalles del pago
         nombre_usuario = request.data.get("nombre_usuario")
-        print("Items comprados:", items_comprados)  # Debugging line
-        print("Payment details:", payment_details)  # Debugging line
-        print("Nombre de usuario:", nombre_usuario)
             
         if not items_comprados or not payment_details or not nombre_usuario:
             return Response({"error": "Datos incompletos en la solicitud"}, status=status.HTTP_400_BAD_REQUEST)
@@ -231,10 +231,12 @@ class CheckoutView(APIView):
                     producto.stock_actual -= cantidad
                     producto.save()
 
-                numero_pedido = uuid.uuid4().hex[:10]
+                # obtiene el ultimo numero de pedido y le suma 1
+                ultimo_pedido = Pedido.objects.all().order_by('-numero_pedido').first()
+                numero_pedido = ultimo_pedido.numero_pedido + 1  
 
                 pedido_data = {
-                    'nombre_usuario': usuario.id,
+                    'nombre_usuario': nombre_usuario,
                     'fecha': timezone.now(),
                     'id_estado_pedido': 1,  # Puedes establecer un valor predeterminado
                     'numero_pedido': numero_pedido,  # Necesitarás una lógica para generar un número de pedido único
@@ -244,8 +246,10 @@ class CheckoutView(APIView):
                 if pedido_serializer.is_valid():
                     pedido = pedido_serializer.save()
                     for item in items_comprados:
+                        producto_id = item.get('id_producto')
+                        producto = Producto.objects.get(id_producto=producto_id)
                         ProductoXPedido.objects.create(
-                            id_producto_id=item.get('id_producto'),
+                            id_producto=producto,
                             id_pedido=pedido,
                             cantidad=item.get('cantidad'),
                             precio=Producto.objects.get(id_producto=item.get('id_producto')).precio
@@ -265,6 +269,7 @@ class CheckoutView(APIView):
         if not card_number or not expiration_date or not cvv:
             return Response ({"error": "Detalles de pagos incompletos"}, status=status.HTTP_400_BAD_REQUEST)
         return Response ({"message": "Pago procesado exitosamente"}, status=status.HTTP_200_OK) 
+    
 # Vistas login / logout #####################################################################################
 class LoginView(APIView):
     def post (self, request):
