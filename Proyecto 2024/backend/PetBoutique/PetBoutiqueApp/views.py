@@ -347,4 +347,8 @@ def registrar_usuario(request):
             user.delete()  # Si el perfil no es válido, borramos el usuario creado
             return Response(custom_user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UsuarioViewSet(viewsets.ModelViewSet):
+    queryset = Usuario.objects.all()
+    serializer_class = UsuarioSerializer 
         
