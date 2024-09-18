@@ -12,7 +12,17 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './nav.component.css'
 })
 export class NavComponent {
+  public nombreUsuario = "";
+  public fotoPerfil = "";
   constructor(private readonly authService:AuthService, private readonly router:Router){}
+
+  ngOnInit(): void {
+    this.authService.updateUserInfo();
+    this.authService.usuarioInfo.subscribe(userInfo => {
+      this.nombreUsuario = userInfo.nombre || "Usuario";
+      this.fotoPerfil = userInfo.fotoPerfil || "";
+  });
+  }
 
   logout(){
     this.authService.logout();
@@ -22,5 +32,5 @@ export class NavComponent {
   get isAuthenticated(){
     return this.authService.isAuthenticated();
   }
-
+  
 }
