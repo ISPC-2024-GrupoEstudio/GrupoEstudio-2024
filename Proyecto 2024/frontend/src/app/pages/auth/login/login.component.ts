@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
+import { IUsuario } from '../../../models/usuario.interface';
 
 @Component({
   selector: 'app-login',
@@ -48,12 +49,12 @@ export class LoginComponent {
   }
 
   private login() {
-    this.authService.login(this.Username?.value, this.Password?.value).subscribe((data:any) => {
-      localStorage.setItem("user",this.Username?.value)
-      this.router.navigate(["/"]);
-    }, (error) => {
+    this.authService.login(this.Username?.value, this.Password?.value).subscribe((loginResponse: any) => {
+       localStorage.setItem("user", this.Username?.value);
+        location.replace('/');
+     }, (error) => {
       localStorage.removeItem("user");
-      this.loginError = "Credenciales incorrectas"
-    })
+      this.loginError = "Credenciales incorrectas";
+  });
   }
 }
