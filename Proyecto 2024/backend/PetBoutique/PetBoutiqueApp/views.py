@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from django.utils import timezone
 import uuid
 from rest_framework.authentication import SessionAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 # Importaciones para registro usuario
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -20,6 +20,8 @@ from rest_framework import viewsets
 from .models import Producto, CategoriaProducto, Proveedor, Pedido, EstadoPedido, ProductoXPedido, FormaDePago, TipoEnvio, Carrito
 from .serializer import ProductoSerializer, CategoriaProductoSerializer, ProveedorSerializer, PedidoSerializer, EstadoPedidoSerializer, ProductoXPedidoSerializer, FormaDePagoSerializer, TipoEnvioSerializer, UserSerializer, UsuarioSerializer, CarritoSerializer
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 # Importaciones API autenticación
 
@@ -134,6 +136,7 @@ class LogoutView(APIView):
         return Response(status=status.HTTP_200_OK)
     
 class RegisterView (APIView):
+    permission_classes = [AllowAny]
     def post (self, request):
         nuevo_usuario = request.data
         nuevo_usuario["id_rol"] = 2
@@ -176,6 +179,8 @@ class DeleteFromCartView (APIView):
         return Response(status= status.HTTP_200_OK)
         
 class CartView(APIView):
+    authentication_classes = [JWTAuthentication]  # Añadimos la autenticación con JWT
+    permission_classes = [IsAuthenticated]  # Solo usuarios autenticados pueden acceder
     def get(self, request, nombre_usuario):
         carritos = Carrito.objects.filter(nombre_usuario=nombre_usuario).select_related('id_producto')
         carrito_serializer = CarritoSerializer(carritos, many=True)
@@ -259,7 +264,7 @@ class CheckoutView(APIView):
 
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+        Carrito.objects.filter(nombre_usuario=nombre_usuario).delete()
         return Response({"message": "Proceso de pago completado y stock actualizado correctamente"}, status=status.HTTP_200_OK)
 
     def process_payment(self, payment_details):
@@ -281,13 +286,13 @@ class LoginView(APIView):
 
         # Si es correcto, añadimos a la request la información de sesión
         if user:
-            login(request, user)
-            return Response(
-                status=status.HTTP_200_OK)
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+            }, status=status.HTTP_200_OK)
         
-        # Si no es correcto, devolvemos un error en la petición
-        return Response(
-            status=status.HTTP_404_NOT_FOUND)
+        return Response({'error': 'Credenciales inválidas'}, status=status.HTTP_401_UNAUTHORIZED)
 
 class LogoutView(APIView):
     def post(self, request):
@@ -298,6 +303,7 @@ class LogoutView(APIView):
         return Response(status=status.HTTP_200_OK)
     
 class RegisterView (APIView):
+    permission_classes = [AllowAny]
     def post (self, request):
         usuario_serializer = UsuarioSerializer(data = request.data)
         admin_user_data =  {
