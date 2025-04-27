@@ -19,25 +19,7 @@ export class CheckoutComponent implements OnInit{
   successMessage: string = ''; // Inicialización para evitar errores de tipo indefinido
   errorMessage: string = ''; // Inicialización para evitar errores de tipo indefinido
 
-  /*
-  paymentMethods: any[] = [];
-  shippingMethods: any[] = [];
-  selectedPaymentMethod: number;
-  selectedShippingMethod: number;
-  cart: any; y para el constructor:
-   this.cartService.getPaymentMethods().subscribe(methods => {
-      this.paymentMethods = methods;
-    });
-    this.cartService.getShippingMethods().subscribe(methods => {
-      this.shippingMethods = methods;
-    });
-      y para el  onEnviar(): void {
-    this.cartService.checkout(this.selectedPaymentMethod, this.selectedShippingMethod).subscribe(response => {
-      console.log('Checkout successful', response);
-    });
-  }
-}
-   */
+
   productosCarrito: ICarrito[] = [];
   form!: FormGroup;
 

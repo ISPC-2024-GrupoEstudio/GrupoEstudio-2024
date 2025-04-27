@@ -17,6 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+
 
 urlpatterns = [
     # Sirve el index de Angular
@@ -29,6 +34,8 @@ urlpatterns = [
 
     # API autenticación routes
     path('api/', include('PetBoutiqueApp.urls')),
+    path('api/auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),  # login
+    path('api/auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'), # refresh
 ]
 
 
