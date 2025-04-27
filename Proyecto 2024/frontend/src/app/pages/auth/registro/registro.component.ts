@@ -40,7 +40,8 @@ export class RegistroComponent {
       nombre_usuario: this.form.value.username,
       email: this.form.value.email,
       password: this.form.value.password,
-    }
+      fotoPerfil: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+    };
 
     if(this.form.valid){
       this.authService.register(usuario).subscribe(data => {
