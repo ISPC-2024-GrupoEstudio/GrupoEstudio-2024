@@ -17,11 +17,11 @@ export class NavComponent {
   constructor(private readonly authService:AuthService, private readonly router:Router){}
 
   ngOnInit(): void {
-    this.authService.updateUserInfo();
-    this.authService.usuarioInfo.subscribe(userInfo => {
-      this.nombreUsuario = userInfo.nombre || "Usuario";
-      this.fotoPerfil = userInfo.fotoPerfil || "";
-  });
+    // Solo obtener el nombre de usuario desde localStorage
+    const username = localStorage.getItem('user');
+    if (username) {
+      this.nombreUsuario = username;
+    }
   }
 
   logout(){
