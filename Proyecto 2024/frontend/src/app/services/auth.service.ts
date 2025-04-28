@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { IUsuario } from "../models/usuario.interface";
 import { Observable, of, tap } from "rxjs";
 
+
 @Injectable()
 export class AuthService {
     private apiUrl = 'http://127.0.0.1:8000/api/auth/'; 
