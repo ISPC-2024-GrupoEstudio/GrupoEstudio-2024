@@ -84,12 +84,32 @@
            <!-- Campo Contraseña -->
            <div class="input-box password-container">
             <label class="label__registro" for="contrasena">Contraseña:</label>
-            <input class="input__registro" type="password" id="contrasena" name="contrasena" class="form-control" formControlName="password" (focus)="showPasswordHint = true" (blur)="showPasswordHint = false">
+          
+            <div class="password-input-wrapper">
+              <input class="input__registro" 
+                     type="password" 
+                     id="contrasena" 
+                     name="contrasena" 
+                     formControlName="password"
+                     (focus)="showPasswordHint = true" 
+                     (blur)="showPasswordHint = false">
+              
+              <img 
+                src="../../../../assets/imagenes/info.png" 
+                alt="Información" 
+                class="password-icon" 
+                (mouseenter)="showPasswordHint = true" 
+                (mouseleave)="showPasswordHint = false"
+              />
+            </div>
+          
             <small class="error-message" id="password-error"></small>
             <div *ngIf="form.controls['password'].errors && form.controls['password'].touched">
               <p class="text-danger" *ngIf="form.controls['password'].hasError('required')">El Password es requerido.</p>
               <p class="text-danger" *ngIf="form.controls['password'].hasError('minlength')">El Password requiere como mínimo 6 caracteres.</p>
             </div>
+          
+          
 
             <!-- Tooltip de Requisitos de Contraseña -->
             <div class="password-hint" *ngIf="showPasswordHint">
