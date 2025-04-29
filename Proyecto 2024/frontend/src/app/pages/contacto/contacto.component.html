@@ -1,5 +1,5 @@
 <main>
-    <form class="form__contacto container">
+    <form class="form__contacto container" [formGroup]="formulario" (ngSubmit)="enviarFormulario()">
       <div class=" text-align-center">
         <h2 class="form__contacto--title">PONETE EN CONTACTO O DEJANOS TUS DATOS Y NOS
           COMUNICAREMOS A LA BREVEDAD</h2>
@@ -34,6 +34,9 @@
           <img src="../../../assets/imagenes/Contacto/ubicacion.png" alt="ubicacion" class="icono-contacto"><a href="https://www.google.com/maps/place/C%C3%B3rdoba/@-31.3990547,-64.3590249,11z/data=!3m1!4b1!4m6!3m5!1s0x9432985f478f5b69:0xb0a24f9a5366b092!8m2!3d-31.4200833!4d-64.1887761!16zL20vMDFrMDNy?authuser=0&entry=ttu"
             target="_blank" class="cta">Cordoba Capital</a>
         </div>
+      </div>
+      <div *ngIf="mensajeExito" class="popup">
+      ¡Tu mensaje fue enviado con éxito!
       </div>
     </form>
   </main>
