@@ -8,13 +8,15 @@ import { AuthService } from '../../../services/auth.service';
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, CommonModule],
   providers: [AuthService],
   templateUrl: './registro.component.html',
   styleUrl: './registro.component.css'
 })
 export class RegistroComponent {
   form!: FormGroup;
+  showPasswordHint = false;
+
   constructor(private _formBuilder: FormBuilder, private authService:AuthService, private router: Router) {
     this.form = this._formBuilder.group({
       names: ["", Validators.required],
@@ -27,6 +29,26 @@ export class RegistroComponent {
       confirm_password: ["", Validators.required],
 
   });
+  }
+
+  get passwordValidLength(): boolean {
+    return this.Password?.value?.length >= 8 && this.Password?.value?.length <= 20;
+  }
+
+  get passwordValidUpper(): boolean {
+    return /[A-Z]/.test(this.Password?.value);
+  }
+
+  get passwordValidLower(): boolean {
+    return /[a-z]/.test(this.Password?.value);
+  }
+
+  get passwordValidNumber(): boolean {
+    return /\d/.test(this.Password?.value);
+  }
+
+  get passwordValidSpecial(): boolean {
+    return /[!@#$%^&*(),.?":{}|<>]/.test(this.Password?.value);
   }
 
   onEnviar(event:Event) {
@@ -76,6 +98,7 @@ get Lastname(){
   {
   return this.form.get("password");
   }
+
   get Email()
   {
   return this.form.get("email");
