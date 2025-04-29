@@ -1,4 +1,7 @@
 <body class="body__registro">
+  <div *ngIf="registroExitoso" class="alert-success" role="alert">
+    ✅ ¡Registro exitoso! Serás redirigido al login...
+  </div>
   <form [formGroup]="form" (ngSubmit)="onEnviar($event)">
     <div class="container">
       <div class="container__title">Registro de usuario</div>
@@ -165,5 +168,6 @@
       </div>
       <h2>¿Ya tienes una cuenta? <a [routerLink]="['/login']">Inicia sesión aquí!</a></h2>
     </div> 
+    
   </form>
 </body>

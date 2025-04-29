@@ -18,6 +18,8 @@ export class RegistroComponent {
   showPasswordHint = false;
   showPassword: boolean = false;
   showConfirmPassword: boolean = false;
+  registroExitoso: boolean = false;
+
 
   constructor(private _formBuilder: FormBuilder, private authService:AuthService, private router: Router) {
     this.form = this._formBuilder.group({
@@ -78,12 +80,22 @@ export class RegistroComponent {
       fotoPerfil: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
     };
 
-    if(this.form.valid){
-      this.authService.register(usuario).subscribe(data => {
-        this.router.navigate(["/login"]);
-      })
-    }
-    else {
+    if (this.form.valid) {
+      this.authService.register(usuario).subscribe({
+        next: (data) => {
+          this.registroExitoso = true;
+  
+          // Espera 2 segundos y luego redirige al login
+          setTimeout(() => {
+            this.router.navigate(["/login"]);
+          }, 2000);
+        },
+        error: (err) => {
+          console.error('Error en el registro:', err);
+          // Podés mostrar mensaje de error también si querés
+        }
+      });
+    } else {
       this.form.markAllAsTouched()
     }
   }
