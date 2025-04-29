@@ -18,7 +18,18 @@
       </div>
       <div class="form-group has-error">
         <label class="label__login" for="password">Contraseña</label>
-        <input id="password" type="password" class="form-control input__login"  formControlName="password">
+        <div class="password-input-wrapper">
+          <input 
+            id="password" 
+            [attr.type]="showPassword ? 'text' : 'password'" 
+            class="form-control input__login" 
+            formControlName="password"
+          >
+      
+          <button type="button" (click)="showPassword = !showPassword" class="btn-ojito">
+            {{ showPassword ? '🙈' : '👁️' }}
+          </button>
+        </div>
         @if (Password?.errors && Password?.touched) {
           <small class="error-message" id="password-error">
             @if (Password?.hasError("required")) {
