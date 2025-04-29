@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { IUsuario } from '../../../models/usuario.interface';
@@ -16,19 +16,21 @@ import { AuthService } from '../../../services/auth.service';
 export class RegistroComponent {
   form!: FormGroup;
   showPasswordHint = false;
+  showPassword: boolean = false;
+  showConfirmPassword: boolean = false;
 
   constructor(private _formBuilder: FormBuilder, private authService:AuthService, private router: Router) {
     this.form = this._formBuilder.group({
       names: ["", Validators.required],
       lastName: ["", Validators.required],
       tipodni: ["", Validators.required],
-      dni: ["",[Validators.required, Validators.pattern("^[0-9]*$")]],
-      username: ["",[Validators.required,Validators.minLength(5), Validators.maxLength(20) ]],
+      dni: ["",[Validators.required, Validators.pattern("^[0-9]*$"),Validators.minLength(8), Validators.maxLength(8) ]],
+      username: ["",[Validators.required,Validators.minLength(5), Validators.maxLength(20), Validators.pattern(/^[a-zA-Z0-9_-]+$/)  ]],
       email: ["",[Validators.required, Validators.email]],
-      password:["",[Validators.required,Validators.minLength(6)]],
+      password:["",[Validators.required,Validators.minLength(6), Validators.maxLength(20), Validators.pattern(/^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{6,}$/)]],
       confirm_password: ["", Validators.required],
 
-  });
+  },{ validators: this.passwordsMatchValidator });
   }
 
   get passwordValidLength(): boolean {
@@ -50,6 +52,17 @@ export class RegistroComponent {
   get passwordValidSpecial(): boolean {
     return /[!@#$%^&*(),.?":{}|<>]/.test(this.Password?.value);
   }
+
+  passwordsMatchValidator(control: AbstractControl): ValidationErrors | null {
+    const password = control.get('password')?.value;
+    const confirmPassword = control.get('confirm_password')?.value;
+    if (password && confirmPassword && password !== confirmPassword) {
+      control.get('confirm_password')?.setErrors({ passwordsMismatch: true });
+      return { passwordsMismatch: true };
+    }
+    return null;
+  }
+
 
   onEnviar(event:Event) {
     event.preventDefault;
