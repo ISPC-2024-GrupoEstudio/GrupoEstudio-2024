@@ -9,7 +9,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 # Importaciones para registro usuario
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from .models import CustomUser
 from .serializer import CustomUserSerializer
 # Fin importaciones registro #
@@ -17,7 +17,7 @@ from .models import Roles, Usuario
 from .serializer import RolesSerializer
 from django.db import transaction
 from rest_framework import viewsets
-from .models import Producto, CategoriaProducto, Proveedor, Pedido, EstadoPedido, ProductoXPedido, FormaDePago, TipoEnvio, Carrito
+from .models import Producto, CategoriaProducto, Proveedor, Pedido, EstadoPedido, ProductoXPedido, FormaDePago, TipoEnvio, Carrito, Usuario
 from .serializer import ProductoSerializer, CategoriaProductoSerializer, ProveedorSerializer, PedidoSerializer, EstadoPedidoSerializer, ProductoXPedidoSerializer, FormaDePagoSerializer, TipoEnvioSerializer, UserSerializer, UsuarioSerializer, CarritoSerializer
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -357,4 +357,13 @@ def registrar_usuario(request):
 class UsuarioViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer 
-        
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def obtener_user_por_username(request, nombre_usuario):
+    try:
+        usuario = Usuario.objects.get(nombre_usuario=nombre_usuario)
+        serializer = UsuarioSerializer(usuario)
+        return Response(serializer.data)
+    except Usuario.DoesNotExist:
+        return Response({'error': 'Usuario no encontrado'}, status=404)
