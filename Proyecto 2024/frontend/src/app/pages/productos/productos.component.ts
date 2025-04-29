@@ -7,19 +7,25 @@ import { CartService } from '../../services/cart.service';
 import { AuthService } from '../../services/auth.service';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { FiltroProductosComponent } from '../../components/filtro-productos/filtro-productos.component';
+import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-productos',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, FiltroProductosComponent],
   templateUrl: './productos.component.html',
   styleUrl: './productos.component.css',
   providers: [ProductoService, CategoriaService],
 })
 export class ProductosComponent implements OnInit {
   categorias: ICategoriaProducto[] = [];
+  categoriasVisibles: ICategoriaProducto[] = [];
   productos: IProducto[] = [];
-  selectedProducto: IProducto | null = null;  // Solo una declaración de selectedProducto
+  selectedProducto: IProducto | null = null;
+  selectedCategoriaId: number | null = null;
+  searchText: string = '';
 
   constructor(
     private productoService: ProductoService,
@@ -32,6 +38,7 @@ export class ProductosComponent implements OnInit {
   ngOnInit(): void {
     this.categoriaService.getCategorias().subscribe((data) => {
       this.categorias = data;
+      this.categoriasVisibles = data;
     });
 
     this.productoService.getProducts().subscribe((data) => {
@@ -40,7 +47,9 @@ export class ProductosComponent implements OnInit {
   }
 
   getProductosPorCategoria(categoriaId: number) {
-    return this.productos.filter((p) => p.id_categoria_producto === categoriaId);
+    return this.productos
+      .filter((p) => p.id_categoria_producto === categoriaId )
+      .filter((p) => p.nombre.toLowerCase().includes(this.searchText.toLowerCase()) || p.descripcion.toLowerCase().includes(this.searchText.toLowerCase()));
   }
 
   addToCart(producto: IProducto) {
@@ -57,6 +66,8 @@ export class ProductosComponent implements OnInit {
       });
       return;
     }
+    
+    
 
     this.cartService.agregarProducto(producto).subscribe(
       (response) => {
@@ -73,6 +84,34 @@ export class ProductosComponent implements OnInit {
       }
     );
   }
+
+  //Funciones para el filtro
+
+  getProductosFiltrados(): IProducto[] {
+    return this.productos.filter((p) => {
+      const coincideCategoria =
+        this.selectedCategoriaId === null || p.id_categoria_producto === this.selectedCategoriaId;
+  
+      const coincideBusqueda =
+        p.nombre.toLowerCase().includes(this.searchText) ||
+        p.descripcion.toLowerCase().includes(this.searchText);
+  
+      return coincideCategoria && coincideBusqueda;
+    });
+  }
+  
+  onCategoriaSeleccionada(categoriaId: number | null) {
+    if (categoriaId === null) {
+      this.categoriasVisibles = this.categorias;
+    } else {
+      this.categoriasVisibles = this.categorias.filter((c) => c.id_categoria_producto === categoriaId);
+    }
+  }
+  
+  onTextoBusqueda(texto: string) {
+    this.searchText = texto;
+  }
+  
 
   // Funciones para manejar el detalle del producto
   verDetalle(producto: IProducto) {

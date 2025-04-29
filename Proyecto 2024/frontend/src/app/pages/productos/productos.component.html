@@ -10,9 +10,16 @@
 		</section>
 	</header>
 
+	  <!-- 🔍 Filtro y búsqueda -->
+	  <app-filtro-productos
+	  [categorias]="categorias"
+	  (categoriaSeleccionada)="onCategoriaSeleccionada($event)"
+	  (textoBusqueda)="onTextoBusqueda($event)">
+	</app-filtro-productos>
+
 	<!-- Lista de categorias y productos -->
 
-	@for (categoria of categorias; track $index) {
+	@for (categoria of categoriasVisibles; track $index) {
 		
 		<section class="categoria__titulo--section">
 			<h2 class="categoria__titulo">{{categoria.nombre}}</h2>

@@ -1,0 +1,41 @@
+
+.filtro-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    margin: 2rem auto;
+    padding: 1rem;
+    background-color: #f7fdfb;
+    border: 1px solid #d9f3ee;
+    border-radius: 8px;
+    max-width: 800px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  }
+  
+  .filtro-container select,
+  .filtro-container input[type="text"] {
+    padding: 8px 16px;
+    border: 1px solid #20c997;
+    border-radius: 6px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s;
+  }
+  
+  .filtro-container select:focus,
+  .filtro-container input[type="text"]:focus {
+    border-color: #44f3be;
+    box-shadow: 0 0 0 3px rgba(68, 243, 190, 0.3);
+  }
+  
+  .filtro-container select {
+    background-color: #ffffff;
+    color: #333;
+  }
+  
+  .filtro-container input[type="text"] {
+    width: 250px;
+  }
+  
