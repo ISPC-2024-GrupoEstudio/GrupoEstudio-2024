@@ -69,4 +69,13 @@ export class AuthService {
         return of(null);  // Si no es un método válido, retorna null
     }
 
+    getUserPerfil(username: string): Observable<any>{
+        const token = this.getAccessToken();
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${token}`
+        });
+
+        return this.httpClient.get(`${this.apiUrl}usuarios/${username}/`, { headers })
+    }
+
 }
