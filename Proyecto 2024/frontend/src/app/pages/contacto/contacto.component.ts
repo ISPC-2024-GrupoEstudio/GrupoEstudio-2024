@@ -15,6 +15,7 @@ export class ContactoComponent {
 
   formulario: FormGroup;
   mensajeExito: boolean = false;
+  ocultandoMensaje: boolean = false;
 
   constructor(private fb: FormBuilder) {
     this.formulario = this.fb.group({
@@ -26,15 +27,25 @@ export class ContactoComponent {
   }
 
   enviarFormulario() {
-    console.log('Formulario válido?', this.formulario.valid);
-  console.log('Datos del formulario:', this.formulario.value);
     if (this.formulario.valid) {
       this.mensajeExito = true;
       this.formulario.reset(); 
-      
+
       setTimeout(() => {
-        this.mensajeExito = false;
+        this.ocultandoMensaje = true;
+        setTimeout(() => {
+          this.mensajeExito = false;
+          this.ocultandoMensaje = false;
+        }, 500); // duración del fade-out
       }, 3000);
     }
+  }
+
+  cerrarPopup() {
+    this.ocultandoMensaje = true;
+    setTimeout(() => {
+      this.mensajeExito = false;
+      this.ocultandoMensaje = false;
+    }, 500);
   }
 }

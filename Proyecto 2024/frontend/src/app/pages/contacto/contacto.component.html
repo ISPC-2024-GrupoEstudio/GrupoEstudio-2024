@@ -35,8 +35,16 @@
             target="_blank" class="cta">Cordoba Capital</a>
         </div>
       </div>
-      <div *ngIf="mensajeExito" class="popup">
+      <!-- <div *ngIf="mensajeExito" class="popup">
       ¡Tu mensaje fue enviado con éxito!
+      </div> -->
+      <div *ngIf="mensajeExito" class="popup-overlay" (click)="cerrarPopup()">
+        <div class="popup-content" (click)="$event.stopPropagation()">
+          <button class="cerrar-btn" (click)="cerrarPopup()">×</button>
+          ¡Tu mensaje fue enviado con éxito!
+        </div>
       </div>
+      
     </form>
   </main>
+  
