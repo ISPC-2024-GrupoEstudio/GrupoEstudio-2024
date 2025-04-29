@@ -60,7 +60,13 @@ export class ProductosComponent implements OnInit {
 
     this.cartService.agregarProducto(producto).subscribe(
       (response) => {
+        //alert('Producto agregado al carrito con éxito !'+JSON.stringify(response));
         this.cartService.actualizarCarrito();
+        Swal.fire({
+          title: 'Producto agregado al carrito con éxito !',
+          icon: 'success',
+          confirmButtonText: 'Aceptar',
+        })
       },
       (error) => {
         console.error('Error al agregar producto al carrito:', error);
