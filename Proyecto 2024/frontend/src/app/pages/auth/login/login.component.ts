@@ -17,6 +17,8 @@ export class LoginComponent {
 
   form:FormGroup;
   loginError?:string;
+  showPasswordHint = false;
+  showPassword: boolean = false;
 
   constructor(
     private readonly formBuilder: FormBuilder,
