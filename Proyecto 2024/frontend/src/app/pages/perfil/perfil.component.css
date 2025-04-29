@@ -1,0 +1,53 @@
+body{
+    margin:0;
+    padding:0;
+}
+
+.foto_perfil{
+    width: 15rem;
+    margin: 2rem 4rem;
+}
+
+h1{
+    color: #ffffff;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    font-size: 5rem;
+}
+
+dl{
+    margin: 0;
+    padding: 3rem 0 4rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.infoPerfil_div{
+    width: 100%;
+    max-width: 30rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.info_perfil img{
+    width: 4rem;
+    height: 4rem;
+}
+
+.info_perfil{
+    font-size: 1.3rem;
+}
+
+.infoPerfil_datos{
+    margin: 0 1rem;
+    border:1px solid #9b59b6;
+    border-radius: 5px;
+    padding: 0.5rem 0 0 1rem;
+    box-shadow: 6px 3px 11px rgb(0 0 0 / 12%);
+    max-width: 30rem;
+    height: auto;
+}
+
+
+

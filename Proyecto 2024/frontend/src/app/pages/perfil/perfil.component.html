@@ -1,0 +1,42 @@
+<body class="body_perfil">
+    <main class="d-flex flex-column flex-md-row justify-content-start align-items-center text-center">
+        <img class="rounded-circle border border-white border-3 foto_perfil" src="../../../assets/imagenes/Perfil/fotoPerfil.png" alt="">
+        <h1>{{ username }}</h1>
+    </main>
+    
+    <dl class="info_perfil bg-light col-xxl-6 col-12  flex-column flex-md-row flex-wrap">
+
+        <div class="infoPerfil_div infoPerfil_nombreCompleto mx-auto my-3">
+            <img src="../../../assets/imagenes/Perfil/nombreCompleto.png" alt="icono de una persona en color violeta">
+            <div class="infoPerfil_datos w-100 w-md-75 w-lg-50" >
+                <dt>Nombre y Apellido:</dt>
+                <dd>{{infoUsuario?.nombre && infoUsuario?.apellido ? infoUsuario.nombre + ' ' + infoUsuario.apellido : 'Dato no proporcionado' }}</dd>
+            </div>
+        </div>
+
+        <div class="infoPerfil_div infoPerfil_dni mx-auto my-3">
+            <img src="../../../assets/imagenes/Perfil/dni.png" alt="icono de un documento de identidad en color violeta">
+            <div class="infoPerfil_datos w-100 w-md-75 w-lg-50" >
+                <dt>DNI:</dt>
+                <dd>{{infoUsuario?.numero_documento || 'Dato no proporcionado' }}</dd>
+            </div>
+        </div>
+
+        <div class="infoPerfil_div infoPerfil_email mx-auto my-3">
+            <img src="../../../assets/imagenes/Perfil/email.png" alt="icono de un sobre de carta color violeta">
+            <div class="infoPerfil_datos w-100 w-md-75 w-lg-50" >
+                <dt>Email:</dt>
+                <dd>{{infoUsuario?.email || 'Dato no proporcionado'}}</dd>
+            </div>
+        </div>
+
+        <div class="infoPerfil_div infoPerfil_telefono mx-auto my-3">
+            <img src="../../../assets/imagenes/Perfil/telefono.png" alt="icono de un telefono en color violeta">
+            <div class="infoPerfil_datos w-100 w-md-75 w-lg-50" >
+                <dt>Teléfono:</dt>
+                <dd>{{infoUsuario?.telefono || 'Dato no proporcionado'}}</dd>
+            </div>
+        </div>
+        
+    </dl>
+</body>
