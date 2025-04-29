@@ -21,7 +21,7 @@
 		<div class="row">
 		@for (producto of getProductosPorCategoria(categoria.id_categoria_producto); track $index) {
 			<div class="col-md-4 col-sm-12 pt-3 pb-3">
-				<div class="item">
+				<div class="item" (click)="verDetalle(producto)">
 					<figure class="items__figure">
 						<img class="items__img" [src]="producto.image_url" alt="producto">
 					</figure>
@@ -30,11 +30,26 @@
 						<p class="descripcion__productos">{{producto.descripcion}}</p>
 						<p class="price">${{producto.precio}}</p>
 					</div>
-					<button (click)="addToCart(producto)" class="btn btn-primary custom-btn">Agregar al carrito</button>	
+					<button (click)="addToCart(producto); $event.stopPropagation()" class="btn btn-primary custom-btn">Agregar al Carrito</button>	
 				</div>
 			</div>
 		}
 		</div>
 	}
+
+  <!-- Modal flotante de detalle -->
+   @if (selectedProducto) {
+	<div class="producto-detalle-modal" (click)="cerrarDetalle()">
+		<div class="modal-content animate-fade" (click)="$event.stopPropagation()">
+		  <span class="close" (click)="cerrarDetalle()">&times;</span>
+		  <img [src]="selectedProducto.image_url" alt="producto" class="detalle-img">
+		  <h2>{{ selectedProducto.nombre }}</h2>
+		  <p>{{ selectedProducto.descripcion }}</p>
+		  <p class="price">${{ selectedProducto.precio }}</p>
+		  <button (click)="addToCart(selectedProducto)" class="btn btn-primary custom-btn">Agregar al carrito</button>
+		</div>
+	  </div>
+   }
+  
 
 </div>

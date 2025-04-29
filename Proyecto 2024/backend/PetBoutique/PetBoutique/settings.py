@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-4l#6bdx6tmem#&^&&850i&ny(mfc$etbdj7zn&!!ok3$9c*l#b
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -108,7 +108,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'pet_boutique',
         'USER': 'root',
-        'PASSWORD': 'root',
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {

@@ -16,20 +16,30 @@ import { Router } from '@angular/router';
   styleUrl: './productos.component.css',
   providers: [ProductoService, CategoriaService],
 })
-export class ProductosComponent implements OnInit{
+export class ProductosComponent implements OnInit {
   categorias: ICategoriaProducto[] = [];
   productos: IProducto[] = [];
-  constructor( private productoService:ProductoService, private categoriaService:CategoriaService, private cartService: CartService, private authService: AuthService, private router: Router) {}
+  selectedProducto: IProducto | null = null;  // Solo una declaración de selectedProducto
+
+  constructor(
+    private productoService: ProductoService,
+    private categoriaService: CategoriaService,
+    private cartService: CartService,
+    private authService: AuthService,
+    private router: Router
+  ) {}
+
   ngOnInit(): void {
-    this.categoriaService.getCategorias().subscribe((data)=> {
+    this.categoriaService.getCategorias().subscribe((data) => {
       this.categorias = data;
-    })
-    this.productoService.getProducts().subscribe((data)=> {
+    });
+
+    this.productoService.getProducts().subscribe((data) => {
       this.productos = data;
-    })
+    });
   }
 
-  getProductosPorCategoria(categoriaId:number) {
+  getProductosPorCategoria(categoriaId: number) {
     return this.productos.filter((p) => p.id_categoria_producto === categoriaId);
   }
 
@@ -49,13 +59,27 @@ export class ProductosComponent implements OnInit{
     }
 
     this.cartService.agregarProducto(producto).subscribe(
-      response => {
+      (response) => {
+        //alert('Producto agregado al carrito con éxito !'+JSON.stringify(response));
         this.cartService.actualizarCarrito();
+        Swal.fire({
+          title: 'Producto agregado al carrito con éxito !',
+          icon: 'success',
+          confirmButtonText: 'Aceptar',
+        })
       },
-      error => {
+      (error) => {
         console.error('Error al agregar producto al carrito:', error);
-        // Aquí puedes manejar el error, como mostrar un mensaje de error al usuario.
       }
     );
+  }
+
+  // Funciones para manejar el detalle del producto
+  verDetalle(producto: IProducto) {
+    this.selectedProducto = producto;
+  }
+
+  cerrarDetalle() {
+    this.selectedProducto = null;
   }
 }
