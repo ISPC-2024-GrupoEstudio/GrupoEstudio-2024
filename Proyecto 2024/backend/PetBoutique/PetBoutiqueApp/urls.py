@@ -1,7 +1,8 @@
 from django.urls import path, include
 from rest_framework import routers
 from PetBoutiqueApp import views
-from .views import RoleListCreateAPIView, RoleRetrieveUpdateDestroyAPIView ,ProcessPaymentView,CheckoutView
+from rest_framework.routers import DefaultRouter
+from .views import RoleListCreateAPIView, RoleRetrieveUpdateDestroyAPIView ,ProcessPaymentView,CheckoutView, GuardarCuponView, CrearCuponView, ListarCuponesView
 from .views import registrar_usuario, obtener_user_por_username
 
 router=routers.DefaultRouter()
@@ -14,6 +15,7 @@ router.register(r'estadoPedido', views.EstadoPedidoViewSet)
 router.register(r'formaDePago', views.FormaDePagoViewSet)
 router.register(r'tipoEnvio', views.TipoEnvioViewSet)
 router.register(r'usuarios', views.UsuarioViewSet)
+# router.register(r'mis-cupones', CuponUsuarioViewSet, basename='cuponusuario')
 
 urlpatterns = [
     path('', include(router.urls)),
@@ -45,6 +47,12 @@ urlpatterns = [
     path('checkout/', CheckoutView.as_view(), name='checkout'),
 
     path('auth/usuarios/<str:nombre_usuario>/', obtener_user_por_username, name='usuario-por-username'),
+    
+    path('api/guardar-cupon/', GuardarCuponView.as_view(), name='guardar-cupon'),
+
+    path('crear-cupon/', CrearCuponView.as_view(), name='crear-cupon'),
+
+    path('api/listar-cupones/', ListarCuponesView.as_view(), name='listar_cupones'),
 ]
 
 

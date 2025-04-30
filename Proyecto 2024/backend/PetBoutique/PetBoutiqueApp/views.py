@@ -13,15 +13,17 @@ from rest_framework.decorators import api_view, permission_classes
 from .models import CustomUser
 from .serializer import CustomUserSerializer
 # Fin importaciones registro #
-from .models import Roles, Usuario
+from .models import Roles, Usuario, Cupon, CuponUsuario
 from .serializer import RolesSerializer
 from django.db import transaction
 from rest_framework import viewsets
-from .models import Producto, CategoriaProducto, Proveedor, Pedido, EstadoPedido, ProductoXPedido, FormaDePago, TipoEnvio, Carrito, Usuario
-from .serializer import ProductoSerializer, CategoriaProductoSerializer, ProveedorSerializer, PedidoSerializer, EstadoPedidoSerializer, ProductoXPedidoSerializer, FormaDePagoSerializer, TipoEnvioSerializer, UserSerializer, UsuarioSerializer, CarritoSerializer
+from .models import Producto, CategoriaProducto, Proveedor, Pedido, EstadoPedido, ProductoXPedido, FormaDePago, TipoEnvio, Carrito, Usuario, CuponUsuario
+from .serializer import ProductoSerializer, CategoriaProductoSerializer, ProveedorSerializer, PedidoSerializer, EstadoPedidoSerializer, ProductoXPedidoSerializer, FormaDePagoSerializer, TipoEnvioSerializer, UserSerializer, UsuarioSerializer, CarritoSerializer, CuponUsuarioSerializer
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.permissions import IsAdminUser
+from .serializer import CuponSerializer 
 
 # Importaciones API autenticación
 
@@ -294,6 +296,8 @@ class LoginView(APIView):
         
         return Response({'error': 'Credenciales inválidas'}, status=status.HTTP_401_UNAUTHORIZED)
 
+
+
 class LogoutView(APIView):
     def post(self, request):
         # Borramos de la request la información de sesión
@@ -367,3 +371,60 @@ def obtener_user_por_username(request, nombre_usuario):
         return Response(serializer.data)
     except Usuario.DoesNotExist:
         return Response({'error': 'Usuario no encontrado'}, status=404)
+
+# class CuponUsuarioViewSet(viewsets.ModelViewSet):
+#     serializer_class = CuponUsuarioSerializer
+#     permission_classes = [IsAuthenticated]
+
+#     def get_queryset(self):
+#         return CuponUsuario.objects.filter(usuario=self.request.user)
+
+#     def perform_create(self, serializer):
+#         serializer.save(usuario=self.request.user)
+class GuardarCuponView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        cupon_id = request.data.get('cupon_id')
+
+        if not cupon_id:
+            return Response({'error': 'cupon_id es requerido'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            cupon = Cupon.objects.get(id=cupon_id)
+        except Cupon.DoesNotExist:
+            return Response({'error': 'Cupón no encontrado'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Verificar si ya lo guardó
+        if CuponUsuario.objects.filter(usuario=request.user, cupon=cupon).exists():
+            return Response({'message': 'El cupón ya fue guardado'}, status=status.HTTP_200_OK)
+
+        cupon_usuario = CuponUsuario.objects.create(usuario=request.user, cupon=cupon)
+        serializer = CuponUsuarioSerializer(cupon_usuario)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+class CrearCuponView(APIView):
+    permission_classes = [IsAuthenticated, IsAdminUser]  
+
+    def post(self, request):
+        serializer = CuponSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class ListarCuponesView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # Obtener todos los cupones
+        cupones = Cupon.objects.all()
+        
+        if not cupones:
+            # Si no hay cupones, devolvemos un mensaje apropiado
+            return Response({'message': 'No hay cupones disponibles'}, status=404)
+        
+        # Serializamos los cupones
+        serializer = CuponSerializer(cupones, many=True)
+        return Response(serializer.data)

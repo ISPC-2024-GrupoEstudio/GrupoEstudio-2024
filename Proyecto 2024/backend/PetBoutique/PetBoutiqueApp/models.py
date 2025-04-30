@@ -326,3 +326,20 @@ class CustomUser(models.Model):
 
     def __str__(self):
         return self.username
+    
+class Cupon(models.Model):
+    name = models.CharField(max_length=100)
+    descripcion = models.TextField()
+    url = models.URLField()
+    fecha_vencimiento = models.DateField()
+
+    def __str__(self):
+        return self.name
+
+class CuponUsuario(models.Model):
+    cupon = models.ForeignKey('PetBoutiqueApp.Cupon', on_delete=models.CASCADE)
+    usuario = models.ForeignKey('PetBoutiqueApp.CustomUser', on_delete=models.CASCADE)
+    canjeado = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.usuario} - {self.cupon}"
