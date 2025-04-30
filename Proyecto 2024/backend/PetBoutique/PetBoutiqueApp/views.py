@@ -323,6 +323,29 @@ class RegisterView (APIView):
         else:
             return Response(admin_user_serializer.errors, status= status.HTTP_400_BAD_REQUEST)
 
+class UsuarioPorNombreView(APIView):
+    permission_clases = [IsAuthenticated]
+
+    def get(self, request, nombre_usuario):
+        try:
+            usuario = Usuario.objects.get(nombre_usuario=nombre_usuario)
+            serializer = UsuarioSerializer(usuario)
+            return Response(serializer.data)
+        except Usuario.DoesNotExist:
+            return Response({"error": "Usuario no encontrado"}, status=404)
+    
+    def put(self, request, nombre_usuario):
+        try:
+            usuario = Usuario.objects.get(nombre_usuario=nombre_usuario)
+        except Usuario.DoesNotExist:
+            return Response({'error': 'Usuario no encontrado'}, status=404)
+    
+        serializer = UsuarioSerializer(usuario, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+
 # Para registrar usuarios en BDD
 @api_view(['POST'])
 def registrar_usuario(request):
@@ -363,7 +386,16 @@ class UsuarioViewSet(viewsets.ModelViewSet):
 def obtener_user_por_username(request, nombre_usuario):
     try:
         usuario = Usuario.objects.get(nombre_usuario=nombre_usuario)
-        serializer = UsuarioSerializer(usuario)
-        return Response(serializer.data)
     except Usuario.DoesNotExist:
         return Response({'error': 'Usuario no encontrado'}, status=404)
+    
+    if request.method == 'GET':
+        serializer = UsuarioSerializer(usuario)
+        return Response(serializer.data)
+    
+    elif request.method == 'PUT':
+        serializer = UsuarioSerializer(usuario, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)

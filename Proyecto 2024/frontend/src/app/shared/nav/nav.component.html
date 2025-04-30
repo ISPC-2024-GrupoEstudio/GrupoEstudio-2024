@@ -56,7 +56,7 @@
         <ul class="navbar-nav ms-auto me-5">
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle usuario-nav" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <img src="../../../assets/imagenes/Perfil/fotoPerfil.png" alt="Perfil" class="rounded-circle me-2" style="width: 40px; height: 40px;">
+              <img [src]="fotoPerfil || '../../../assets/imagenes/Perfil/fotoPerfil.png'" class="rounded-circle me-2" style="width: 40px; height: 40px;">
               <strong>{{ nombreUsuario }}</strong>
             </a>
             <ul class="dropdown-menu">
