@@ -4,6 +4,9 @@
     <span class="badge badge-pill badge-danger">{{ productosCarrito.length }}</span>
   </div>
   <div class="cart-dropdown" *ngIf="isCartOpen">
+    <div class="d-flex justify-content-end p-2">
+      <button type="button" class="btn-close" aria-label="Cerrar" (click)="toggleCart()"></button>
+    </div>
     <div *ngFor="let productoCarrito of productosCarrito" class="p-2 border-bottom d-flex justify-content-between align-items-center">
       <div>
         <img [src]="productoCarrito.producto.image_url" class="img-fluid p-2" alt="" style="height: 70px !important;width: 100px !important;">
