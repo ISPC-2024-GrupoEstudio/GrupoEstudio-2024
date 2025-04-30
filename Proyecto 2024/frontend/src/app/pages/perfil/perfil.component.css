@@ -3,9 +3,51 @@ body{
     padding:0;
 }
 
+main{
+    padding: 3rem;
+}
+
+.div_fotoPerfil{
+    width: 15rem;
+    height: 15rem;
+    margin-bottom: 2rem;
+}
+
 .foto_perfil{
     width: 15rem;
-    margin: 2rem 4rem;
+    height: 15rem;
+    margin: 0;
+    object-fit: cover;
+}
+
+
+.editar_fotoPerfil{
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    bottom: 0;
+    right: 0;
+    transform: translate(-40%, 30%);
+    width: 5rem;
+    height: 5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+}
+
+.btn_editarFoto{
+    margin: 1rem;
+    border: none;
+    outline: none;
+}
+
+.btn_editarFoto:focus{
+    outline: none;
+}
+
+.icono_camara{
+    width: 2.7rem;
+    height: 2.7rem;
 }
 
 h1{

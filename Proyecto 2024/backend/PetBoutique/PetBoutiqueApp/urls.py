@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework import routers
 from PetBoutiqueApp import views
 from .views import RoleListCreateAPIView, RoleRetrieveUpdateDestroyAPIView ,ProcessPaymentView,CheckoutView
-from .views import registrar_usuario, obtener_user_por_username
+from .views import registrar_usuario, UsuarioPorNombreView
 
 router=routers.DefaultRouter()
 router.register(r'productos', views.ProductoViewSet)
@@ -44,7 +44,7 @@ urlpatterns = [
          
     path('checkout/', CheckoutView.as_view(), name='checkout'),
 
-    path('auth/usuarios/<str:nombre_usuario>/', obtener_user_por_username, name='usuario-por-username'),
+    path('auth/usuarios/<str:nombre_usuario>/', UsuarioPorNombreView.as_view(), name='usuario-por-username'),
 ]
 
 
