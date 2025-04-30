@@ -18,6 +18,10 @@ export class ContactoComponent implements OnInit {
   ocultandoMensaje: boolean = false;
   username: string | null = null;  // Asegúrate de tener una propiedad para el username
 
+  //Propiedades Whatsapp
+  errorWhatsApp: boolean = false;
+  ocultandoErrorWhatsApp: boolean = false;
+
   constructor(private fb: FormBuilder, private authService: AuthService) {
     this.formulario = this.fb.group({
       nombre: ['', Validators.required],
@@ -76,6 +80,28 @@ export class ContactoComponent implements OnInit {
       this.mensajeExito = false;
       this.ocultandoMensaje = false;
     }, 500);
+  }
+
+  //Metodos Whatsapp
+  verificarWhatsapp(event: MouseEvent): void{
+    const timestamp = new Date().getTime();
+    const whatsappUrl = 'https://wa.me/540351408654?t=${timestamp}';
+    const windowRef = window.open(whatsappUrl, '_blank');
+
+    //Verificar si se abrio la ventana
+    if (!windowRef || windowRef.closed || typeof windowRef.closed === 'undefined') {
+      event.preventDefault();
+      this.errorWhatsApp = true;
+      
+      // Ocultar el mensaje de error después de 3 segundos (similar a tu lógica del mensajeExito)
+      setTimeout(() => {
+        this.ocultandoErrorWhatsApp = true;
+        setTimeout(() => {
+          this.errorWhatsApp = false;
+          this.ocultandoErrorWhatsApp = false;
+        }, 500); // duración del fade-out
+      }, 3000);
+    }
   }
 }
 
