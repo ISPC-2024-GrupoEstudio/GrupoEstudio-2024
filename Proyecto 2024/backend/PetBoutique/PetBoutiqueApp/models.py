@@ -328,13 +328,25 @@ class CustomUser(models.Model):
         return self.username
     
 class Cupon(models.Model):
-    name = models.CharField(max_length=100)
+    TIPO_DESCUENTO = [
+        ('porcentaje', 'Porcentaje'),
+        ('monto', 'Monto fijo'),
+    ]
+
+    nombre = models.CharField(max_length=100)
     descripcion = models.TextField()
-    url = models.URLField()
+    tipo_descuento = models.CharField(max_length=20, choices=TIPO_DESCUENTO, default='porcentaje')
+    valor_descuento = models.DecimalField(max_digits=10, decimal_places=2)
+    # imagen = models.ImageField(upload_to='cupones/', null=True, blank=True)
+    image_url = models.TextField(blank=True, null=True)
     fecha_vencimiento = models.DateField()
 
+    class Meta:
+        verbose_name = "Cupón"
+        verbose_name_plural = "Cupones"
+
     def __str__(self):
-        return self.name
+        return f"{self.nombre} - {self.tipo_descuento}: {self.valor_descuento}"
 
 class CuponUsuario(models.Model):
     cupon = models.ForeignKey('PetBoutiqueApp.Cupon', on_delete=models.CASCADE)
