@@ -45,6 +45,7 @@ urlpatterns = [
     path('checkout/', CheckoutView.as_view(), name='checkout'),
 
     path('auth/usuarios/<str:nombre_usuario>/', UsuarioPorNombreView.as_view(), name='usuario-por-username'),
+    path('api/usuarios/<str:nombre_usuario>/', UsuarioPorNombreView.as_view()),
 ]
 
 

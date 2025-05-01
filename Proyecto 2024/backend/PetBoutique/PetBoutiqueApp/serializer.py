@@ -13,6 +13,8 @@ class ProductoSerializer(serializers.ModelSerializer):
         fields = '__all__'  
 
 class UsuarioSerializer(serializers.ModelSerializer):
+    telefono = serializers.IntegerField(max_value=9223372036854775807, required=False, allow_null=True)
+
     class Meta:
         model = Usuario
         fields = '__all__'  

@@ -1,4 +1,11 @@
 <body class="body_perfil">
+    <!-- Mensaje de éxito al guardar -->
+    <div *ngIf="mostrarMensajeExito" class="toast-fixed-center">
+        <div class="toast-content">
+          <span class="toast-text">¡Perfil actualizado correctamente!</span>
+        </div>
+      </div>
+
     <main class="d-flex flex-column flex-md-row justify-content-start align-items-center text-start">
         <div class="div_fotoPerfil position-relative">
             <!--Spinner-->
@@ -53,6 +60,24 @@
                 <dd>{{infoUsuario?.telefono || 'Dato no proporcionado'}}</dd>
             </div>
         </div>
-        
+        <div class="editarPerfil">
+            <button class="editarPerfil-btn btn" (click)="abrirModal()">Editar Perfil</button>
+            
+            <!--Modal-->
+            <div class="modal fade " id="editarPerfilModal" tabindex="-1" aria-modal="true" role="dialog">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title">Editar Perfil</h3>
+                            <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body">
+                            <app-editar-perfil (formularioGuardado)="cerrarModal()"></app-editar-perfil>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </dl>
+    
 </body>

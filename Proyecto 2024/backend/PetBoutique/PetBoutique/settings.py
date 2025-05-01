@@ -108,7 +108,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'pet_boutique',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': 'contra.bd.24',
         'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {
