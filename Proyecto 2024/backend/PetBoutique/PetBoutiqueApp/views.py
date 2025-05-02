@@ -5,11 +5,11 @@ from rest_framework.views import APIView
 from django.utils import timezone
 import uuid
 from rest_framework.authentication import SessionAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 # Importaciones para registro usuario
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from .models import CustomUser
 from .serializer import CustomUserSerializer
 # Fin importaciones registro #
@@ -17,9 +17,11 @@ from .models import Roles, Usuario
 from .serializer import RolesSerializer
 from django.db import transaction
 from rest_framework import viewsets
-from .models import Producto, CategoriaProducto, Proveedor, Pedido, EstadoPedido, ProductoXPedido, FormaDePago, TipoEnvio, Carrito
+from .models import Producto, CategoriaProducto, Proveedor, Pedido, EstadoPedido, ProductoXPedido, FormaDePago, TipoEnvio, Carrito, Usuario
 from .serializer import ProductoSerializer, CategoriaProductoSerializer, ProveedorSerializer, PedidoSerializer, EstadoPedidoSerializer, ProductoXPedidoSerializer, FormaDePagoSerializer, TipoEnvioSerializer, UserSerializer, UsuarioSerializer, CarritoSerializer
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 # Importaciones API autenticación
 
@@ -134,6 +136,7 @@ class LogoutView(APIView):
         return Response(status=status.HTTP_200_OK)
     
 class RegisterView (APIView):
+    permission_classes = [AllowAny]
     def post (self, request):
         nuevo_usuario = request.data
         nuevo_usuario["id_rol"] = 2
@@ -176,6 +179,8 @@ class DeleteFromCartView (APIView):
         return Response(status= status.HTTP_200_OK)
         
 class CartView(APIView):
+    authentication_classes = [JWTAuthentication]  # Añadimos la autenticación con JWT
+    permission_classes = [IsAuthenticated]  # Solo usuarios autenticados pueden acceder
     def get(self, request, nombre_usuario):
         carritos = Carrito.objects.filter(nombre_usuario=nombre_usuario).select_related('id_producto')
         carrito_serializer = CarritoSerializer(carritos, many=True)
@@ -259,7 +264,7 @@ class CheckoutView(APIView):
 
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+        Carrito.objects.filter(nombre_usuario=nombre_usuario).delete()
         return Response({"message": "Proceso de pago completado y stock actualizado correctamente"}, status=status.HTTP_200_OK)
 
     def process_payment(self, payment_details):
@@ -281,13 +286,13 @@ class LoginView(APIView):
 
         # Si es correcto, añadimos a la request la información de sesión
         if user:
-            login(request, user)
-            return Response(
-                status=status.HTTP_200_OK)
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+            }, status=status.HTTP_200_OK)
         
-        # Si no es correcto, devolvemos un error en la petición
-        return Response(
-            status=status.HTTP_404_NOT_FOUND)
+        return Response({'error': 'Credenciales inválidas'}, status=status.HTTP_401_UNAUTHORIZED)
 
 class LogoutView(APIView):
     def post(self, request):
@@ -298,6 +303,7 @@ class LogoutView(APIView):
         return Response(status=status.HTTP_200_OK)
     
 class RegisterView (APIView):
+    permission_classes = [AllowAny]
     def post (self, request):
         usuario_serializer = UsuarioSerializer(data = request.data)
         admin_user_data =  {
@@ -316,6 +322,29 @@ class RegisterView (APIView):
             return Response(usuario_serializer.data, status= status.HTTP_201_CREATED)
         else:
             return Response(admin_user_serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+
+class UsuarioPorNombreView(APIView):
+    permission_clases = [IsAuthenticated]
+
+    def get(self, request, nombre_usuario):
+        try:
+            usuario = Usuario.objects.get(nombre_usuario=nombre_usuario)
+            serializer = UsuarioSerializer(usuario)
+            return Response(serializer.data)
+        except Usuario.DoesNotExist:
+            return Response({"error": "Usuario no encontrado"}, status=404)
+    
+    def put(self, request, nombre_usuario):
+        try:
+            usuario = Usuario.objects.get(nombre_usuario=nombre_usuario)
+        except Usuario.DoesNotExist:
+            return Response({'error': 'Usuario no encontrado'}, status=404)
+    
+        serializer = UsuarioSerializer(usuario, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
 
 # Para registrar usuarios en BDD
 @api_view(['POST'])
@@ -347,4 +376,26 @@ def registrar_usuario(request):
             user.delete()  # Si el perfil no es válido, borramos el usuario creado
             return Response(custom_user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+
+class UsuarioViewSet(viewsets.ModelViewSet):
+    queryset = Usuario.objects.all()
+    serializer_class = UsuarioSerializer 
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def obtener_user_por_username(request, nombre_usuario):
+    try:
+        usuario = Usuario.objects.get(nombre_usuario=nombre_usuario)
+    except Usuario.DoesNotExist:
+        return Response({'error': 'Usuario no encontrado'}, status=404)
+    
+    if request.method == 'GET':
+        serializer = UsuarioSerializer(usuario)
+        return Response(serializer.data)
+    
+    elif request.method == 'PUT':
+        serializer = UsuarioSerializer(usuario, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)

@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework import routers
 from PetBoutiqueApp import views
 from .views import RoleListCreateAPIView, RoleRetrieveUpdateDestroyAPIView ,ProcessPaymentView,CheckoutView
-from .views import registrar_usuario
+from .views import registrar_usuario, UsuarioPorNombreView
 
 router=routers.DefaultRouter()
 router.register(r'productos', views.ProductoViewSet)
@@ -13,6 +13,7 @@ router.register(r'productoXPedido', views.ProductosXPerdidoViewSet)
 router.register(r'estadoPedido', views.EstadoPedidoViewSet)
 router.register(r'formaDePago', views.FormaDePagoViewSet)
 router.register(r'tipoEnvio', views.TipoEnvioViewSet)
+router.register(r'usuarios', views.UsuarioViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
@@ -41,7 +42,10 @@ urlpatterns = [
     path("delete-from-cart/<int:id_carrito>/",
          views.DeleteFromCartView.as_view(), name="cart"),
          
-    path('checkout/', CheckoutView.as_view(), name='checkout')
+    path('checkout/', CheckoutView.as_view(), name='checkout'),
+
+    path('auth/usuarios/<str:nombre_usuario>/', UsuarioPorNombreView.as_view(), name='usuario-por-username'),
+    path('api/usuarios/<str:nombre_usuario>/', UsuarioPorNombreView.as_view()),
 ]
 
 

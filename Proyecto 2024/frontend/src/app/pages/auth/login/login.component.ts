@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
+import { IUsuario } from '../../../models/usuario.interface';
 
 @Component({
   selector: 'app-login',
@@ -10,14 +11,14 @@ import { AuthService } from '../../../services/auth.service';
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
-  providers: [
-    AuthService
-  ]
 })
+
 export class LoginComponent {
 
   form:FormGroup;
   loginError?:string;
+  showPasswordHint = false;
+  showPassword: boolean = false;
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -48,12 +49,31 @@ export class LoginComponent {
   }
 
   private login() {
+    const username = this.Username?.value;
+    const password = this.Password?.value;
+
     this.authService.login(this.Username?.value, this.Password?.value).subscribe((data:any) => {
-      localStorage.setItem("user",this.Username?.value)
-      this.router.navigate(["/"]);
+      console.log('Login exitoso. Token recibido:', data.access);
+      if (data.access) {
+        localStorage.setItem('access_token', data.access);  // Guarda el token en localStorage
+        localStorage.setItem('user', username);  // Guarda el usuario
+        console.log('Token guardado en localStorage:', localStorage.getItem('access_token'));  // Verifica que el token se guardó
+        this.router.navigate(['/']);  // Redirige a la página de inicio u otra página
+      } else {
+        console.error('No se recibió token de acceso');
+      }
     }, (error) => {
+      console.error('Error en el login:', error);
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('user');
+      this.loginError = "Credenciales incorrectas";
+    });
+    this.authService.login(this.Username?.value, this.Password?.value).subscribe((loginResponse: any) => {
+       localStorage.setItem("user", this.Username?.value);
+        location.replace('/');
+     }, (error) => {
       localStorage.removeItem("user");
-      this.loginError = "Credenciales incorrectas"
-    })
+      this.loginError = "Credenciales incorrectas";
+  });
   }
 }

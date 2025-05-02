@@ -1,0 +1,133 @@
+<div class="container">
+    <!-- Spinner de carga -->
+    <div *ngIf="cargando" class="text-center my-4">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="mt-2">Cargando datos...</p>
+    </div>
+  
+    <!-- Mensaje de error -->
+    <div *ngIf="error" class="alert alert-danger my-3">
+      {{ error }}
+    </div>
+  
+    <!-- Formulario -->
+    <form [formGroup]="perfilForm" (ngSubmit)="guardarCambios()" novalidate>
+      <div class="row g-3">
+        <!-- Nombre -->
+        <div class="col-md-6">
+          <label for="nombre" class="form-label">Nombre *</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            [ngClass]="{'is-invalid': submitted && f['nombre'].errors}" 
+            id="nombre" 
+            formControlName="nombre"
+            placeholder="Ingrese su nombre">
+          <div *ngIf="submitted && f['nombre'].errors" class="invalid-feedback">
+            <div *ngIf="f['nombre'].errors['required']">El nombre es obligatorio</div>
+            <div *ngIf="f['nombre'].errors['minlength']">El nombre debe tener al menos 2 caracteres</div>
+            <div *ngIf="f['nombre'].errors['maxlength']">El nombre no puede tener más de 100 caracteres</div>
+            <div *ngIf="f['nombre'].errors['soloLetras']">El nombre solo puede contener letras</div>
+          </div>
+        </div>
+        
+        <!-- Apellido -->
+        <div class="col-md-6">
+          <label for="apellido" class="form-label">Apellido *</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            [ngClass]="{'is-invalid': submitted && f['apellido'].errors}" 
+            id="apellido" 
+            formControlName="apellido"
+            placeholder="Ingrese su apellido">
+          <div *ngIf="submitted && f['apellido'].errors" class="invalid-feedback">
+            <div *ngIf="f['apellido'].errors['required']">El apellido es obligatorio</div>
+            <div *ngIf="f['apellido'].errors['minlength']">El apellido debe tener al menos 2 caracteres</div>
+            <div *ngIf="f['apellido'].errors['maxlength']">El apellido no puede tener más de 100 caracteres</div>
+            <div *ngIf="f['apellido'].errors['soloLetras']">El apellido solo puede contener letras</div>
+          </div>
+        </div>
+        
+        <!-- Email -->
+        <div class="col-md-6">
+          <label for="email" class="form-label">Email *</label>
+          <input 
+            type="email" 
+            class="form-control" 
+            [ngClass]="{'is-invalid': submitted && f['email'].errors}" 
+            id="email" 
+            formControlName="email"
+            placeholder="ejemplo@correo.com">
+          <div *ngIf="submitted && f['email'].errors" class="invalid-feedback">
+            <div *ngIf="f['email'].errors['required']">El email es obligatorio</div>
+            <div *ngIf="f['email'].errors['email']">Debe ingresar un formato de email válido</div>
+          </div>
+        </div>
+        
+        <!-- Teléfono -->
+        <div class="col-md-6">
+          <label for="telefono" class="form-label">Teléfono *</label>
+          <input 
+            type="tel" 
+            class="form-control"
+            [max]="9223372036854775807" 
+            [ngClass]="{'is-invalid': submitted && f['telefono'].errors}" 
+            id="telefono" 
+            formControlName="telefono"
+            placeholder="Ej: 1123456789">
+          <div *ngIf="submitted && f['telefono'].errors" class="invalid-feedback">
+            <div *ngIf="f['telefono'].errors['required']">El teléfono es obligatorio</div>
+            <div *ngIf="f['telefono'].errors['telefono']">El teléfono debe tener exactamente 10 dígitos numéricos</div>
+          </div>
+        </div>
+        
+        <!-- Dirección -->
+        <div class="col-12">
+          <label for="direccion" class="form-label">Dirección *</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            [ngClass]="{'is-invalid': submitted && f['direccion'].errors}" 
+            id="direccion" 
+            formControlName="direccion"
+            placeholder="Ej: Calle Falsa 123">
+          <div *ngIf="submitted && f['direccion'].errors" class="invalid-feedback">
+            <div *ngIf="f['direccion'].errors['required']">La dirección es obligatoria</div>
+            <div *ngIf="f['direccion'].errors['minLength']">La dirección debe tener al menos 3 caracteres</div>
+            <div *ngIf="f['direccion'].errors['requiresNumber']">La dirección debe contener al menos un número</div>
+            <div *ngIf="f['direccion'].errors['noSimbolos']">La dirección no puede contener símbolos especiales</div>
+          </div>
+        </div>
+        
+        <!-- DNI -->
+        <div class="col-md-6">
+          <label for="numero_documento" class="form-label">DNI *</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            [ngClass]="{'is-invalid': submitted && f['numero_documento'].errors}" 
+            id="numero_documento" 
+            formControlName="numero_documento"
+            placeholder="Ej: 12345678">
+          <div *ngIf="submitted && f['numero_documento'].errors" class="invalid-feedback">
+            <div *ngIf="f['numero_documento'].errors['required']">El DNI es obligatorio</div>
+            <div *ngIf="f['numero_documento'].errors['dni']">El DNI debe tener exactamente 8 dígitos numéricos</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Notas de requisitos -->
+      <div class="mt-4 mb-3">
+        <small class="text-muted">* Campos obligatorios</small>
+      </div>
+      
+      <div class="d-flex justify-content-end mt-3">
+        <button type="submit" class="guardarCambios-btn btn btn-primary">Guardar cambios</button>
+      </div>
+      
+    </form>
+    
+  </div>
