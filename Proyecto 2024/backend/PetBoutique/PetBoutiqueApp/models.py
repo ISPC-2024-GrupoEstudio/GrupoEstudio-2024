@@ -268,6 +268,28 @@ class TipoEnvio(models.Model):
 
     def __str__(self):
         return self.id_tipo_envio
+    
+class Cupon(models.Model):
+    TIPO_DESCUENTO_CHOICES = [
+        ('PORCENTAJE', 'Porcentaje'),
+        ('MONTO', 'Monto fijo'),
+    ]
+
+    nombre = models.CharField(max_length=50)
+    descripcion = models.TextField()
+    tipo_descuento = models.CharField(max_length=20, choices=TIPO_DESCUENTO_CHOICES)
+    valor_descuento = models.FloatField()
+    imagen_url = models.URLField(blank=True, null=True)
+    fecha_vencimiento = models.DateField()
+
+    #image_url = models.TextField(blank=True, null=True)    
+
+    class Meta:
+        verbose_name = "Cupón"
+        verbose_name_plural = "Cupones"
+
+    def __str__(self):
+        return f"{self.nombre} ({self.tipo_descuento})"
 
 # Incorporamos usuario a registrar
 class Usuario(models.Model):
@@ -284,6 +306,7 @@ class Usuario(models.Model):
     estado = models.TextField(blank=True, null=True)  # This field type is a guess.
     password = models.CharField(max_length=45, blank=True, null=True)
     fotoPerfil = models.CharField(max_length=600, blank=True, null=True)
+    cupones = models.ManyToManyField(Cupon, blank=True)
 
     class Meta:
         managed = False
@@ -326,3 +349,4 @@ class CustomUser(models.Model):
 
     def __str__(self):
         return self.username
+    
