@@ -337,21 +337,27 @@ class Cupon(models.Model):
     descripcion = models.TextField()
     tipo_descuento = models.CharField(max_length=20, choices=TIPO_DESCUENTO, default='porcentaje')
     valor_descuento = models.DecimalField(max_digits=10, decimal_places=2)
-    # imagen = models.ImageField(upload_to='cupones/', null=True, blank=True)
     image_url = models.TextField(blank=True, null=True)
     fecha_vencimiento = models.DateField()
 
     class Meta:
         verbose_name = "Cupón"
         verbose_name_plural = "Cupones"
+        managed = False 
+        db_table = 'cupon'
 
     def __str__(self):
         return f"{self.nombre} - {self.tipo_descuento}: {self.valor_descuento}"
 
+
 class CuponUsuario(models.Model):
-    cupon = models.ForeignKey('PetBoutiqueApp.Cupon', on_delete=models.CASCADE)
+    cupon = models.ForeignKey(Cupon, on_delete=models.CASCADE)
     usuario = models.ForeignKey('PetBoutiqueApp.CustomUser', on_delete=models.CASCADE)
     canjeado = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.usuario} - {self.cupon}"
+
+    
+
+

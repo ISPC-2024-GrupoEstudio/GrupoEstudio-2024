@@ -385,23 +385,23 @@ class GuardarCuponView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        cupon_id = request.data.get('cupon_id')
-
+        cupon_id = request.data.get('cupon')
         if not cupon_id:
-            return Response({'error': 'cupon_id es requerido'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'ID de cupón requerido'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             cupon = Cupon.objects.get(id=cupon_id)
+            # Evitar duplicados
+            cupon_usuario, creado = CuponUsuario.objects.get_or_create(
+                cupon=cupon,
+                usuario=request.user
+            )
+            if not creado:
+                return Response({'message': 'Este cupón ya fue seleccionado'}, status=status.HTTP_200_OK)
+
+            return Response({'message': 'Cupón guardado correctamente'}, status=status.HTTP_201_CREATED)
         except Cupon.DoesNotExist:
             return Response({'error': 'Cupón no encontrado'}, status=status.HTTP_404_NOT_FOUND)
-
-        # Verificar si ya lo guardó
-        if CuponUsuario.objects.filter(usuario=request.user, cupon=cupon).exists():
-            return Response({'message': 'El cupón ya fue guardado'}, status=status.HTTP_200_OK)
-
-        cupon_usuario = CuponUsuario.objects.create(usuario=request.user, cupon=cupon)
-        serializer = CuponUsuarioSerializer(cupon_usuario)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
     
 class CrearCuponView(APIView):
     permission_classes = [IsAuthenticated, IsAdminUser]  
@@ -426,5 +426,14 @@ class ListarCuponesView(APIView):
             return Response({'message': 'No hay cupones disponibles'}, status=404)
         
         # Serializamos los cupones
+        serializer = CuponSerializer(cupones, many=True)
+        return Response(serializer.data)
+    
+class MisCuponesView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        cupones_usuario = CuponUsuario.objects.filter(usuario=request.user)
+        cupones = [cupon_usuario.cupon for cupon_usuario in cupones_usuario]
         serializer = CuponSerializer(cupones, many=True)
         return Response(serializer.data)

@@ -1,50 +1,41 @@
-<!-- <h1 class="cupon-titulo text-center">Cupones Disponibles</h1>
-<div *ngIf="cuponesLista.length === 0" class="alert alert-warning text-center">No hay cupones disponibles</div>
-<div class="row" *ngIf="cuponesLista.length > 0">
-  <div *ngFor="let cupon of cuponesLista" class="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 col-auto text-center">
-    <div class="card d-flex card-cupones">
-      <img [src]="cupon.url" class="card-img-top cupon-img" style="height: 9rem; width: 9rem;">
-      <div class="card-body">
-        <h5 class="card-title">{{ cupon.name }}</h5>
-        <p class="card-text">{{ cupon.descripcion }}</p>
-        <p>Vencimiento: {{ cupon.fechaVencimiento | date: 'dd-MM-yyyy' }}</p>
-        <a (click)="alertaCupon(cupon)">Seleccionar cupón</a> 
-      </div>
-    </div>
-  </div>
-</div> -->
-
 <h1 class="cupon-titulo text-center">Cupones Disponibles</h1>
-<div *ngIf="misCupones.length === 0" class="alert alert-warning text-center">No hay cupones disponibles</div>
-<div class="row" *ngIf="misCupones.length > 0">
-  <div *ngFor="let cupon of misCupones" class="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 col-auto text-center">
-    <div class="card d-flex card-cupones">
-      <img [src]="cupon.url" class="card-img-top cupon-img" style="height: 9rem; width: 9rem;">
-      <div class="card-body">
-        <h5 class="card-title">{{ cupon.name }}</h5>
-        <p class="card-text">{{ cupon.descripcion }}</p>
-        <p>Vencimiento: {{ cupon.fecha_vencimiento | date: 'dd-MM-yyyy' }}</p>
-        <a (click)="alertaCupon(cupon)">Seleccionar cupón</a>
+<div *ngIf="cuponesDisponibles.length === 0" class="alert alert-warning text-center">
+    No hay cupones disponibles
+  </div>
+  
+  <div class="row" *ngIf="cuponesDisponibles.length > 0">
+    <div *ngFor="let cupon of cuponesDisponibles" class="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 col-auto text-center">
+      <div class="card d-flex card-cupones">
+        <img [src]="cupon.image_url" class="card-img-top cupon-img" style="height: 9rem; width: 9rem;">
+        <div class="card-body">
+          <h5 class="card-title">{{ cupon.nombre }}</h5>
+          <p class="card-text">{{ cupon.descripcion }}</p>
+          <p *ngIf="cupon.tipo_descuento === 'porcentaje'">Descuento: {{ cupon.valor_descuento | number:'1.0-0' }}%</p>
+          <p *ngIf="cupon.tipo_descuento === 'monto'">Descuento: ${{ cupon.valor_descuento | number:'1.0-0' }}</p>
+          <p>Vencimiento: {{ cupon.fecha_vencimiento | date: 'dd-MM-yyyy' }}</p>
+          <a (click)="alertaCupon(cupon)" class="btn-cupones btn text-white">Seleccionar cupón</a>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
+  <h1 class="cupon-titulo text-center">Mis Cupones Seleccionados</h1>
 
-<hr class="my-4">
-
-<h1 class="cupon-titulo text-center">Mis Cupones Seleccionados</h1>
-<div *ngIf="misCupones.length === 0" class="alert alert-info text-center">Aún no has seleccionado ningún cupón</div>
-<div class="row" *ngIf="misCupones.length > 0">
-  <div *ngFor="let item of misCupones" class="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 col-auto text-center">
-    <div class="card d-flex card-cupones">
-      <img [src]="item.cupon.url" class="card-img-top cupon-img" style="height: 9rem; width: 9rem;">
-      <div class="card-body">
-        <h5 class="card-title">{{ item.cupon.name }}</h5>
-        <p class="card-text">{{ item.cupon.descripcion }}</p>
-        <p>Vencimiento: {{ item.cupon.fecha_vencimiento | date: 'dd-MM-yyyy' }}</p>
+  <!-- Si no hay cupones seleccionados, mostramos el mensaje -->
+  <div *ngIf="cuponesGuardados.length === 0" class="alert alert-info text-center">
+    Aún no has seleccionado ningún cupón
+  </div>
+  
+  <!-- Si hay cupones seleccionados, los mostramos -->
+  <div class="row" *ngIf="cuponesGuardados.length > 0">
+    <div *ngFor="let item of cuponesGuardados" class="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 col-auto text-center">
+      <div class="card d-flex card-cupones">
+        <img [src]="item.cupon.image_url" class="card-img-top cupon-img" style="height: 9rem; width: 9rem;">
+        <div class="card-body">
+          <h5 class="card-title">{{ item.cupon.nombre }}</h5>
+          <p class="card-text">{{ item.cupon.descripcion }}</p>
+          <p>Vencimiento: {{ item.cupon.fecha_vencimiento | date: 'dd-MM-yyyy' }}</p>
+        </div>
       </div>
     </div>
-  </div>
-</div>
-
+  </div> 

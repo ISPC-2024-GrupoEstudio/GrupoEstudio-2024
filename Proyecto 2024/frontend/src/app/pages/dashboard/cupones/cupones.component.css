@@ -11,16 +11,19 @@
     height: auto;
     margin:0;
     padding: 3rem;
+    
 }
 
 .card-cupones{
     background-color: #cdfdfde3;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.565);
-
 }
 
 .cupon-img{
     padding: 0.7rem 0;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .card-title{
@@ -38,15 +41,21 @@
 
 .btn-cupones:hover{
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.449);
-    background-image: linear-gradient(to right,#679a9ae3, #72c1a89c);
+    background-image: linear-gradient(to right,#0f6767e3, #2ebf919c);
     color: rgba(0, 0, 0, 0.869);
+}
 
+.row{
+    margin: 2rem;
 }
 
 @media (max-width: 1200px){
     .card-cupones{
         margin: 1rem 0;
-        height: 390px;
+        height: 27rem;
+    }
+    .card-title{
+        font-size: 1.2rem;
     }
 }
 
@@ -63,6 +72,10 @@
     }
 
     .card-cupones{
-        height: 400px;
+        height: 27rem;
+    }
+
+    .card-title{
+        font-size: 1.1rem;
     }
 }
