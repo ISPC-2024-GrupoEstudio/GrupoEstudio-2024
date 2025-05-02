@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import status
+from rest_framework import status, generics, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.utils import timezone
@@ -17,8 +17,8 @@ from .models import Roles, Usuario
 from .serializer import RolesSerializer
 from django.db import transaction
 from rest_framework import viewsets
-from .models import Producto, CategoriaProducto, Proveedor, Pedido, EstadoPedido, ProductoXPedido, FormaDePago, TipoEnvio, Carrito, Usuario, Cupon
-from .serializer import ProductoSerializer, CategoriaProductoSerializer, ProveedorSerializer, PedidoSerializer, EstadoPedidoSerializer, ProductoXPedidoSerializer, FormaDePagoSerializer, TipoEnvioSerializer, UserSerializer, UsuarioSerializer, CarritoSerializer, CuponSerializer
+from .models import Producto, CategoriaProducto, Proveedor, Pedido, EstadoPedido, ProductoXPedido, FormaDePago, TipoEnvio, Carrito, Usuario, Cupon, UsuarioCupon
+from .serializer import ProductoSerializer, CategoriaProductoSerializer, ProveedorSerializer, PedidoSerializer, EstadoPedidoSerializer, ProductoXPedidoSerializer, FormaDePagoSerializer, TipoEnvioSerializer, UserSerializer, UsuarioSerializer, CarritoSerializer, CuponSerializer, UsuarioCuponSerializer
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -404,3 +404,78 @@ def obtener_user_por_username(request, nombre_usuario):
 class CuponViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Cupon.objects.all()
     serializer_class = CuponSerializer
+
+class UsuarioCuponListCreateView(generics.RetrieveUpdateAPIView):
+    serializer_class = UsuarioCuponSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+    
+@api_view(['GET'])
+def obtener_usuario(request, username):
+    try:
+        usuario = User.objects.get(username=username)
+        serializer = UsuarioSerializer(usuario)
+        return Response(serializer.data)
+    except User.DoesNotExist:
+        return Response({"error": "Usuario no encontrado"}, status=404)
+
+# class MisCuponesAPIView(APIView):
+#     def patch(self, request):
+#         username = request.data.get('username')
+#         cupon_id = request.data.get('cupon_id')
+
+#         try:            
+#             cupon_usuario = UsuarioCupon.objects.get(usuario__nombre_usuario=username, cupon_id=cupon_id)
+#             cupon_usuario.usado = True
+#             cupon_usuario.save()
+#             return Response({"mensaje": "Cupón aplicado correctamente"})
+#         except UsuarioCupon.DoesNotExist:
+#             return Response({"error": "Cupón no encontrado"}, status=404)
+# class MisCuponesAPIView(APIView):
+#     # permission_classes = [IsAuthenticated]
+
+#     def get(self, request):
+#         username = request.user.username
+#         cupones_usuario = UsuarioCupon.objects.filter(usuario__nombre_usuario=username)
+#         cupon_ids = [cupon.cupon.id for cupon in cupones_usuario]
+#         return Response(cupon_ids)
+
+#     def patch(self, request):
+#         username = request.user.username
+#         cupon_id = request.data.get('cupon_id')  # OJO: no es una lista ahora
+
+#         try:
+#             cupon_usuario = UsuarioCupon.objects.get(usuario__nombre_usuario=username, cupon_id=cupon_id)
+#             cupon_usuario.usado = True
+#             cupon_usuario.save()
+#             return Response({"mensaje": "Cupón aplicado correctamente"})
+#         except UsuarioCupon.DoesNotExist:
+#             return Response({"error": "Cupón no encontrado"}, status=404)
+class MisCuponesAPIView(APIView):
+    # Descomenta esta línea para proteger la vista
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        username = request.user.username
+        cupones_usuario = UsuarioCupon.objects.filter(usuario__nombre_usuario=username)
+        cupon_ids = [cupon.cupon.id for cupon in cupones_usuario]
+        return Response(cupon_ids)
+
+    def post(self, request):
+        username = request.user.username
+        cupon_id = request.data.get('cupon_id')
+
+        try:
+            usuario = Usuario.objects.get(nombre_usuario=username)
+            cupon = Cupon.objects.get(id=cupon_id)
+            # Crear relación si no existe
+            usuario_cupon, created = UsuarioCupon.objects.get_or_create(usuario=usuario, cupon=cupon)
+            if not created:
+                return Response({'mensaje': 'El usuario ya tiene este cupón'}, status=200)
+            return Response({'mensaje': 'Cupón agregado correctamente'})
+        except Usuario.DoesNotExist:
+            return Response({'error': 'Usuario no encontrado'}, status=404)
+        except Cupon.DoesNotExist:
+            return Response({'error': 'Cupón no encontrado'}, status=404)

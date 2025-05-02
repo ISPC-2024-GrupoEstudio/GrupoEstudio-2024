@@ -287,9 +287,15 @@ class Cupon(models.Model):
     class Meta:
         verbose_name = "Cupón"
         verbose_name_plural = "Cupones"
+        # db_table = 'cupon'  # 👈 Nombre exacto que ya existe en la base de datos
+        # managed = False     # 👈 Le dice a Django que NO intente crearla con migrate
 
     def __str__(self):
         return f"{self.nombre} ({self.tipo_descuento})"
+    
+
+
+
 
 # Incorporamos usuario a registrar
 class Usuario(models.Model):
@@ -306,7 +312,7 @@ class Usuario(models.Model):
     estado = models.TextField(blank=True, null=True)  # This field type is a guess.
     password = models.CharField(max_length=45, blank=True, null=True)
     fotoPerfil = models.CharField(max_length=600, blank=True, null=True)
-    cupones = models.ManyToManyField(Cupon, blank=True)
+    #cupones = models.ManyToManyField(Cupon, blank=True)
 
     class Meta:
         managed = False
@@ -314,6 +320,16 @@ class Usuario(models.Model):
 
     def __str__(self):
         return self.nombre_usuario
+
+class UsuarioCupon(models.Model):
+    #usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name="cupones_usuario")
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name="cupones_usuario")
+    cupon = models.ForeignKey(Cupon, on_delete=models.CASCADE)
+    usado = models.BooleanField(default=False)
+    fecha_aplicado = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        unique_together = ('usuario', 'cupon')
 
 class Venta(models.Model):
     id_venta = models.AutoField(primary_key=True)
@@ -349,4 +365,5 @@ class CustomUser(models.Model):
 
     def __str__(self):
         return self.username
+ 
     

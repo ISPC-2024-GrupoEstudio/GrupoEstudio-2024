@@ -109,3 +109,10 @@ class CuponSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cupon
         fields = '__all__'
+
+class UsuarioCuponSerializer(serializers.ModelSerializer):
+    cupones = serializers.PrimaryKeyRelatedField(queryset=Cupon.objects.all(), many=True)
+
+    class Meta:
+        model = Usuario
+        fields = ['cupones']
