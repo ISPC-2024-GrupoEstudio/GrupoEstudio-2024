@@ -1,4 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+
+declare global {
+  interface Window {
+    MercadoPago: any;
+  }
+}
 import { FormGroup, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
@@ -7,6 +13,7 @@ import { NgFor, NgIf } from '@angular/common';
 import { Router } from '@angular/router';
 import { ICarrito } from '../../../models/carrito.interface';
 import { AuthService } from '../../../services/auth.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-checkout',
@@ -22,11 +29,13 @@ export class CheckoutComponent implements OnInit{
 
   productosCarrito: ICarrito[] = [];
   form!: FormGroup;
+  public mp: any; 
 
   constructor(private _formBuilder: FormBuilder,
     private cartService: CartService,
     private authService : AuthService, 
-    private router: Router) {
+    private router: Router,
+    private http: HttpClient) {
     this.form = this._formBuilder.group({
       name: ['', Validators.required],
       cardNumber: ['', [Validators.required, Validators.minLength(19), Validators.maxLength(19)]],
@@ -39,7 +48,89 @@ export class CheckoutComponent implements OnInit{
     this.cartService.productosCarrito.subscribe(productosCarrito => {
       this.productosCarrito = productosCarrito;
     });
+  
+    this.mp = new window.MercadoPago('TEST-b6a47a1d-7ac3-4cbd-9b6b-4419f6198fc9');
+  
+    // Inicializamos el Brick luego de asegurarnos que el DOM está listo
+    setTimeout(() => {
+      this.mp.bricks().create('cardPayment', 'paymentBrick_container', {
+        initialization: {
+          amount: this.calculateTotal() + 20, // Total real
+        },
+        customization: {
+          paymentMethods: {
+            ticket: 'all',
+            bankTransfer: 'all',
+            creditCard: 'all'
+          }
+        },
+        callbacks: {
+          onReady: () => {
+            console.log('Brick cargado correctamente');
+          },
+          onSubmit: (formData: any) => {
+            console.log('Datos del Brick recibidos:', formData);
+          
+            const itemsComprados = this.cartService.obtenerProductosCarrito();
+            const itemsTransformados = this.transformarItems(itemsComprados);
+          
+            if (itemsTransformados.length === 0) {
+              this.errorMessage = 'El carrito está vacío';
+              return;
+            }
+          
+            this.authService.getUsername().subscribe(
+              (username: string | null) => {
+                if (!username) {
+                  this.router.navigate(['/login']);
+                  return;
+                }
+          
+                const pedidoData = {
+                  nombre_usuario: username,
+                  items_comprados: itemsTransformados,
+                  payment_details: {
+                    transaction_amount: this.calculateTotal() + 20,
+                    token: formData.token,
+                    payment_method_id: formData.payment_method_id,
+                    description: 'Compra en Pet Boutique',
+                    installments: formData.installments,
+                    cardholderEmail: formData.payer.email,
+                    cardholderName: formData.payer.name,
+                    identificationType: formData.payer.identification.type,
+                    identificationNumber: formData.payer.identification.number
+                  }
+                };
+                console.log("Datos que se están enviando al backend:", pedidoData);
+          
+                this.http.post('http://localhost:8000/api/checkout/', pedidoData).subscribe(
+                  (                  response: any) => {
+                    console.log('Pago exitoso y pedido registrado:', response);
+                    this.cartService.limpiarCarrito();
+                    this.successMessage = '¡Compra realizada con éxito!';
+                    this.errorMessage = '';
+                  },
+                  (                  error: any) => {
+                    console.error('Error al registrar el pedido:', error);
+                    this.errorMessage = 'Error al procesar el pedido.';
+                  }
+                );
+              },
+              error => {
+                console.error('Error al obtener usuario:', error);
+                this.errorMessage = 'Error al autenticar al usuario';
+              }
+            );
+          },
+          onError: (error: any) => {
+            console.error('Error al cargar el Brick:', error);
+          }
+        }
+      });
+    }, 300); // Pequeño delay para asegurar que el div está en el DOM
   }
+
+
 
   calculateTotal(): number {
     return this.productosCarrito.reduce((acc, productoCarrito) => acc + productoCarrito.producto.precio * productoCarrito.cantidad, 0);
@@ -56,6 +147,7 @@ export class CheckoutComponent implements OnInit{
     }));
   }
 
+  /*
   onEnviar(event: Event): void {
     console.log('Botón de envío clickeado'); // Verificar si la función se ejecuta al hacer clic en el botón
     event.preventDefault();
@@ -127,7 +219,7 @@ export class CheckoutComponent implements OnInit{
         this.form.markAllAsTouched(); // Marcar todos los campos del formulario como tocados
         this.logFormErrors(); // Aquí podrías llamar a una función para manejar los errores del formulario si fuera necesario
       }
-    }
+    }*/
 
 
   irAlDashboard(): void {
