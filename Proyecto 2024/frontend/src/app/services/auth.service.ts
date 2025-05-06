@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { IUsuario } from "../models/usuario.interface";
 import { Observable, of, tap, BehaviorSubject, catchError } from "rxjs";
+@Injectable({ providedIn: 'root' })
 
 
 @Injectable()
@@ -126,6 +127,10 @@ export class AuthService {
         }
         // Puedes añadir más métodos HTTP si los necesitas
         return of(null);  // Si no es un método válido, retorna null
+    }
+
+    refreshToken(refreshToken: string): Observable<any> {
+        return this.httpClient.post('http://localhost:8000/api/auth/token/refresh/', { refresh: refreshToken });
     }
 
     getUserPerfil(username: string): Observable<any>{
