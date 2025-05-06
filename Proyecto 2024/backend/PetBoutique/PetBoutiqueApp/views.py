@@ -22,9 +22,10 @@ from .serializer import ProductoSerializer, CategoriaProductoSerializer, Proveed
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
+import mercadopago
 
 # Importaciones API autenticación
-
+sdk = mercadopago.SDK("TEST-1790053134983653-050514-62d92a126552d7221b317050972a27c9-2425748384")
 # Create your views here.
 class ProductoViewSet(viewsets.ModelViewSet):
     queryset = Producto.objects.all()
@@ -198,8 +199,8 @@ class CartView(APIView):
 
 class CheckoutView(APIView):
     def post(self, request):
-        items_comprados = request.data.get('items_comprados', [])  # Obtener los productos comprados
-        payment_details = request.data.get('payment_details', {})  # Detalles del pago
+        items_comprados = request.data.get('items_comprados', [])
+        payment_details = request.data.get('payment_details', {})
         nombre_usuario = request.data.get("nombre_usuario")
             
         if not items_comprados or not payment_details or not nombre_usuario:
@@ -210,70 +211,94 @@ class CheckoutView(APIView):
         except User.DoesNotExist:
             return Response({"error": f"Usuario con nombre {nombre_usuario} no encontrado"}, status=status.HTTP_404_NOT_FOUND)
 
-        # Validar detalles de pago
-        if not all(key in payment_details for key in ['cardNumber', 'expirationDate', 'cvv']):
-            return Response({"error": "Los detalles de pago son incompletos"}, status=status.HTTP_400_BAD_REQUEST)
+        required_fields = ["transaction_amount", "token", "payment_method_id", "cardholderEmail", "identificationType", "identificationNumber"]
+        for field in required_fields:
+            if not payment_details.get(field):
+                return Response({"error": f"Falta el campo {field} en los detalles de pago"}, status=status.HTTP_400_BAD_REQUEST)
+        # Procesar pago con Mercado Pago
+        try:
+            payment_data = {
+                "transaction_amount": float(payment_details.get("transaction_amount")),
+                "token": payment_details.get("token"),
+                "description": payment_details.get("description", "Compra en Pet Boutique"),
+                "installments": int(payment_details.get("installments", 1)),
+                "payment_method_id": payment_details.get("payment_method_id"),
+                "payer": {
+                    "email": payment_details.get("cardholderEmail"),
+                    "first_name": payment_details.get("cardholderName", "Nombre no proporcionado"),
+                    "identification": {
+                        "type": payment_details.get("identificationType"),
+                        "number": payment_details.get("identificationNumber")
+                    }
+                }
+            }
+            print("PAYMENT DATA:", payment_data)
 
-        process_payment_response = self.process_payment(payment_details)  # Procesar el pago
-        if process_payment_response.status_code != status.HTTP_200_OK:
-            return process_payment_response  # Si el pago falla, retornar la respuesta de la pasarela de pago
+            payment_response = sdk.payment().create(payment_data)
+            print(payment_response)
+            payment = payment_response["response"]
 
+            if payment.get("status") != "approved":
+                return Response({
+            "message": "Pago rechazado por Mercado Pago",
+            "status": payment.get("status"),
+            "status_detail": payment.get("status_detail")
+            }, status=402)
+
+        except Exception as e:
+            return Response({"error": "Error al procesar el pago: " + str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        # Registrar pedido solo si el pago fue aprobado
         try:
             with transaction.atomic():
-                # Actualizar el stock de los productos comprados
                 for item in items_comprados:
                     producto_id = item.get('id_producto')
                     cantidad = item.get('cantidad')
-                      # Verificar si el producto existe
                     try:
                         producto = Producto.objects.get(id_producto=producto_id)
                     except Producto.DoesNotExist:
                         return Response({"error": f"Producto con id {producto_id} no encontrado"}, status=status.HTTP_404_NOT_FOUND)
                     
-                    # Verificar stock suficiente
                     if producto.stock_actual < cantidad:
                         return Response({"error": f"Stock insuficiente para el producto {producto_id}"}, status=status.HTTP_400_BAD_REQUEST)
+                    
                     producto.stock_actual -= cantidad
                     producto.save()
 
-                # obtiene el ultimo numero de pedido y le suma 1
                 ultimo_pedido = Pedido.objects.all().order_by('-numero_pedido').first()
-                numero_pedido = ultimo_pedido.numero_pedido + 1  
+                numero_pedido = ultimo_pedido.numero_pedido + 1 if ultimo_pedido else 1
 
                 pedido_data = {
                     'nombre_usuario': nombre_usuario,
                     'fecha': timezone.now(),
-                    'id_estado_pedido': 1,  # Puedes establecer un valor predeterminado
-                    'numero_pedido': numero_pedido,  # Necesitarás una lógica para generar un número de pedido único
+                    'id_estado_pedido': 1,
+                    'numero_pedido': numero_pedido,
                 }
 
                 pedido_serializer = PedidoSerializer(data=pedido_data)
                 if pedido_serializer.is_valid():
                     pedido = pedido_serializer.save()
                     for item in items_comprados:
-                        producto_id = item.get('id_producto')
-                        producto = Producto.objects.get(id_producto=producto_id)
+                        producto = Producto.objects.get(id_producto=item.get('id_producto'))
                         ProductoXPedido.objects.create(
                             id_producto=producto,
                             id_pedido=pedido,
                             cantidad=item.get('cantidad'),
-                            precio=Producto.objects.get(id_producto=item.get('id_producto')).precio
+                            precio=producto.precio
                         )
                 else:
                     return Response({"error": pedido_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        Carrito.objects.filter(nombre_usuario=nombre_usuario).delete()
-        return Response({"message": "Proceso de pago completado y stock actualizado correctamente"}, status=status.HTTP_200_OK)
 
-    def process_payment(self, payment_details):
-        card_number = payment_details.get('cardNumber')
-        expiration_date = payment_details.get('expirationDate')
-        cvv = payment_details.get('cvv')
-        if not card_number or not expiration_date or not cvv:
-            return Response ({"error": "Detalles de pagos incompletos"}, status=status.HTTP_400_BAD_REQUEST)
-        return Response ({"message": "Pago procesado exitosamente"}, status=status.HTTP_200_OK) 
+        Carrito.objects.filter(nombre_usuario=nombre_usuario).delete()
+
+        return Response({
+            "message": "Pago aprobado y pedido registrado correctamente",
+            "payment_id": payment["id"],
+            "pedido_id": pedido.id
+        }, status=status.HTTP_200_OK)
     
 # Vistas login / logout #####################################################################################
 class LoginView(APIView):
