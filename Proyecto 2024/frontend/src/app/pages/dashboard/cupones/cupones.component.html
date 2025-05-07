@@ -42,6 +42,7 @@
             <h5 class="card-title">{{ cupon.nombre }}</h5>
             <p class="card-text">{{ cupon.descripcion }}</p>
             <p>Vencimiento: {{ cupon.fecha_vencimiento | date: 'dd-MM-yyyy' }}</p>
+            <a class="btn btn-primary btn-cupones" (click)="usarCupon(cupon)">Usar Cupón</a>
           </div>
         </div>
       </div>

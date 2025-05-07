@@ -4,6 +4,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IProducto } from '../models/producto.interface';
 import { ICarrito } from '../models/carrito.interface';
 import { catchError } from 'rxjs/operators'; 
+import { CuponAplicado } from '../pages/dashboard/cupones/cupon-aplicado';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -103,6 +105,14 @@ export class CartService {
   obtenerProductosCarrito(): ICarrito[] {
   return this.productosCarritoSubject.value;
   }
+
+  private cuponAplicadoSubject = new BehaviorSubject<CuponAplicado | null>(null);
+  cuponAplicado$ = this.cuponAplicadoSubject.asObservable();
+
+  aplicarCupon(cupon: CuponAplicado) {
+    this.cuponAplicadoSubject.next(cupon);
+  }
+
 
   /*
   getPaymentMethods(): Observable<any> {

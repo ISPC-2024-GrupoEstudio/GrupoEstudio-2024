@@ -1,6 +1,15 @@
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { CuponService, Cupon } from '../../../services/cupon.service';
+import { CartService } from '../../../services/cart.service';
+import { CuponAplicado } from './cupon-aplicado';
+
+// interface CuponAplicado {
+//   id: number;
+//   nombre: string;
+//   tipo_descuento: 'PORCENTAJE' | 'MONTO';
+//   valor_descuento: number;
+// }
 
 @Component({
   selector: 'app-cupones',
@@ -9,6 +18,7 @@ import { CuponService, Cupon } from '../../../services/cupon.service';
   templateUrl: './cupones.component.html',
   styleUrl: './cupones.component.css'
 })
+
 export class CuponesComponent implements OnInit {
 
   // cuponesLista: {url: string,name:string, descripcion:string, fechaVencimiento: Date}[] = [
@@ -22,7 +32,7 @@ export class CuponesComponent implements OnInit {
   cuponesDisponibles: Cupon[] = [];
   misCupones: Cupon[] = [];
 
-  constructor(private cuponService: CuponService) {}
+  constructor(private cuponService: CuponService, private cartService: CartService) {}
 
   ngOnInit(): void {
     this.cargarCupones();
@@ -52,8 +62,19 @@ export class CuponesComponent implements OnInit {
         this.cargarCupones(); // Refrescar cupones para que se actualicen en pantalla
       },
       error: (err) => console.error('Error al aplicar cupón:', err)
-    });
-  
+    });  
     
   }
+
+  usarCupon(cupon: Cupon): void {
+    const cuponAplicado: CuponAplicado = {
+      id: cupon.id,
+      nombre: cupon.nombre,
+      tipo_descuento: cupon.tipo_descuento as 'PORCENTAJE' | 'MONTO',
+      valor_descuento: cupon.valor_descuento
+    };
+  
+    this.cartService.aplicarCupon(cuponAplicado);
+  }
+  
 }
