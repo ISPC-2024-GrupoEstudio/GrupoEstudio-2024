@@ -1,53 +1,47 @@
-    <!-- <h1 class="cupon-titulo text-center">Mis Cupones</h1>
-    <div *ngIf="cuponesLista.length>0" class="row cupon-container">
-        <div *ngFor="let item of cuponesLista" class="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 col-auto text-center">
-            <div class="card d-flex card-cupones" >
-                <img [src]="item.url" alt="..." class="card-img-top align-self-center cupon-img" style="height: 9rem;width: 9rem;">
-                <div class="card-body">
-                    <h5 class="card-title">{{item.name}}</h5>
-                    <p class="card-text">{{item.descripcion}}</p>
-                    <p>Vencimiento: {{item.fechaVencimiento | date: 'dd-MM-yyyy' }}</p>
-                    <a class="btn btn-primary btn-cupones" (click)="alertaCupon()">Seleccionar Cupón</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div *ngIf="cuponesLista.length==0">
-        <p class="alert alert-danger">No hay cupones diponibles</p>
-    </div> -->
-    <h1 class="cupon-titulo text-center">Cupones Disponibles</h1>
-    <div *ngIf="cuponesDisponibles.length > 0" class="row cupon-container">
-      <div *ngFor="let cupon of cuponesDisponibles" class="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 col-auto text-center">
-        <div class="card d-flex card-cupones">
-          <img [src]="cupon.imagen_url" alt="..." class="card-img-top align-self-center cupon-img" style="height: 9rem;width: 9rem;">
-          <div class="card-body">
-            <h5 class="card-title">{{ cupon.nombre }}</h5>
-            <p class="card-text">{{ cupon.descripcion }}</p>
-            <p>Vencimiento: {{ cupon.fecha_vencimiento | date: 'dd-MM-yyyy' }}</p>
-            <a class="btn btn-primary btn-cupones" (click)="seleccionarCupon(cupon)">Seleccionar Cupón</a>
-          </div>
-        </div>
+<h1 class="cupon-titulo text-center">Cupones Disponibles</h1>
+<div *ngIf="cuponesDisponibles.length > 0" class="row cupon-container">
+  <div *ngFor="let cupon of cuponesDisponibles" class="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 col-auto text-center">
+    <div class="card d-flex card-cupones" [ngClass]="{'cupon-vencido': isCuponVencido(cupon)}">
+      <img [src]="cupon.imagen_url" alt="..." class="card-img-top align-self-center cupon-img" style="height: 9rem;width: 9rem;">
+      <div class="card-body">
+        <h5 class="card-title">{{ cupon.nombre }}</h5>
+        <p class="card-text">{{ cupon.descripcion }}</p>
+        <p>Vencimiento: {{ cupon.fecha_vencimiento | date: 'dd-MM-yyyy' }}</p>
+        <a 
+          class="btn btn-primary btn-cupones" 
+          (click)="seleccionarCupon(cupon)"
+          [attr.disabled]="isCuponVencido(cupon) ? true : null"
+          [ngClass]="{'btn-disabled': isCuponVencido(cupon)}">
+          {{ isCuponVencido(cupon) ? 'Cupón vencido' : 'Seleccionar Cupón' }}
+        </a>
       </div>
     </div>
-    <div *ngIf="cuponesDisponibles.length == 0">
-      <p class="alert alert-danger">No hay cupones disponibles</p>
-    </div>
+  </div>
+</div>
+<div *ngIf="cuponesDisponibles.length == 0">
+  <p class="alert alert-danger">No hay cupones disponibles</p>
+</div>
     
-    <h1 class="cupon-titulo text-center">Mis Cupones</h1>
-    <div *ngIf="misCupones.length > 0" class="row cupon-container">
-      <div *ngFor="let cupon of misCupones" class="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 col-auto text-center">
-        <div class="card d-flex card-cupones">
-          <img [src]="cupon.imagen_url" alt="..." class="card-img-top align-self-center cupon-img" style="height: 9rem;width: 9rem;">
-          <div class="card-body">
-            <h5 class="card-title">{{ cupon.nombre }}</h5>
-            <p class="card-text">{{ cupon.descripcion }}</p>
-            <p>Vencimiento: {{ cupon.fecha_vencimiento | date: 'dd-MM-yyyy' }}</p>
-            <a class="btn btn-primary btn-cupones" (click)="usarCupon(cupon)">Usar Cupón</a>
-          </div>
-        </div>
+<h1 class="cupon-titulo text-center">Mis Cupones</h1>
+<div *ngIf="misCupones.length > 0" class="row cupon-container">
+  <div *ngFor="let cupon of misCupones" class="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 col-auto text-center">
+    <div class="card d-flex card-cupones" [ngClass]="{'cupon-vencido': isCuponVencido(cupon)}">
+      <img [src]="cupon.imagen_url" alt="..." class="card-img-top align-self-center cupon-img" style="height: 9rem;width: 9rem;">
+      <div class="card-body">
+        <h5 class="card-title">{{ cupon.nombre }}</h5>
+        <p class="card-text">{{ cupon.descripcion }}</p>
+        <p>Vencimiento: {{ cupon.fecha_vencimiento | date: 'dd-MM-yyyy' }}</p>
+        <a 
+          class="btn btn-primary btn-cupones" 
+          (click)="usarCupon(cupon)"
+          [attr.disabled]="isCuponVencido(cupon) ? true : null"
+          [ngClass]="{'btn-disabled': isCuponVencido(cupon)}">
+          {{ isCuponVencido(cupon) ? 'Cupón vencido' : 'Usar Cupón' }}
+        </a>
       </div>
     </div>
-    <div *ngIf="misCupones.length == 0">
-      <p class="alert alert-danger">No tienes cupones seleccionados</p>
-    </div>
-    
+  </div>
+</div>
+<div *ngIf="misCupones.length == 0">
+  <p class="alert alert-danger">No tienes cupones seleccionados</p>
+</div>  

@@ -43,6 +43,31 @@
 
 }
 
+.cupon-vencido {
+    background-color: #f0f0f0; 
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.btn-disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.btn-cupones:hover {
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.449);
+    background-image: linear-gradient(to right,#679a9ae3, #72c1a89c);
+    color: rgba(0, 0, 0, 0.869);
+}
+
+.btn-cupones.btn-disabled:hover {
+    box-shadow: none;
+    background-image: none;
+    color: #ccc;
+}
+
+  
+
 @media (max-width: 1200px){
     .card-cupones{
         margin: 1rem 0;
