@@ -19,8 +19,9 @@ export class CuponService {
     private apiUrl = 'http://localhost:8000/api';
   
     constructor(private http: HttpClient) {}
-    private obtenerToken(): string | null {        
-        return localStorage.getItem('access_token');
+    private obtenerToken(): string | null {
+        // Asegúrate de que el token se haya guardado tras el login
+        return localStorage.getItem('access_token'); // O el método que uses para almacenar el token
       }
   
       getCupones(): Observable<Cupon[]> {
