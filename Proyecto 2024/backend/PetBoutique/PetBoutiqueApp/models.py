@@ -281,14 +281,11 @@ class Cupon(models.Model):
     valor_descuento = models.FloatField()
     imagen_url = models.URLField(blank=True, null=True)
     fecha_vencimiento = models.DateField()
-
-    #image_url = models.TextField(blank=True, null=True)    
+    image_url = models.TextField(blank=True, null=True)    
 
     class Meta:
         verbose_name = "Cupón"
         verbose_name_plural = "Cupones"
-        # db_table = 'cupon'  # 👈 Nombre exacto que ya existe en la base de datos
-        # managed = False     # 👈 Le dice a Django que NO intente crearla con migrate
 
     def __str__(self):
         return f"{self.nombre} ({self.tipo_descuento})"
@@ -312,7 +309,6 @@ class Usuario(models.Model):
     estado = models.TextField(blank=True, null=True)  # This field type is a guess.
     password = models.CharField(max_length=45, blank=True, null=True)
     fotoPerfil = models.CharField(max_length=600, blank=True, null=True)
-    #cupones = models.ManyToManyField(Cupon, blank=True)
 
     class Meta:
         managed = False
