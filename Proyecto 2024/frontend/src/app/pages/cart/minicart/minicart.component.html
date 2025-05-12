@@ -19,10 +19,15 @@
       </div>
       <button type="button" class="btn fs-5 closeBtn" (click)="removeFromCart(productoCarrito.id_carrito)"><i  class="fas fa-times" ></i></button>
     </div>
-    <div *ngIf="cuponAplicado" class="p-2 d-flex justify-content-between">
-      <h6>Cupón: {{ cuponAplicado.nombre }}</h6>
-      <h6>- {{ cuponAplicado.tipo_descuento === 'PORCENTAJE' ? cuponAplicado.valor_descuento + '%' : '$' + cuponAplicado.valor_descuento }}</h6>
-    </div>    
+    <div *ngIf="cupones.length > 0" class="cupones-minicart">
+      <h5>Cupones Aplicados</h5>
+      <ul>
+        <li *ngFor="let cupon of cupones">
+          {{ cupon.nombre }}
+        </li>
+      </ul>
+    </div>
+       
     <div class="p-2 d-flex justify-content-between">
       <h6>SubTotal :</h6>
       <h6>${{ calculateTotal() }}</h6>

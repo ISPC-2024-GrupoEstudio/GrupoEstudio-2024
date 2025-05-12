@@ -17,6 +17,7 @@ export class MinicartComponent implements OnInit {
   isCartOpen: boolean = false;  // Indica si el carrito está abierto o cerrado
   productosCarrito: ICarrito[] = [];
   cuponAplicado: CuponAplicado | null = null;  // Cambia la definición de cuponAplicado
+  cupones: CuponAplicado[] = [];
 
   constructor(private cartService: CartService) { }
 
@@ -25,9 +26,10 @@ export class MinicartComponent implements OnInit {
       this.productosCarrito = productosCarrito;
     });
 
-    this.cartService.cuponAplicado$.subscribe(cupon => {
-      this.cuponAplicado = cupon;
-    });
+    // this.cartService.cuponAplicado$.subscribe(cupon => {
+    //   this.cuponAplicado = cupon;
+    // });
+    this.cupones = this.cartService.getCuponesAplicados();
   }
 
   toggleCart() {
@@ -38,23 +40,41 @@ export class MinicartComponent implements OnInit {
     this.cartService.quitarProducto(productoCarritoId);
   }
 
+  // calculateTotal() {
+  //   let total = this.productosCarrito.reduce((sum, item) => sum + item.producto.precio, 0);
+
+  //   if (this.cuponAplicado) {
+  //     const cupon = this.cuponAplicado;
+  //     if (cupon.tipo_descuento === 'PORCENTAJE') {
+  //       total = total - (total * (cupon.valor_descuento / 100));
+  //     } else if (cupon.tipo_descuento === 'MONTO') {
+  //       total = total - cupon.valor_descuento;
+  //     }
+
+  //     // No permitir totales negativos
+  //     if (total < 0) total = 0;
+  //   }
+
+  //   return total.toFixed(2);
+  // }
   calculateTotal() {
     let total = this.productosCarrito.reduce((sum, item) => sum + item.producto.precio, 0);
-
-    if (this.cuponAplicado) {
-      const cupon = this.cuponAplicado;
+  
+    const cupones = this.cartService.getCuponesAplicados();
+  
+    for (const cupon of cupones) {
       if (cupon.tipo_descuento === 'PORCENTAJE') {
-        total = total - (total * (cupon.valor_descuento / 100));
+        total -= total * (cupon.valor_descuento / 100);
       } else if (cupon.tipo_descuento === 'MONTO') {
-        total = total - cupon.valor_descuento;
+        total -= cupon.valor_descuento;
       }
-
-      // No permitir totales negativos
-      if (total < 0) total = 0;
     }
-
+  
+    if (total < 0) total = 0;
+  
     return total.toFixed(2);
   }
+  
 
   viewCart() {
     // Lógica para ver el carrito
