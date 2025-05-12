@@ -43,29 +43,44 @@
 
 }
 
-.cupon-vencido {
-    background-color: #f0f0f0; 
-    opacity: 0.5;
-    pointer-events: none;
-}
-
-.btn-disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-}
-
-.btn-cupones:hover {
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.449);
-    background-image: linear-gradient(to right,#679a9ae3, #72c1a89c);
-    color: rgba(0, 0, 0, 0.869);
-}
-
-.btn-cupones.btn-disabled:hover {
-    box-shadow: none;
-    background-image: none;
-    color: #ccc;
-}
-
+.producto-detalle-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+  
+  .modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+    position: relative;
+    max-width: 400px;
+  }
+  
+  .close {
+    position: absolute;
+    right: 1rem;
+    top: 0.5rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  
+  .animate-fade {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
   
 
 @media (max-width: 1200px){

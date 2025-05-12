@@ -11,11 +11,11 @@ import { CuponAplicado } from './cupon-aplicado';
   templateUrl: './cupones.component.html',
   styleUrl: './cupones.component.css'
 })
-
 export class CuponesComponent implements OnInit {
 
   cuponesDisponibles: Cupon[] = [];
   misCupones: Cupon[] = [];
+  mostrarModal: boolean = false;
 
   constructor(private cuponService: CuponService, private cartService: CartService) {}
 
@@ -24,24 +24,51 @@ export class CuponesComponent implements OnInit {
   }
 
   cargarCupones(): void {
-    this.cuponService.getCupones().subscribe(cupones => {
-      this.cuponesDisponibles = cupones;
-    });
-
-    this.cuponService.getMisCupones().subscribe(cuponIds => {
-      this.misCupones = this.cuponesDisponibles.filter(cupon => cuponIds.includes(cupon.id));
-    });
-  }
-
-  isCuponVencido(cupon: Cupon): boolean {
-    const fechaVencimiento = new Date(cupon.fecha_vencimiento);
-    const fechaActual = new Date();
-    return fechaVencimiento < fechaActual;
-  }
-
-  seleccionarCupon(cupon: Cupon): void {
+    // Obtén el nombre de usuario del localStorage
     const username = localStorage.getItem('user');
+
+    if (username) {
+      // Obtiene los cupones disponibles
+      this.cuponService.getCupones().subscribe(cupones => {
+        this.cuponesDisponibles = cupones;
+      });
+
+      // Obtiene los cupones del usuario
+      this.cuponService.getMisCupones(username).subscribe(cupones => {
+        this.misCupones = cupones;
+      });
+    } else {
+      console.error('Usuario no autenticado');
+    }
+  }
+
+  // seleccionarCupon(cupon: Cupon): void {
+  //   this.cartService.aplicarCupon(cupon);
+  //   const username = localStorage.getItem('user'); 
+  //   if (!username) {
+  //     console.error('Usuario no autenticado');
+  //     return;
+  //   }
   
+  //   this.cuponService.agregarCupon(username, cupon.id).subscribe({
+  //     next: (res) => {
+  //       console.log('Cupón aplicado:', res);
+  //       this.cargarCupones();
+  //       this.mostrarModal = true; // Mostrar modal
+  //     },
+  //     error: (err) => console.error('Error al aplicar cupón:', err)
+  //   });
+    
+  // }
+  seleccionarCupon(cupon: Cupon): void {
+    const cuponAplicado: CuponAplicado = {
+      ...cupon,
+      tipo_descuento: cupon.tipo_descuento as 'PORCENTAJE' | 'MONTO'
+    };
+  
+    this.cartService.aplicarCupon(cuponAplicado);
+  
+    const username = localStorage.getItem('user'); 
     if (!username) {
       console.error('Usuario no autenticado');
       return;
@@ -51,21 +78,13 @@ export class CuponesComponent implements OnInit {
       next: (res) => {
         console.log('Cupón aplicado:', res);
         this.cargarCupones();
+        this.mostrarModal = true;
       },
       error: (err) => console.error('Error al aplicar cupón:', err)
-    });  
-    
+    });
   }
 
-  usarCupon(cupon: Cupon): void {
-    const cuponAplicado: CuponAplicado = {
-      id: cupon.id,
-      nombre: cupon.nombre,
-      tipo_descuento: cupon.tipo_descuento as 'PORCENTAJE' | 'MONTO',
-      valor_descuento: cupon.valor_descuento
-    };
-  
-    this.cartService.aplicarCupon(cuponAplicado);
+  cerrarModal(): void {
+    this.mostrarModal = false;
   }
-  
 }

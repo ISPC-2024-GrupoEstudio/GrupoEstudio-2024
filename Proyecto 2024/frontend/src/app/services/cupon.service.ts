@@ -16,34 +16,36 @@ export interface Cupon {
   providedIn: 'root'
 })
 export class CuponService {
-    private apiUrl = 'http://localhost:8000/api';
-  
-    constructor(private http: HttpClient) {}
-    private obtenerToken(): string | null {        
-        return localStorage.getItem('access_token');
-      }
-  
-      getCupones(): Observable<Cupon[]> {
-        const token = this.obtenerToken();
-        const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-        return this.http.get<Cupon[]>(`${this.apiUrl}/cupones/`, { headers });
-      }
-    
-      getMisCupones(): Observable<number[]> {
-        const token = this.obtenerToken();
-        const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-        return this.http.get<number[]>(`${this.apiUrl}/mis-cupones/`, { headers });
-      }
-    
-      agregarCupon(username: string, cuponId: number): Observable<any> {
-        const token = this.obtenerToken();
-        const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-        return this.http.post(
+  private apiUrl = 'http://localhost:8000/api';
+
+  constructor(private http: HttpClient) {}
+
+  private obtenerToken(): string | null {
+      return localStorage.getItem('access_token');
+  }
+
+  getCupones(): Observable<Cupon[]> {
+      const token = this.obtenerToken();
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+      return this.http.get<Cupon[]>(`${this.apiUrl}/cupones/`, { headers });
+  }
+
+  // Ajuste para incluir el nombre de usuario en la URL
+  getMisCupones(nombre_usuario: string): Observable<Cupon[]> {
+      const token = this.obtenerToken();
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+      return this.http.get<Cupon[]>(`${this.apiUrl}/mis-cupones/${nombre_usuario}/`, { headers });
+  }
+
+  agregarCupon(username: string, cuponId: number): Observable<any> {
+      const token = this.obtenerToken();
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+      return this.http.post(
           `${this.apiUrl}/mis-cupones/`,
           { username: username, cupon_id: cuponId },
           { headers }
-        );
-      }
-    
+      );
   }
+}
+
   

@@ -22,6 +22,7 @@ from .serializer import ProductoSerializer, CategoriaProductoSerializer, Proveed
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework import serializers
 
 # Importaciones API autenticación
 
@@ -453,15 +454,35 @@ def obtener_usuario(request, username):
 #             return Response({"mensaje": "Cupón aplicado correctamente"})
 #         except UsuarioCupon.DoesNotExist:
 #             return Response({"error": "Cupón no encontrado"}, status=404)
+class CuponSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Cupon
+        fields = ['id', 'nombre', 'descripcion', 'tipo_descuento', 'valor_descuento', 'imagen_url', 'fecha_vencimiento']
+
+
 class MisCuponesAPIView(APIView):
-    # Descomenta esta línea para proteger la vista
     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
-        username = request.user.username
-        cupones_usuario = UsuarioCupon.objects.filter(usuario__nombre_usuario=username)
-        cupon_ids = [cupon.cupon.id for cupon in cupones_usuario]
-        return Response(cupon_ids)
+    # def get(self, request):
+    #     username = request.user.username
+    #     cupones_usuario = UsuarioCupon.objects.filter(usuario__nombre_usuario=username)
+    #     cupon_ids = [cupon.cupon.id for cupon in cupones_usuario]
+    #     return Response(cupon_ids)
+    def get(self, request, nombre_usuario=None):
+        if nombre_usuario is None:
+            # Si no se pasa el nombre de usuario en la URL, usa el usuario autenticado
+            nombre_usuario = request.user.username  
+
+        # Filtra los cupones del usuario
+        cupones_usuario = UsuarioCupon.objects.filter(usuario__nombre_usuario=nombre_usuario)
+        
+        # Obtiene los cupones completos (no solo los IDs)
+        cupones = [cupon.cupon for cupon in cupones_usuario]
+
+        # Serializa los cupones completos
+        cupones_serializados = CuponSerializer(cupones, many=True)
+
+        return Response(cupones_serializados.data)
 
     def post(self, request):
         username = request.user.username
