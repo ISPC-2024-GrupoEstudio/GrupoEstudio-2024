@@ -70,6 +70,12 @@ export class CuponesComponent implements OnInit {
     return this.misCupones.some(c => c.id === cupon.id);
   }
 
+  estaVencido(cupon: Cupon): boolean {
+    const hoy = new Date();
+    const fechaVencimiento = new Date(cupon.fecha_vencimiento);
+    return fechaVencimiento < hoy;
+  }
+
   cerrarModal(): void {
     this.mostrarModal = false;
   }

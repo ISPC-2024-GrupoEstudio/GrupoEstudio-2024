@@ -92,6 +92,11 @@
     box-shadow: none;
 }
 
+.alert-danger{
+    text-align: center;
+    font-size: 1.5rem;
+}
+
   
   @keyframes fadeIn {
     from { opacity: 0; transform: scale(0.9); }
