@@ -136,20 +136,32 @@
   
                         <hr class="my-4">
     
+                        <!-- Subtotal -->
                         <div class="d-flex justify-content-between">
                           <p class="mb-2">Subtotal</p>
-                          <p class="mb-2">${{ calculateTotal() }}</p>
+                          <p class="mb-2">${{ calculateSubtotal().toFixed(2) }}</p>
                         </div>
-    
+
+                        <!-- Descuento -->
                         <div class="d-flex justify-content-between">
-                          <p class="mb-2">Shipping</p>
+                          <p class="mb-2">Descuento cupones aplicados:</p>
+                          <p class="mb-2">- ${{ getDescuentoTotal().toFixed(2) }}</p>
+                        </div>
+
+                        <!-- Envío -->
+                        <div class="d-flex justify-content-between">
+                          <p class="mb-2">Envío</p>
                           <p class="mb-2">$20.00</p>
                         </div>
-    
+
+                        <hr class="my-4" />
+
+                        <!-- Total final -->
                         <div class="d-flex justify-content-between mb-4">
-                          <p class="mb-2">Total(Incl. taxes)</p>
-                          <p class="mb-2">${{ calculateTotal() + 20.00 }}</p>
+                          <p class="mb-2">Total (Incl. taxes)</p>
+                          <p class="mb-2">${{ calculateTotalFinal().toFixed(2) }}</p>
                         </div>
+
     
                         <button  type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-info btn-block btn-lg">
                           <div class="d-flex justify-content-between">

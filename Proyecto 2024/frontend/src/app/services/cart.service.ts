@@ -4,6 +4,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IProducto } from '../models/producto.interface';
 import { ICarrito } from '../models/carrito.interface';
 import { catchError } from 'rxjs/operators'; 
+import { CuponAplicado } from '../pages/dashboard/cupones/cupon-aplicado';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -20,6 +22,8 @@ export class CartService {
 
   constructor(private readonly httpClient : HttpClient) { 
     this.actualizarCarrito();
+    this.cargarCuponesDesdeLocalStorage();
+    this.obtenerCuponesUsuario().subscribe();
   }
 
   private getHeaders(): HttpHeaders {
@@ -103,6 +107,59 @@ export class CartService {
   obtenerProductosCarrito(): ICarrito[] {
   return this.productosCarritoSubject.value;
   }
+
+  // private cuponAplicadoSubject = new BehaviorSubject<CuponAplicado | null>(null);
+  // cuponAplicado$ = this.cuponAplicadoSubject.asObservable();
+
+  // aplicarCupon(cupon: CuponAplicado) {
+  //   this.cuponAplicadoSubject.next(cupon);
+  // }
+  private cuponesAplicados: CuponAplicado[] = [];
+
+aplicarCupon(cupon: CuponAplicado): void {
+  const yaExiste = this.cuponesAplicados.some(c => c.id === cupon.id);
+  if (!yaExiste) {
+    this.cuponesAplicados.push(cupon);
+    localStorage.setItem('cuponesAplicados', JSON.stringify(this.cuponesAplicados)); // Guardar en localStorage
+  }
+}
+
+getCuponesAplicados(): CuponAplicado[] {
+  return this.cuponesAplicados;
+}
+
+obtenerCuponesUsuario(): Observable<CuponAplicado[]> {
+  const token = localStorage.getItem('access_token');
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  const username = localStorage.getItem('user');
+  const url = `${this.apiUrl}mis-cupones/${username}/`;
+
+  return this.httpClient.get<CuponAplicado[]>(url, { headers }).pipe(
+    tap((cupones) => {
+      this.cuponesAplicados = cupones;
+      localStorage.setItem('cuponesAplicados', JSON.stringify(cupones));
+    }),
+    catchError((error) => {
+      console.error('Error al obtener cupones del usuario:', error);
+      return of([]);
+    })
+  );
+}
+
+
+cargarCuponesDesdeLocalStorage(): void {
+  const cuponesGuardados = localStorage.getItem('cuponesAplicados');
+  if (cuponesGuardados) {
+    this.cuponesAplicados = JSON.parse(cuponesGuardados);
+  }
+}
+
+limpiarCupones(): void {
+  this.cuponesAplicados = [];
+  localStorage.removeItem('cuponesAplicados');
+}
+
+
 
   /*
   getPaymentMethods(): Observable<any> {

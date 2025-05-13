@@ -7,11 +7,13 @@ import { NgFor, NgIf } from '@angular/common';
 import { Router } from '@angular/router';
 import { ICarrito } from '../../../models/carrito.interface';
 import { AuthService } from '../../../services/auth.service';
+import { CuponAplicado } from '../../dashboard/cupones/cupon-aplicado';
+import { CuponService } from '../../../services/cupon.service';
 
 @Component({
   selector: 'app-checkout',
   standalone: true,
-  imports: [RouterLink,RouterOutlet, ReactiveFormsModule,NgFor, NgIf],
+  imports: [RouterLink, RouterOutlet, ReactiveFormsModule,NgFor, NgIf],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.css'
 })
@@ -22,11 +24,14 @@ export class CheckoutComponent implements OnInit{
 
   productosCarrito: ICarrito[] = [];
   form!: FormGroup;
+  descuento: number = 0; // en porcentaje o monto fijo
+  tipoDescuento: 'porcentaje' | 'monto' = 'porcentaje'; // ajusta esto según el tipo de cupón
 
   constructor(private _formBuilder: FormBuilder,
     private cartService: CartService,
     private authService : AuthService, 
-    private router: Router) {
+    private router: Router,
+    private cuponService: CuponService ) {
     this.form = this._formBuilder.group({
       name: ['', Validators.required],
       cardNumber: ['', [Validators.required, Validators.minLength(19), Validators.maxLength(19)]],
@@ -39,11 +44,90 @@ export class CheckoutComponent implements OnInit{
     this.cartService.productosCarrito.subscribe(productosCarrito => {
       this.productosCarrito = productosCarrito;
     });
+
+     // Simulación: ejemplo de cupón aplicado
+    this.descuento = 10; // 10% de descuento
+    this.tipoDescuento = 'porcentaje'; // o 'monto'
+  }
+
+  // calculateTotal(): number {
+  //   return this.productosCarrito.reduce((acc, productoCarrito) => acc + productoCarrito.producto.precio * productoCarrito.cantidad, 0);
+  // }
+//   getDescuentoTotal(): number {
+//   const cupones: CuponAplicado[] = this.cartService.getCuponesAplicados();
+//   const subtotal = this.calculateSubtotal();
+//   let totalDescuento = 0;
+
+//   for (const cupon of cupones) {
+//     if (cupon.tipo_descuento === 'PORCENTAJE') {
+//       totalDescuento += subtotal * (cupon.valor_descuento / 100);
+//     } else if (cupon.tipo_descuento === 'MONTO') {
+//       totalDescuento += cupon.valor_descuento;
+//     }
+//   }
+
+//   return totalDescuento;
+// }
+getDescuentoTotal(): number {
+  const cupones: CuponAplicado[] = this.cartService.getCuponesAplicados();
+  let totalDescuento = 0;
+  let totalTemporal = this.calculateSubtotal(); // subtotal base
+
+  for (const cupon of cupones) {
+    let descuento = 0;
+
+    if (cupon.tipo_descuento === 'PORCENTAJE') {
+      descuento = totalTemporal * (cupon.valor_descuento / 100);
+    } else if (cupon.tipo_descuento === 'MONTO') {
+      descuento = cupon.valor_descuento;
+    }
+
+    // Evita que el descuento exceda el total restante
+    if (descuento > totalTemporal) {
+      descuento = totalTemporal;
+    }
+
+    totalDescuento += descuento;
+    totalTemporal -= descuento;
+
+    if (totalTemporal <= 0) {
+      break; // Ya no se puede aplicar más descuento
+    }
+  }
+
+  return totalDescuento;
+}
+
+
+calculateSubtotal(): number {
+  return this.productosCarrito.reduce((acc, productoCarrito) =>
+    acc + productoCarrito.producto.precio * productoCarrito.cantidad, 0);
+}
+
+calculateTotalFinal(): number {
+  const subtotal = this.calculateSubtotal();
+  const descuento = this.getDescuentoTotal();
+  const envio = 20.00; // por ejemplo
+
+  const totalFinal = subtotal - descuento + envio;
+  return totalFinal < 0 ? 0 : totalFinal;
+}
+
+
+  calculateDiscount(): number {
+    const subtotal = this.calculateSubtotal();
+    return this.tipoDescuento === 'porcentaje'
+      ? subtotal * (this.descuento / 100)
+      : this.descuento;
   }
 
   calculateTotal(): number {
-    return this.productosCarrito.reduce((acc, productoCarrito) => acc + productoCarrito.producto.precio * productoCarrito.cantidad, 0);
+    const subtotal = this.calculateSubtotal();
+    const descuentoAplicado = this.calculateDiscount();
+    const shipping = 20;
+    return subtotal - descuentoAplicado + shipping;
   }
+
 
   removeFromCart(productoCarritoId: number): void {
     this.cartService.quitarProducto(productoCarritoId);
@@ -99,6 +183,17 @@ export class CheckoutComponent implements OnInit{
                   this.errorMessage = ''; // Limpiar mensaje de error si hubiera
                   this.form.reset(); // Reiniciar formulario después de éxito
                   this.cartService.limpiarCarrito();
+                  this.cartService.limpiarCupones();
+
+                   //Eliminar cupones desde backend
+                  this.cuponService.eliminarCupones(username).subscribe({
+                    next: (res) => {
+                      console.log('Cupones del usuario eliminados:', res.mensaje);
+                    },
+                    error: (err) => {
+                      console.error('Error al eliminar los cupones del usuario:', err);
+                    }
+                  });
                 },
                 error => { // Fin del suscribe de checkout(), inicio del error handler
                   console.log('Error del servidor:', error);
