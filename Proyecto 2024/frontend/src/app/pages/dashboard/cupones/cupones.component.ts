@@ -42,24 +42,6 @@ export class CuponesComponent implements OnInit {
     }
   }
 
-  // seleccionarCupon(cupon: Cupon): void {
-  //   this.cartService.aplicarCupon(cupon);
-  //   const username = localStorage.getItem('user'); 
-  //   if (!username) {
-  //     console.error('Usuario no autenticado');
-  //     return;
-  //   }
-  
-  //   this.cuponService.agregarCupon(username, cupon.id).subscribe({
-  //     next: (res) => {
-  //       console.log('Cupón aplicado:', res);
-  //       this.cargarCupones();
-  //       this.mostrarModal = true; // Mostrar modal
-  //     },
-  //     error: (err) => console.error('Error al aplicar cupón:', err)
-  //   });
-    
-  // }
   seleccionarCupon(cupon: Cupon): void {
     const cuponAplicado: CuponAplicado = {
       ...cupon,
@@ -82,6 +64,10 @@ export class CuponesComponent implements OnInit {
       },
       error: (err) => console.error('Error al aplicar cupón:', err)
     });
+  }
+
+  yaFueReclamado(cupon: Cupon): boolean {
+    return this.misCupones.some(c => c.id === cupon.id);
   }
 
   cerrarModal(): void {

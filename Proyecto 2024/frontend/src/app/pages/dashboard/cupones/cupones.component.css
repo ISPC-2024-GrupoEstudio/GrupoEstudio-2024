@@ -76,6 +76,22 @@
   .animate-fade {
     animation: fadeIn 0.3s ease-in-out;
   }
+
+  .card-cupones.reclamado {
+    background-color: #d3d3d3; 
+    filter: grayscale(80%);
+    pointer-events: none; 
+    opacity: 0.7;
+}
+
+.btn-cupones.reclamado-btn {
+    background-color: #414040;
+    background-image: none;
+    cursor: not-allowed;
+    color: white;
+    box-shadow: none;
+}
+
   
   @keyframes fadeIn {
     from { opacity: 0; transform: scale(0.9); }

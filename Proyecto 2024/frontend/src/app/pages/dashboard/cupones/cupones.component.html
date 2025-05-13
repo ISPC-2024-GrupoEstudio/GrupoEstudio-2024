@@ -1,13 +1,20 @@
 <h1 class="cupon-titulo text-center">Cupones Disponibles</h1>
 <div *ngIf="cuponesDisponibles.length > 0" class="row cupon-container">
   <div *ngFor="let cupon of cuponesDisponibles" class="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 col-auto text-center">
-    <div class="card d-flex card-cupones">
+    <div class="card d-flex card-cupones" [ngClass]="{ 'reclamado': yaFueReclamado(cupon) }">
       <img [src]="cupon.imagen_url" alt="..." class="card-img-top align-self-center cupon-img" style="height: 9rem;width: 9rem;">
       <div class="card-body">
         <h5 class="card-title">{{ cupon.nombre }}</h5>
         <p class="card-text">{{ cupon.descripcion }}</p>
         <p>Vencimiento: {{ cupon.fecha_vencimiento | date: 'dd-MM-yyyy' }}</p>
-        <a class="btn btn-primary btn-cupones" (click)="seleccionarCupon(cupon)">Seleccionar Cupón</a>
+        <!-- <a class="btn btn-primary btn-cupones" (click)="seleccionarCupon(cupon)">Seleccionar Cupón</a> -->
+        <button 
+          class="btn btn-primary btn-cupones"
+          [ngClass]="{ 'reclamado-btn': yaFueReclamado(cupon) }"
+          [disabled]="yaFueReclamado(cupon)"
+          (click)="seleccionarCupon(cupon)">
+          {{ yaFueReclamado(cupon) ? 'Cupón reclamado' : 'Seleccionar Cupón' }}
+        </button>
       </div>
     </div>
   </div>
