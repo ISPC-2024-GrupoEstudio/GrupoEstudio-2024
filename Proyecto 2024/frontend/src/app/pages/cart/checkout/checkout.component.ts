@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { ICarrito } from '../../../models/carrito.interface';
 import { AuthService } from '../../../services/auth.service';
 import { CuponAplicado } from '../../dashboard/cupones/cupon-aplicado';
+import { CuponService } from '../../../services/cupon.service';
 
 @Component({
   selector: 'app-checkout',
@@ -29,7 +30,8 @@ export class CheckoutComponent implements OnInit{
   constructor(private _formBuilder: FormBuilder,
     private cartService: CartService,
     private authService : AuthService, 
-    private router: Router) {
+    private router: Router,
+    private cuponService: CuponService ) {
     this.form = this._formBuilder.group({
       name: ['', Validators.required],
       cardNumber: ['', [Validators.required, Validators.minLength(19), Validators.maxLength(19)]],
@@ -181,6 +183,17 @@ calculateTotalFinal(): number {
                   this.errorMessage = ''; // Limpiar mensaje de error si hubiera
                   this.form.reset(); // Reiniciar formulario después de éxito
                   this.cartService.limpiarCarrito();
+                  this.cartService.limpiarCupones();
+
+                   //Eliminar cupones desde backend
+                  this.cuponService.eliminarCupones(username).subscribe({
+                    next: (res) => {
+                      console.log('Cupones del usuario eliminados:', res.mensaje);
+                    },
+                    error: (err) => {
+                      console.error('Error al eliminar los cupones del usuario:', err);
+                    }
+                  });
                 },
                 error => { // Fin del suscribe de checkout(), inicio del error handler
                   console.log('Error del servidor:', error);

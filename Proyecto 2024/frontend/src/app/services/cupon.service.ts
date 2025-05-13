@@ -46,6 +46,14 @@ export class CuponService {
           { headers }
       );
   }
+
+  eliminarCupones(nombre_usuario: string): Observable<any> {
+    const token = this.obtenerToken();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.delete(`${this.apiUrl}/mis-cupones/${nombre_usuario}/`, { headers });
+  }
+
+
 }
 
   
