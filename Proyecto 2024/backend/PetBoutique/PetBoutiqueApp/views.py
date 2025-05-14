@@ -1,6 +1,6 @@
 import json
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -312,6 +312,10 @@ def crear_preferencia(request):
             items = data.get("items")
             if not items or not isinstance(items, list):
                 return JsonResponse({"error": "Lista de items no válida"}, status=400)
+            
+            external_reference = data.get("external_reference")
+            print("External Reference enviada a MP:", external_reference)
+
 
             preference_data = {
                 "items": [
@@ -323,14 +327,16 @@ def crear_preferencia(request):
                     } for item in items
                 ],
                 "back_urls": {
-                    "success": "https://tusitio.com/success",
+                    "success": "https://d0cd-181-28-11-56.ngrok-free.app/api/pago-exitoso/",
                     "failure": "https://tusitio.com/failure",
                     "pending": "https://tusitio.com/pending"
                 },
                 "auto_return": "approved",
-                "external_reference": data.get("external_reference", "pedido_xyz")
+                "external_reference": external_reference if external_reference else "no-reference"
+
             }
             print("Preference data enviado a MercadoPago:", preference_data)
+            print("External Reference enviada a MP:", external_reference)
 
             preference_response = sdk.preference().create(preference_data)
             print("Respuesta de Mercado Pago:", preference_response)
@@ -347,6 +353,80 @@ def crear_preferencia(request):
             return JsonResponse({"error": f"Error al crear preferencia: {str(e)}"}, status=500)
 
     return JsonResponse({"error": "Método no permitido"}, status=405)
+
+
+def procesar_pedido(nombre_usuario):
+    carrito = Carrito.objects.filter(nombre_usuario=nombre_usuario)
+
+    if not carrito.exists():
+        raise Exception("El carrito está vacío o no existe.")
+
+    items_comprados = [
+        {
+            'id_producto': item.id_producto.id_producto,
+            'cantidad': item.cantidad
+        } for item in carrito
+    ]
+
+    with transaction.atomic():
+        for item in items_comprados:
+            producto = Producto.objects.get(id_producto=item['id_producto'])
+            if producto.stock_actual < item['cantidad']:
+                raise Exception(f"Stock insuficiente para el producto {producto.nombre}")
+            producto.stock_actual -= item['cantidad']
+            producto.save()
+
+        ultimo_pedido = Pedido.objects.all().order_by('-numero_pedido').first()
+        numero_pedido = (ultimo_pedido.numero_pedido + 1) if ultimo_pedido else 1
+
+        pedido_data = {
+            'nombre_usuario': nombre_usuario,
+            'fecha': timezone.now(),
+            'id_estado_pedido': 1,
+            'numero_pedido': numero_pedido
+        }
+
+        pedido_serializer = PedidoSerializer(data=pedido_data)
+        if pedido_serializer.is_valid():
+            pedido = pedido_serializer.save()
+        else:
+            raise Exception(f"Error al crear el pedido: {pedido_serializer.errors}")
+
+        for item in items_comprados:
+            producto = Producto.objects.get(id_producto=item['id_producto'])
+            ProductoXPedido.objects.create(
+                id_producto=producto,
+                id_pedido=pedido,
+                cantidad=item['cantidad'],
+                precio=producto.precio
+            )
+
+        carrito.delete()
+
+
+@api_view(['GET'])
+def procesar_pago_exitoso(request):
+    print("Procesando el pago...")
+    print("Datos recibidos:", request.GET)
+
+    external_reference = request.query_params.get('external_reference') # nombre_usuario
+    print("Referencia externa recibida:", external_reference)
+
+    if not external_reference:
+        return JsonResponse({'error': 'Referencia externa no recibida'}, status=400)
+
+    try:
+        procesar_pedido(external_reference)
+        print("Pedido procesado correctamente")
+        return redirect('http://localhost:4200/dashboard')
+    except Exception as e:
+        print("Error al procesar el pedido:", str(e))
+        return JsonResponse({'error': str(e)}, status=500)
+
+
+
+
+
 
 # Vistas login / logout #####################################################################################
 class LoginView(APIView):

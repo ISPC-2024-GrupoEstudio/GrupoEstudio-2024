@@ -216,6 +216,24 @@ logFormErrors(): void {
 }
 
 
+ handlePagoExitoso(): void {
+    // Verificar si el pago fue exitoso
+    this.http.get<any>('http://localhost:8000/api/pago-exitoso').subscribe({
+      next: (response) => {
+        if (response.message === 'Pedido procesado correctamente') {
+          this.irAlDashboard(); // Redirigir al dashboard
+        } else {
+          this.errorMessage = 'Hubo un problema con el procesamiento del pago.';
+        }
+      },
+      error: (err) => {
+        console.error('Error al verificar el pago:', err);
+        this.errorMessage = 'Hubo un error al verificar el pago.';
+      }
+    });
+  }
+
+
 
   get Name(){
     return this.form.get("name")

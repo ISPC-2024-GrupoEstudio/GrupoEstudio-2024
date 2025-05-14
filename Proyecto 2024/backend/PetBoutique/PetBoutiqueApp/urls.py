@@ -47,6 +47,7 @@ urlpatterns = [
     path('auth/usuarios/<str:nombre_usuario>/', UsuarioPorNombreView.as_view(), name='usuario-por-username'),
     path('api/usuarios/<str:nombre_usuario>/', UsuarioPorNombreView.as_view()),
     path('preferencia/', views.crear_preferencia, name='crear_preferencia'),
+    path('pago-exitoso/', views.procesar_pago_exitoso, name='pago_exitoso'),
 ]
 
 
