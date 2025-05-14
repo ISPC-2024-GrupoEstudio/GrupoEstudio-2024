@@ -10,7 +10,7 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
   const accessToken = localStorage.getItem('access_token');
   let authReq = req;
 
-  if (accessToken) {
+  if (accessToken && !req.url.includes('cloudinary.com')) {
     authReq = req.clone({
       setHeaders: { Authorization: `Bearer ${accessToken}` }
     });
