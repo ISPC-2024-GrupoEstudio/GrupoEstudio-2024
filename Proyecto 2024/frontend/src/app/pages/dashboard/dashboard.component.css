@@ -1,28 +1,11 @@
-.body-dashboard{
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: stretch; 
-    width: 100%;
-    margin: 0;
-    padding: 0;
+/* Estilos modernos para el Dashboard */
+.dashboard {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f8f9fa;
 }
 
-/* HEADER DASHBOARD */
-.header-dash, .recomendaciones-div-title{
-    background-color: white;
-    margin: 0;
-    padding: 2rem;
-}
-
-.img-header-dash{
-    width: 30rem;
-    border: none;
-}
-
-.titulo-header, .recomendaciones-titulo{
+.titulo-header{
     font-size: 4rem;
-    font-weight: 500;
     background-image: linear-gradient(to right, #2ebf91a6, #8360c3);
     background-clip: text; 
     background-clip: text; 
@@ -31,7 +14,7 @@
 
 .scale-up-hor-left {
 	animation: scale-up-hor-left 0.5s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
-	        animation: scale-up-hor-left 0.5s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+	animation: scale-up-hor-left 0.5s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
 }
 
 @-webkit-keyframes scale-up-hor-left {
@@ -63,242 +46,160 @@
     }
 }
 
-/*SECCION HISTORIAL*/
+/* Tarjeta de historial */
+.history-card {
+  border-radius: 10px;
+  transition: transform 0.3s ease;
+}
+
+.history-card:hover {
+  transform: translateY(-5px);
+}
+
+.history-link {
+  color: #333;
+  background-color: #7F72C0;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.history-link:hover {
+  background-color: #6a60a3;
+  color: white;
+}
+
+.arrow-icon {
+  width: 20px;
+}
+
+.transition-effect {
+  transition: transform 0.3s ease;
+}
+
+.history-link:hover .transition-effect {
+  transform: translateY(3px) scale(1.2);
+}
+
+/* Tarjeta de cupón */
+.coupon-card {
+  background-color: #53A6A6;
+  border-radius: 10px;
+  transition: transform 0.3s ease;
+}
+
+.coupon-card:hover {
+  transform: translateY(-5px);
+}
+
+.coupon-title {
+  color: #333;
+}
+
+.highlight-text {
+  background-color: rgba(131, 96, 195, 0.7);
+  padding: 2px 8px;
+}
+
+.btn-coupon {
+  background: #8360c3;
+  border-radius: 30px;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.btn-coupon:hover {
+  background: #6a4da3;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(131, 96, 195, 0.4);
+  color: white;
+}
+
+/* Sección de Recomendaciones */
+.product-card {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border-radius: 15px;
+  padding: 20px;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+}
+
+.product-img {
+  max-width: 200px;
+  max-height: 200px;
+  object-fit: contain;
+  margin: 0 auto;
+  transition: transform 0.5s ease;
+}
+
+.product-card:hover .product-img {
+  transform: scale(1.1);
+}
+
+.btn-product {
+  background: #8360c3;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.btn-product:hover {
+  background: #6a4da3;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(131, 96, 195, 0.4);
+  color: white;
+}
+
+/* Controles del carousel */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: rgba(131, 96, 195, 0.7);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Estilos responsive */
+@media (max-width: 768px) {
+  .text-gradient {
+    font-size: 1.8rem;
+  }
   
-.texto-historial, .div-historial{
-    background-color: #7F72C0;
-    font-size: 3rem;
-    width: 100%;
-    color: rgba(0, 0, 0, 0.789);
-    padding: 1rem 1rem;
-    margin: 0;
+  .product-img {
+    max-width: 150px;
+    max-height: 150px;
+  }
 }
 
-.flecha{
-    width: 2rem;
-    height: auto;
-}
-
-.grow{
-    transition: .5s, color .10s;
-        transition: .5s, color .10s;
-        transition: .5s, color .10s;
-}
-.grow:hover{
-    transform: scale3d(1.5, 1.5, 0.3);
-        transform: scale3d(1.5, 1.5, 0.3);
-        transform: scale3d(1.5, 1.5, 0.3);
-}
-                           
-/* SECCION CUPON */
-
-.seccion-cupon{
-    background-color: #53A6A6;
-    padding: 4rem 0;
-    width: 100%;
-    margin: 0;
-}
-
-.titulo-cupon{
-    font-size: 2rem;
-    padding-top: 1rem;
-}
-
-.btn-cupon{
-    font-size: 2rem;
-    font-weight: 400;
-    background-color: #8360c3a2;
-    box-shadow: 0 0 1.8rem rgb(255, 255, 255);
-    color: rgba(0, 0, 0, 0.865);
-    padding: 1rem;
-    border-radius: 1rem;
-    text-decoration: none;
-}
-
-.swing:hover{
-    color: rgba(255, 255, 255, 0.845);
-    animation-name: swing;
-        animation-name: swing;
-        animation-name: swing;
-    animation-duration: 1s;
-        animation-duration: 1s;
-        animation-duration: 1s;
-        background-color: #412477a2;
-
-}
-
-@keyframes swing {
-        20% {transform: rotate3d(0, 0, 1, 15deg);}
-        40% {transform: rotate3d(0, 0, 1, -10deg);}
-        60% {transform: rotate3d(0, 0, 1, 5deg);}
-        80% {transform: rotate3d(0, 0, 1, -5deg);}
-        to  {transform: rotate3d(0, 0, 1, 0deg);}
-}
-
-.pulse {
-    animation-name: pulse;
-    animation-duration: 1s;
-    animation-iteration-count: infinite;
-}
-  
-@keyframes pulse {
-    0% {transform: scale(1);}
-    50% {transform: scale(1.2);}
-    100% {transform: scale(1);}
-}
-
-/* RECOMENDACIONES */
-
-.recomendaciones{
-    background-color: white;
-    margin: 0;
-    padding: 1rem 0 2rem 0;
-    
-}
-
-.carousel{
-    width: 70%;
-    background-image: linear-gradient(to right, #2ebf91a6, #8360c3);
-    margin: 0;
-}
-
-.carousel-item{
-      padding: 2rem 0;
-}
-
-.img-carousel{
-    width: 30%;
-      height: auto;
-}
-
-.titulo-card-carousel{
-    color: white;
-    padding: 1rem 0;
-    text-shadow: 5px 5px 10px rgb(0, 0, 0);
-
-}
-
-.btn-producto-carousel{
+@media (max-width: 576px) {
+  .text-gradient {
     font-size: 1.5rem;
-    background-color: #8360c3;
-    box-shadow: 0 0 1.8rem rgb(255, 255, 255);
-    border: none;
-    margin: 1rem 0;
+  }
+  
+  .header-image {
+    max-width: 80%;
+    margin: 0 auto;
+  }
+  
+  .history-link span {
+    font-size: 1.2rem;
+  }
+  
+  .coupon-title {
+    font-size: 1.2rem;
+  }
+  
+  .btn-coupon, .btn-product {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+  }
 }
 
-.link-btn-carousel{
-    text-decoration: none;
-    color: white;
-}
-
-.btn-producto-carousel:hover{
-    background-color: #3f2968;
-
-}
-
-/* RESPONSIVE */
-
-@media (max-width: 1000px){
-    .titulo-header{
-        font-size: 3rem;
-    }
-}
-
-@media (max-width: 995px){
-    .titulo-cupon{
-        font-size: 1.2rem;
-    }
-
-    .btn-cupon{
-        font-size: 1.2rem;
-        padding: 0.5rem;
-        margin-top: 0.5rem;
-    }
-}
-
-@media (max-width: 829px){
-    .div-header-dash{
-        flex-direction: column;
-        text-align: center;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .recomendaciones-titulo{
-        font-size: 3rem;
-    }
-}
-
-@media (max-width:690px){
-    .seccion-cupon{
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .btn-cupon{
-        width: 30%;
-        text-align: center;
-    }
-}
-
-@media (max-width:550px){
-    .titulo-cupon{
-        font-size: 1rem;
-    }
-
-    .btn-cupon{
-        font-size: 1rem;
-        padding: 0.3rem;
-        margin-top: 0.5rem;
-    }
-
-    .texto-historial, .div-historial{
-        font-size: 2rem;
-    }
-
-    .btn-producto-carousel{
-        font-size: 1rem;
-    }
-}
-
-@media (max-width:490px){
-    .titulo-cupon, .btn-cupon{
-        font-size: 0.8rem;
-    }
-
-    
-    .texto-historial, .div-historial{
-        font-size: 1.5rem;
-    }
-
-    .recomendaciones-titulo{
-        font-size: 2rem;
-    }
-
-    .seccion-cupon{
-        padding: 2rem 0;
-    }
-
-    .flecha{
-        width: 1.5rem;
-    }
-}
-
-@media (max-width:340px){
-    .titulo-cupon, .btn-cupon{
-        font-size: 0.5rem;
-    }
-
-    .recomendaciones-titulo, .titulo-header, .texto-historial, .div-historial{
-        font-size: 1.2rem;
-    }
-
-    .seccion-cupon{
-        padding: 1rem 0;
-    }
-
-    .flecha{
-        width: 1rem;
-    }
-}

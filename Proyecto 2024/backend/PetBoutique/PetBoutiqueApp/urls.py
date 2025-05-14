@@ -1,6 +1,7 @@
 from django.urls import path, include
 from rest_framework import routers
 from PetBoutiqueApp import views
+from .views import RoleListCreateAPIView, RoleRetrieveUpdateDestroyAPIView ,ProcessPaymentView,CheckoutView, CuponViewSet, UsuarioCuponListCreateView, MisCuponesAPIView
 from .views import RoleListCreateAPIView, RoleRetrieveUpdateDestroyAPIView ,ProcessPaymentView,CheckoutView, crear_preferencia
 from .views import registrar_usuario, UsuarioPorNombreView
 
@@ -14,6 +15,7 @@ router.register(r'estadoPedido', views.EstadoPedidoViewSet)
 router.register(r'formaDePago', views.FormaDePagoViewSet)
 router.register(r'tipoEnvio', views.TipoEnvioViewSet)
 router.register(r'usuarios', views.UsuarioViewSet)
+router.register(r'cupones', CuponViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
@@ -46,6 +48,10 @@ urlpatterns = [
 
     path('auth/usuarios/<str:nombre_usuario>/', UsuarioPorNombreView.as_view(), name='usuario-por-username'),
     path('api/usuarios/<str:nombre_usuario>/', UsuarioPorNombreView.as_view()),
+    path('api/', include(router.urls)),
+    path('mis-cupones/', views.MisCuponesAPIView.as_view()),
+    path('mis-cupones/<str:nombre_usuario>/', views.MisCuponesAPIView.as_view(), name='mis-cupones-usuario'),
+    # path('api/mis-cupones/', UsuarioCuponListCreateView.as_view(), name='mis-cupones'),
     path('preferencia/', views.crear_preferencia, name='crear_preferencia'),
     path('pago-exitoso/', views.procesar_pago_exitoso, name='pago_exitoso'),
 ]

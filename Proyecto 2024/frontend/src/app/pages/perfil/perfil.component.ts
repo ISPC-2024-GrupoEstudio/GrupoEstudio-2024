@@ -112,13 +112,15 @@ export class PerfilComponent implements OnInit, OnDestroy {
   async subirImagenACloudinary(file: File): Promise<string | null> {
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('upload_preset', 'perfil_unsigned');
+    formData.append('upload_preset', 'perfil_imagen');
     formData.append('cloud_name', 'dgql9nx7t');
 
     try {
       const response: any = await this.http.post('https://api.cloudinary.com/v1_1/dgql9nx7t/image/upload', formData).toPromise();
       return response.secure_url;
-    } catch (error) {
+    } catch (error: any) {
+      console.error('Error al subir imagen a Cloudinary:', error);
+      alert('Error al subir imagen: ' + JSON.stringify(error.error || error.message || error));
       return null;
     }
   }

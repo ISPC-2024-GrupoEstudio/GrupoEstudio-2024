@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Producto, CategoriaProducto, Proveedor, Pedido, EstadoPedido, ProductoXPedido, Roles, FormaDePago, TipoEnvio, Carrito, Usuario
+from .models import Producto, CategoriaProducto, Proveedor, Pedido, EstadoPedido, ProductoXPedido, Roles, FormaDePago, TipoEnvio, Carrito, Usuario, Cupon
 # Importaciones referentes a Custom User
 from .models import CustomUser
 from django.contrib.auth.models import User
@@ -105,4 +105,14 @@ class CustomUserSerializer(serializers.ModelSerializer):
         return custom_user
         
 
+class CuponSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Cupon
+        fields = '__all__'
 
+class UsuarioCuponSerializer(serializers.ModelSerializer):
+    cupones = serializers.PrimaryKeyRelatedField(queryset=Cupon.objects.all(), many=True)
+
+    class Meta:
+        model = Usuario
+        fields = ['cupones']
