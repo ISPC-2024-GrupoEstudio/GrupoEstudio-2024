@@ -1,62 +1,78 @@
-<div class="body__galeria">
+<div class="body__galeria w-100 d-flex flex-column justify-content-center align-items-center p-0 m-0 bg-white">
 
-	<!-- Encabezado-->
-	<header class="header__galeria">
-		<section class="textos-header">
-			<h1 class="">Galeria de Productos</h1>
-		</section>
-		<section class="division">
-			<h2 class="subtitulo__galeria pulse">Encontrá todo para tu mascota</h2>
-		</section>
-	</header>
+  <!-- Encabezado modernizado -->
+  <header class="header__galeria d-flex flex-column justify-content-center mb-5 shadow position-relative">
+    <section class="textos-header py-5 px-0">
+      <h1 class="text-center fw-bolder text-white mb-3">Galería de Productos</h1>
+    </section>
+    <section class="division d-flex w-100 align-items-center justify-content-center py-3 px-0">
+      <h2 class="subtitulo__galeria pulse fw-semibold text-white m-0">Encontrá todo para tu mascota</h2>
+    </section>
+  </header>
 
-	  <!-- 🔍 Filtro y búsqueda -->
-	  <app-filtro-productos
-	  [categorias]="categorias"
-	  (categoriaSeleccionada)="onCategoriaSeleccionada($event)"
-	  (textoBusqueda)="onTextoBusqueda($event)">
-	</app-filtro-productos>
+  <!-- 🔍 Filtro y búsqueda con Bootstrap -->
+    <div class="flex-row justify-content-evenly w-100 filtro-productos ">
+      <div class="row-lg-10 w-100">
+        <app-filtro-productos
+          [categorias]="categorias"
+          (categoriaSeleccionada)="onCategoriaSeleccionada($event)"
+          (textoBusqueda)="onTextoBusqueda($event)">
+        </app-filtro-productos>
+      </div>
+    </div>
 
-	<!-- Lista de categorias y productos -->
+  <!-- Lista de categorias y productos modernizados -->
+  @for (categoria of categoriasVisibles; track $index) {
+    <div class="categoria-section w-100 p-3 d-flex flex-column justify-content-center align-items-center">
+        <section class="categoria__titulo--section text-center d-flex justify-content-center align-items-center position-relative">
+          <h2 class="categoria__titulo position-relative fw-bolder text-white text-center d-inline-block  ">{{categoria.nombre}}</h2>
+        </section>
 
-	@for (categoria of categoriasVisibles; track $index) {
-		
-		<section class="categoria__titulo--section">
-			<h2 class="categoria__titulo">{{categoria.nombre}}</h2>
-		</section>	
-
-		<div class="row">
-		@for (producto of getProductosPorCategoria(categoria.id_categoria_producto); track $index) {
-			<div class="col-md-4 col-sm-12 pt-3 pb-3">
-				<div class="item" (click)="verDetalle(producto)">
-					<figure class="items__figure">
-						<img class="items__img" [src]="producto.image_url" alt="producto">
-					</figure>
-					<div>
-						<h2 class="titulo__productos">{{producto.nombre}}</h2>
-						<p class="descripcion__productos">{{producto.descripcion}}</p>
-						<p class="price">${{producto.precio}}</p>
-					</div>
-					<button (click)="addToCart(producto); $event.stopPropagation()" class="btn btn-primary custom-btn">Agregar al Carrito</button>	
-				</div>
-			</div>
-		}
-		</div>
-	}
+        <div class="row w-100 pb-3">
+          @for (producto of getProductosPorCategoria(categoria.id_categoria_producto); track $index) {
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 mb-4">
+              <div class="card producto-card d-flex justify-content-center align-items-center  p-2 bg-white overflow-hidden border-0 shadow h-100" (click)="verDetalle(producto)">
+                <div class="card-img-container d-flex justify-content-center align-items-center w-100 overflow-hidden ">
+                  <img class="card-img-top w-100" [src]="producto.image_url" alt="{{producto.nombre}}">
+                </div>
+                <div class="card-body d-flex flex-column">
+                  <h3 class="card-title">{{producto.nombre}}</h3>
+                  <p class="card-text mb-1 text-black">{{producto.descripcion}}</p>
+                  <div class="mt-auto">
+                    <p class="price py-2 px-1">${{producto.precio}}</p>
+                    <button (click)="addToCart(producto); $event.stopPropagation()" 
+                            class="btn btn-agregar w-100 text-white fw-semibold">
+                      <i class="bi bi-cart-plus me-2 "></i>Agregar al Carrito
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+      </div>
+    </div>
+  }
 
   <!-- Modal flotante de detalle -->
-   @if (selectedProducto) {
-	<div class="producto-detalle-modal" (click)="cerrarDetalle()">
-		<div class="modal-content animate-fade" (click)="$event.stopPropagation()">
-		  <span class="close" (click)="cerrarDetalle()">&times;</span>
-		  <img [src]="selectedProducto.image_url" alt="producto" class="detalle-img">
-		  <h2>{{ selectedProducto.nombre }}</h2>
-		  <p>{{ selectedProducto.descripcion }}</p>
-		  <p class="price">${{ selectedProducto.precio }}</p>
-		  <button (click)="addToCart(selectedProducto)" class="btn btn-primary custom-btn">Agregar al carrito</button>
-		</div>
-	  </div>
-   }
-  
+  @if (selectedProducto) {
+    <div class="producto-detalle-modal d-flex flex-column justify-content-center align-items-center w-100" (click)="cerrarDetalle()">
+      <div class="modal-content-productos p-3 text-center w-75 animate-fade hide-scrollbar" (click)="$event.stopPropagation()">
+        <button type="button" class="close" (click)="cerrarDetalle()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="text-center mb-4">
+          <img [src]="selectedProducto.image_url" alt="{{selectedProducto.nombre}}" class="detalle-img w-75 h-auto">
+        </div>
+        <h2 class="titulo-modal-productos">{{ selectedProducto.nombre }}</h2>
+        <p>{{ selectedProducto.descripcion }}</p>
+        <p class="price">${{ selectedProducto.precio }}</p>
+        <div class="text-center">
+          <button (click)="addToCart(selectedProducto)" class="btn btn-agregar btn-lg text-white fw-semibold">
+            <i class="bi bi-cart-plus me-2"></i>Agregar al carrito
+          </button>
+        </div>
+      </div>
+    </div>
+  }
 
 </div>
