@@ -23,6 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-4l#6bdx6tmem#&^&&850i&ny(mfc$etbdj7zn&!!ok3$9c*l#b'
+MERCADOPAGO_ACCESS_TOKEN = "APP_USR-833122140344943-051410-45098cbf690567d10ec9d3bfec64cc08-2437030261"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

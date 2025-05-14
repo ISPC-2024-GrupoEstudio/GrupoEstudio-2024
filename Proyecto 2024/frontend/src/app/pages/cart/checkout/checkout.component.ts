@@ -45,91 +45,57 @@ export class CheckoutComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.cartService.productosCarrito.subscribe(productosCarrito => {
-      this.productosCarrito = productosCarrito;
+  this.cartService.productosCarrito.subscribe(productosCarrito => {
+    this.productosCarrito = productosCarrito;
+  });
+
+  // Inicializa el SDK de MercadoPago
+  this.mp = new window.MercadoPago('APP_USR-5f241e38-0261-4a16-ad5e-d6d28e14ba69'); // Reemplaza por tu clave pública de producción
+
+  // Obtenemos el preferenceId desde el backend
+  const itemsComprados = this.cartService.obtenerProductosCarrito();
+  const itemsTransformados = this.transformarItems(itemsComprados);
+
+  this.authService.getUsername().subscribe((username: string | null) => {
+    if (!username) {
+      this.router.navigate(['/login']);
+      return;
+    }
+    console.log('Items transformados:', itemsTransformados);
+
+    const pedido = {
+    items: itemsTransformados,
+    external_reference: username
+    };
+
+    console.log('Pedido que se envía al backend:', pedido);
+
+    this.http.post<any>('http://localhost:8000/api/preferencia/', pedido).subscribe({
+      next: (response) => {
+        console.log('Respuesta del backend:', response); 
+        const preferenceId = response.preference_id;
+        this.renderMercadoPagoButton(preferenceId);
+      },
+      error: (err) => {
+        console.error('Error al crear la preferencia:', err);
+        this.errorMessage = 'No se pudo iniciar el proceso de pago.';
+      }
     });
-  
-    this.mp = new window.MercadoPago('TEST-b6a47a1d-7ac3-4cbd-9b6b-4419f6198fc9');
-  
-    // Inicializamos el Brick luego de asegurarnos que el DOM está listo
-    setTimeout(() => {
-      this.mp.bricks().create('cardPayment', 'paymentBrick_container', {
-        initialization: {
-          amount: this.calculateTotal() + 20, // Total real
-        },
-        customization: {
-          paymentMethods: {
-            ticket: 'all',
-            bankTransfer: 'all',
-            creditCard: 'all'
-          }
-        },
-        callbacks: {
-          onReady: () => {
-            console.log('Brick cargado correctamente');
-          },
-          onSubmit: (formData: any) => {
-            console.log('Datos del Brick recibidos:', formData);
-          
-            const itemsComprados = this.cartService.obtenerProductosCarrito();
-            const itemsTransformados = this.transformarItems(itemsComprados);
-          
-            if (itemsTransformados.length === 0) {
-              this.errorMessage = 'El carrito está vacío';
-              return;
-            }
-          
-            this.authService.getUsername().subscribe(
-              (username: string | null) => {
-                if (!username) {
-                  this.router.navigate(['/login']);
-                  return;
-                }
-          
-                const pedidoData = {
-                  nombre_usuario: username,
-                  items_comprados: itemsTransformados,
-                  payment_details: {
-                    transaction_amount: this.calculateTotal() + 20,
-                    token: formData.token,
-                    payment_method_id: formData.payment_method_id,
-                    description: 'Compra en Pet Boutique',
-                    installments: formData.installments,
-                    cardholderEmail: formData.payer.email,
-                    cardholderName: formData.payer.name,
-                    identificationType: formData.payer.identification.type,
-                    identificationNumber: formData.payer.identification.number
-                  }
-                };
-                console.log("Datos que se están enviando al backend:", pedidoData);
-          
-                this.http.post('http://localhost:8000/api/checkout/', pedidoData).subscribe(
-                  (                  response: any) => {
-                    console.log('Pago exitoso y pedido registrado:', response);
-                    this.cartService.limpiarCarrito();
-                    this.successMessage = '¡Compra realizada con éxito!';
-                    this.errorMessage = '';
-                  },
-                  (                  error: any) => {
-                    console.error('Error al registrar el pedido:', error);
-                    this.errorMessage = 'Error al procesar el pedido.';
-                  }
-                );
-              },
-              error => {
-                console.error('Error al obtener usuario:', error);
-                this.errorMessage = 'Error al autenticar al usuario';
-              }
-            );
-          },
-          onError: (error: any) => {
-            console.error('Error al cargar el Brick:', error);
-          }
-        }
-      });
-    }, 300); // Pequeño delay para asegurar que el div está en el DOM
+  });
   }
 
+  renderMercadoPagoButton(preferenceId: string): void {
+  this.mp.bricks().create("wallet", "wallet_container", {
+    initialization: {
+      preferenceId: preferenceId
+    },
+    customization: {
+      texts: {
+        valueProp: 'smart_option'
+      }
+    }
+  });
+}
 
 
   calculateTotal(): number {
@@ -139,13 +105,26 @@ export class CheckoutComponent implements OnInit{
   removeFromCart(productoCarritoId: number): void {
     this.cartService.quitarProducto(productoCarritoId);
   }
-  private transformarItems(items: any[]): any[] {
+
+  private transformarItems(items: ICarrito[]): any[] {
+  return items.map(item => ({
+    title: item.producto.nombre,
+    quantity: item.cantidad,
+    unit_price: item.producto.precio
+  }));
+}
+
+
+
+
+
+  /*private transformarItems(items: any[]): any[] {
     // Transforma los items del carrito para que solo contengan id_producto y cantidad
     return items.map(item => ({
       id_producto: item.id_producto,
       cantidad: item.cantidad
     }));
-  }
+  }*/
 
   /*
   onEnviar(event: Event): void {

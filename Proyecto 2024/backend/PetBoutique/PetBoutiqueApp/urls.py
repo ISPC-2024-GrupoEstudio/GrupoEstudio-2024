@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework import routers
 from PetBoutiqueApp import views
-from .views import RoleListCreateAPIView, RoleRetrieveUpdateDestroyAPIView ,ProcessPaymentView,CheckoutView
+from .views import RoleListCreateAPIView, RoleRetrieveUpdateDestroyAPIView ,ProcessPaymentView,CheckoutView, crear_preferencia
 from .views import registrar_usuario, UsuarioPorNombreView
 
 router=routers.DefaultRouter()
@@ -46,6 +46,7 @@ urlpatterns = [
 
     path('auth/usuarios/<str:nombre_usuario>/', UsuarioPorNombreView.as_view(), name='usuario-por-username'),
     path('api/usuarios/<str:nombre_usuario>/', UsuarioPorNombreView.as_view()),
+    path('preferencia/', views.crear_preferencia, name='crear_preferencia'),
 ]
 
 

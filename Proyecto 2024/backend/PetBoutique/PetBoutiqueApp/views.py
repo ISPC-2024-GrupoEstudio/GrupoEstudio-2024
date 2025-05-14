@@ -1,3 +1,5 @@
+import json
+from django.http import JsonResponse
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.response import Response
@@ -25,7 +27,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 import mercadopago
 
 # Importaciones API autenticación
-sdk = mercadopago.SDK("TEST-1790053134983653-050514-62d92a126552d7221b317050972a27c9-2425748384")
+sdk = mercadopago.SDK("APP_USR-833122140344943-051410-45098cbf690567d10ec9d3bfec64cc08-2437030261")
 # Create your views here.
 class ProductoViewSet(viewsets.ModelViewSet):
     queryset = Producto.objects.all()
@@ -300,6 +302,52 @@ class CheckoutView(APIView):
             "pedido_id": pedido.id
         }, status=status.HTTP_200_OK)
     
+@api_view(['POST'])
+def crear_preferencia(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            print("Datos recibidos en crear_preferencia:", data)
+
+            items = data.get("items")
+            if not items or not isinstance(items, list):
+                return JsonResponse({"error": "Lista de items no válida"}, status=400)
+
+            preference_data = {
+                "items": [
+                    {
+                        "title": item["title"],
+                        "quantity": item["quantity"],
+                        "unit_price": float(item["unit_price"]),
+                        "currency_id": "ARS",
+                    } for item in items
+                ],
+                "back_urls": {
+                    "success": "https://tusitio.com/success",
+                    "failure": "https://tusitio.com/failure",
+                    "pending": "https://tusitio.com/pending"
+                },
+                "auto_return": "approved",
+                "external_reference": data.get("external_reference", "pedido_xyz")
+            }
+            print("Preference data enviado a MercadoPago:", preference_data)
+
+            preference_response = sdk.preference().create(preference_data)
+            print("Respuesta de Mercado Pago:", preference_response)
+            preference = preference_response["response"]
+
+            return JsonResponse({
+                "preference_id": preference["id"],
+                "init_point": preference["init_point"]
+            })
+        except KeyError as e:
+            return JsonResponse({"error": f"Falta el campo requerido: {str(e)}"}, status=400)
+        except Exception as e:
+            print("Error al crear preferencia:", str(e))
+            return JsonResponse({"error": f"Error al crear preferencia: {str(e)}"}, status=500)
+
+    return JsonResponse({"error": "Método no permitido"}, status=405)
+
 # Vistas login / logout #####################################################################################
 class LoginView(APIView):
     def post (self, request):
