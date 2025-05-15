@@ -47,8 +47,19 @@ export class CuponService {
       );
   }
 
+  // eliminarCupones(nombre_usuario: string): Observable<any> {
+  //   const token = this.obtenerToken();
+  //   const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  //   return this.http.delete(`${this.apiUrl}/mis-cupones/${nombre_usuario}/`, { headers });
+  // }
   eliminarCupones(nombre_usuario: string): Observable<any> {
     const token = this.obtenerToken();
+
+    if (!token) {
+      console.error('No hay token disponible para eliminar cupones.');
+      throw new Error('Usuario no autenticado');
+    }
+
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.http.delete(`${this.apiUrl}/mis-cupones/${nombre_usuario}/`, { headers });
   }
