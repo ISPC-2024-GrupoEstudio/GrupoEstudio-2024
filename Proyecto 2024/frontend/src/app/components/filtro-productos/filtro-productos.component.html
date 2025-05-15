@@ -1,0 +1,17 @@
+<div class="filtro-container">
+    <select (change)="onCategoriaChange($event)">
+      <option value="">Todas las categorías</option>
+      @for (cat of categorias; track $index) {
+        <option [value]="cat.id_categoria_producto">
+          {{ cat.nombre }}
+        </option>
+      }
+    </select>
+  
+    <input
+      type="text"
+      placeholder="Buscar por nombre o descripción"
+      (input)="onBusquedaChange($event)"
+    />
+  </div>
+  

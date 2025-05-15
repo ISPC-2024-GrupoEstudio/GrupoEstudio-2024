@@ -1,28 +1,47 @@
-<div class="mini-cart">
-  <div class="cart-icon" (click)="toggleCart()">
-    <i class="fa fa-shopping-cart fs-5 me-1" style="color: #202122;"></i>
-    <span class="badge badge-pill badge-danger">{{ productosCarrito.length }}</span>
+<div class="mini-cart position-relative">
+  <!-- Icono del carrito en el navbar -->
+  <div class="cart-icon d-flex align-items-center justify-content-end" (click)="toggleCart()">
+    <i class="fa fa-shopping-cart fs-5 me-2 pe-1" style="color: #202122;"></i>
+    <span class="badge bg-danger rounded-circle">{{ productosCarrito.length }}</span>
   </div>
-  <div class="cart-dropdown" *ngIf="isCartOpen">
-    <div *ngFor="let productoCarrito of productosCarrito" class="p-2 border-bottom d-flex justify-content-between align-items-center">
-      <div>
-        <img [src]="productoCarrito.producto.image_url" class="img-fluid p-2" alt="" style="height: 70px !important;width: 100px !important;">
-      </div>
-      <div class="flex-grow-1 ms-3">
-        <a href="#" class="text-decoration-none text-black fw-semibold">
-          <p class="m-0 p-0">{{ productoCarrito.producto.nombre }}</p>
+
+  <!-- Dropdown flotante a la derecha -->
+  <div class="cart-dropdown shadow-lg bg-white rounded-3 p-3" *ngIf="isCartOpen">
+    <div class="d-flex justify-content-end">
+      <button type="button" class="btn-close" aria-label="Cerrar" (click)="toggleCart()"></button>
+    </div>
+
+    <div *ngFor="let productoCarrito of productosCarrito" class="d-flex align-items-center border-bottom py-2">
+      <img [src]="productoCarrito.producto.image_url" alt="" class="img-thumbnail rounded" style="height: 70px; width: 100px;">
+      <div class="ms-3 flex-grow-1">
+        <a href="#" class="text-decoration-none text-dark fw-semibold">
+          <p class="mb-1">{{ productoCarrito.producto.nombre }}</p>
         </a>
-        <p>1 <i class="fa-solid fa-xmark" style="color: #0d0d0d;"></i> ${{ productoCarrito.producto.precio }}</p>
+        <p class="mb-0 small">1 <i class="fa-solid fa-xmark text-muted"></i> ${{ productoCarrito.producto.precio }}</p>
       </div>
-      <button type="button" class="btn fs-5 closeBtn" (click)="removeFromCart(productoCarrito.id_carrito)"><i  class="fas fa-times" ></i></button>
+      <button type="button" class="btn btn-sm text-danger fs-5" (click)="removeFromCart(productoCarrito.id_carrito)">
+        <i class="fas fa-times"></i>
+      </button>
     </div>
-    <div class="p-2 d-flex justify-content-between">
-      <h6>SubTotal :</h6>
-      <h6>${{ calculateTotal() }}</h6>
+
+    <div *ngIf="cupones.length > 0" class="mt-3">
+      <h6 class="fw-bold text-secondary">Cupones Aplicados</h6>
+      <ul class="list-unstyled small ps-3">
+        <li *ngFor="let cupon of cupones">✔ {{ cupon.nombre }}</li>
+      </ul>
     </div>
-    <div class="d-flex justify-content-evenly mt-2">
-      <button class="btn btn-danger rounded-0 px-3" (click)="checkout()" [routerLink]="['/checkout']">Finalizar compra</button>
+
+    <div class="d-flex justify-content-between mt-3">
+      <span class="fw-bold">Subtotal:</span>
+      <span class="fw-bold">${{ calculateTotal() }}</span>
+    </div>
+
+    <div class="mt-3 text-center">
+      <button class="btn text-white w-100 px-3 rounded-pill fw-semibold"
+              style="background: linear-gradient(to right, #8360c3a2, #2ebf919c);"
+              (click)="checkout()" [routerLink]="['/checkout']">
+        Finalizar compra
+      </button>
     </div>
   </div>
 </div>
-

@@ -14,6 +14,8 @@ import { CuponesComponent } from './pages/dashboard/cupones/cupones.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { CheckoutComponent } from './pages/cart/checkout/checkout.component';
 import { permisosGuard } from './pages/guards/permisos.guard';
+import { PerfilComponent } from './pages/perfil/perfil.component';
+import { EditarPerfilComponent } from './pages/perfil/editar-perfil/editar-perfil.component';
 
 export const routes: Routes = [
     {path: "", component: HomeComponent},
@@ -28,6 +30,9 @@ export const routes: Routes = [
     ]},
     {path:"cupones", component: CuponesComponent},
     {path: "contacto", component: ContactoComponent},
+    {path: "perfil", component: PerfilComponent, children: [
+        {path: "editar-perfil", component: EditarPerfilComponent}
+    ]},
 
     {path: "**", component: NotFoundComponent}
 ];

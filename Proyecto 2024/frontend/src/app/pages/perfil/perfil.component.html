@@ -1,0 +1,83 @@
+<body class="body_perfil">
+    <!-- Mensaje de éxito al guardar -->
+    <div *ngIf="mostrarMensajeExito" class="toast-fixed-center">
+        <div class="toast-content">
+          <span class="toast-text">¡Perfil actualizado correctamente!</span>
+        </div>
+      </div>
+
+    <main class="d-flex flex-column flex-md-row justify-content-start align-items-center text-start">
+        <div class="div_fotoPerfil position-relative">
+            <!--Spinner-->
+            <div *ngIf="cargandoImagen" class="position-absolute w-100 h-100 d-flex justify-content-center align-items-center rounded-circle bg-light bg-opacity-75">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+            </div>
+
+            <img class="rounded-circle border border-white border-3 foto_perfil" [src]="infoUsuario?.fotoPerfil || '../../../assets/imagenes/Perfil/fotoPerfil.png'" alt="foto de perfil del usuario" (load)="onImageLoad()" (error)="onImageError()"/>
+
+            <div class="editar_fotoPerfil bg-white rounded-circle border position-absolute">
+                <input type="file" accept="image/*" (change)="onFileSelected($event)" hidden #fileInput/>
+                <button class="btn_editarFoto btn " (click)="fileInput.click()">
+                    <img src="../../../assets/imagenes/Perfil/editarFoto.png" alt="icono de una camara en color violeta" class="icono_camara">
+                </button>
+            </div>
+        </div>
+        <h1 class="ms-4">{{ username }}</h1>
+    </main>
+    
+    <dl class="info_perfil bg-light col-xxl-6 col-12  flex-column flex-md-row flex-wrap">
+
+        <div class="infoPerfil_div infoPerfil_nombreCompleto mx-auto my-3">
+            <img src="../../../assets/imagenes/Perfil/nombreCompleto.png" alt="icono de una persona en color violeta">
+            <div class="infoPerfil_datos w-100 w-md-75 w-lg-50" >
+                <dt>Nombre y Apellido:</dt>
+                <dd>{{infoUsuario?.nombre && infoUsuario?.apellido ? infoUsuario.nombre + ' ' + infoUsuario.apellido : 'Dato no proporcionado' }}</dd>
+            </div>
+        </div>
+
+        <div class="infoPerfil_div infoPerfil_dni mx-auto my-3">
+            <img src="../../../assets/imagenes/Perfil/dni.png" alt="icono de un documento de identidad en color violeta">
+            <div class="infoPerfil_datos w-100 w-md-75 w-lg-50" >
+                <dt>DNI:</dt>
+                <dd>{{infoUsuario?.numero_documento || 'Dato no proporcionado' }}</dd>
+            </div>
+        </div>
+
+        <div class="infoPerfil_div infoPerfil_email mx-auto my-3">
+            <img src="../../../assets/imagenes/Perfil/email.png" alt="icono de un sobre de carta color violeta">
+            <div class="infoPerfil_datos w-100 w-md-75 w-lg-50" >
+                <dt>Email:</dt>
+                <dd>{{infoUsuario?.email || 'Dato no proporcionado'}}</dd>
+            </div>
+        </div>
+
+        <div class="infoPerfil_div infoPerfil_telefono mx-auto my-3">
+            <img src="../../../assets/imagenes/Perfil/telefono.png" alt="icono de un telefono en color violeta">
+            <div class="infoPerfil_datos w-100 w-md-75 w-lg-50" >
+                <dt>Teléfono:</dt>
+                <dd>{{infoUsuario?.telefono || 'Dato no proporcionado'}}</dd>
+            </div>
+        </div>
+        <div class="editarPerfil">
+            <button class="editarPerfil-btn btn" (click)="abrirModal()">Editar Perfil</button>
+            
+            <!--Modal-->
+            <div class="modal fade " id="editarPerfilModal" tabindex="-1" aria-modal="true" role="dialog">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title">Editar Perfil</h3>
+                            <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body">
+                            <app-editar-perfil (formularioGuardado)="cerrarModal()"></app-editar-perfil>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </dl>
+    
+</body>

@@ -1,15 +1,19 @@
 from django.shortcuts import render
+from rest_framework import status, generics, permissions
+import json
+from django.http import JsonResponse
+from django.shortcuts import redirect, render
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.utils import timezone
 import uuid
 from rest_framework.authentication import SessionAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 # Importaciones para registro usuario
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from .models import CustomUser
 from .serializer import CustomUserSerializer
 # Fin importaciones registro #
@@ -17,12 +21,16 @@ from .models import Roles, Usuario
 from .serializer import RolesSerializer
 from django.db import transaction
 from rest_framework import viewsets
-from .models import Producto, CategoriaProducto, Proveedor, Pedido, EstadoPedido, ProductoXPedido, FormaDePago, TipoEnvio, Carrito
-from .serializer import ProductoSerializer, CategoriaProductoSerializer, ProveedorSerializer, PedidoSerializer, EstadoPedidoSerializer, ProductoXPedidoSerializer, FormaDePagoSerializer, TipoEnvioSerializer, UserSerializer, UsuarioSerializer, CarritoSerializer
+from .models import Producto, CategoriaProducto, Proveedor, Pedido, EstadoPedido, ProductoXPedido, FormaDePago, TipoEnvio, Carrito, Usuario, Cupon, UsuarioCupon
+from .serializer import ProductoSerializer, CategoriaProductoSerializer, ProveedorSerializer, PedidoSerializer, EstadoPedidoSerializer, ProductoXPedidoSerializer, FormaDePagoSerializer, TipoEnvioSerializer, UserSerializer, UsuarioSerializer, CarritoSerializer, CuponSerializer, UsuarioCuponSerializer
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework import serializers
+import mercadopago
 
 # Importaciones API autenticación
-
+sdk = mercadopago.SDK("APP_USR-833122140344943-051410-45098cbf690567d10ec9d3bfec64cc08-2437030261")
 # Create your views here.
 class ProductoViewSet(viewsets.ModelViewSet):
     queryset = Producto.objects.all()
@@ -134,6 +142,7 @@ class LogoutView(APIView):
         return Response(status=status.HTTP_200_OK)
     
 class RegisterView (APIView):
+    permission_classes = [AllowAny]
     def post (self, request):
         nuevo_usuario = request.data
         nuevo_usuario["id_rol"] = 2
@@ -176,6 +185,8 @@ class DeleteFromCartView (APIView):
         return Response(status= status.HTTP_200_OK)
         
 class CartView(APIView):
+    authentication_classes = [JWTAuthentication]  # Añadimos la autenticación con JWT
+    permission_classes = [IsAuthenticated]  # Solo usuarios autenticados pueden acceder
     def get(self, request, nombre_usuario):
         carritos = Carrito.objects.filter(nombre_usuario=nombre_usuario).select_related('id_producto')
         carrito_serializer = CarritoSerializer(carritos, many=True)
@@ -193,8 +204,8 @@ class CartView(APIView):
 
 class CheckoutView(APIView):
     def post(self, request):
-        items_comprados = request.data.get('items_comprados', [])  # Obtener los productos comprados
-        payment_details = request.data.get('payment_details', {})  # Detalles del pago
+        items_comprados = request.data.get('items_comprados', [])
+        payment_details = request.data.get('payment_details', {})
         nombre_usuario = request.data.get("nombre_usuario")
             
         if not items_comprados or not payment_details or not nombre_usuario:
@@ -205,54 +216,80 @@ class CheckoutView(APIView):
         except User.DoesNotExist:
             return Response({"error": f"Usuario con nombre {nombre_usuario} no encontrado"}, status=status.HTTP_404_NOT_FOUND)
 
-        # Validar detalles de pago
-        if not all(key in payment_details for key in ['cardNumber', 'expirationDate', 'cvv']):
-            return Response({"error": "Los detalles de pago son incompletos"}, status=status.HTTP_400_BAD_REQUEST)
+        required_fields = ["transaction_amount", "token", "payment_method_id", "cardholderEmail", "identificationType", "identificationNumber"]
+        for field in required_fields:
+            if not payment_details.get(field):
+                return Response({"error": f"Falta el campo {field} en los detalles de pago"}, status=status.HTTP_400_BAD_REQUEST)
+        # Procesar pago con Mercado Pago
+        try:
+            payment_data = {
+                "transaction_amount": float(payment_details.get("transaction_amount")),
+                "token": payment_details.get("token"),
+                "description": payment_details.get("description", "Compra en Pet Boutique"),
+                "installments": int(payment_details.get("installments", 1)),
+                "payment_method_id": payment_details.get("payment_method_id"),
+                "payer": {
+                    "email": payment_details.get("cardholderEmail"),
+                    "first_name": payment_details.get("cardholderName", "Nombre no proporcionado"),
+                    "identification": {
+                        "type": payment_details.get("identificationType"),
+                        "number": payment_details.get("identificationNumber")
+                    }
+                }
+            }
+            print("PAYMENT DATA:", payment_data)
 
-        process_payment_response = self.process_payment(payment_details)  # Procesar el pago
-        if process_payment_response.status_code != status.HTTP_200_OK:
-            return process_payment_response  # Si el pago falla, retornar la respuesta de la pasarela de pago
+            payment_response = sdk.payment().create(payment_data)
+            print(payment_response)
+            payment = payment_response["response"]
 
+            if payment.get("status") != "approved":
+                return Response({
+            "message": "Pago rechazado por Mercado Pago",
+            "status": payment.get("status"),
+            "status_detail": payment.get("status_detail")
+            }, status=402)
+
+        except Exception as e:
+            return Response({"error": "Error al procesar el pago: " + str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        # Registrar pedido solo si el pago fue aprobado
         try:
             with transaction.atomic():
-                # Actualizar el stock de los productos comprados
                 for item in items_comprados:
                     producto_id = item.get('id_producto')
                     cantidad = item.get('cantidad')
-                      # Verificar si el producto existe
                     try:
                         producto = Producto.objects.get(id_producto=producto_id)
                     except Producto.DoesNotExist:
                         return Response({"error": f"Producto con id {producto_id} no encontrado"}, status=status.HTTP_404_NOT_FOUND)
                     
-                    # Verificar stock suficiente
                     if producto.stock_actual < cantidad:
                         return Response({"error": f"Stock insuficiente para el producto {producto_id}"}, status=status.HTTP_400_BAD_REQUEST)
+                    
                     producto.stock_actual -= cantidad
                     producto.save()
 
-                # obtiene el ultimo numero de pedido y le suma 1
                 ultimo_pedido = Pedido.objects.all().order_by('-numero_pedido').first()
-                numero_pedido = ultimo_pedido.numero_pedido + 1  
+                numero_pedido = ultimo_pedido.numero_pedido + 1 if ultimo_pedido else 1
 
                 pedido_data = {
                     'nombre_usuario': nombre_usuario,
                     'fecha': timezone.now(),
-                    'id_estado_pedido': 1,  # Puedes establecer un valor predeterminado
-                    'numero_pedido': numero_pedido,  # Necesitarás una lógica para generar un número de pedido único
+                    'id_estado_pedido': 1,
+                    'numero_pedido': numero_pedido,
                 }
 
                 pedido_serializer = PedidoSerializer(data=pedido_data)
                 if pedido_serializer.is_valid():
                     pedido = pedido_serializer.save()
                     for item in items_comprados:
-                        producto_id = item.get('id_producto')
-                        producto = Producto.objects.get(id_producto=producto_id)
+                        producto = Producto.objects.get(id_producto=item.get('id_producto'))
                         ProductoXPedido.objects.create(
                             id_producto=producto,
                             id_pedido=pedido,
                             cantidad=item.get('cantidad'),
-                            precio=Producto.objects.get(id_producto=item.get('id_producto')).precio
+                            precio=producto.precio
                         )
                 else:
                     return Response({"error": pedido_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
@@ -260,16 +297,140 @@ class CheckoutView(APIView):
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        return Response({"message": "Proceso de pago completado y stock actualizado correctamente"}, status=status.HTTP_200_OK)
+        Carrito.objects.filter(nombre_usuario=nombre_usuario).delete()
 
-    def process_payment(self, payment_details):
-        card_number = payment_details.get('cardNumber')
-        expiration_date = payment_details.get('expirationDate')
-        cvv = payment_details.get('cvv')
-        if not card_number or not expiration_date or not cvv:
-            return Response ({"error": "Detalles de pagos incompletos"}, status=status.HTTP_400_BAD_REQUEST)
-        return Response ({"message": "Pago procesado exitosamente"}, status=status.HTTP_200_OK) 
+        return Response({
+            "message": "Pago aprobado y pedido registrado correctamente",
+            "payment_id": payment["id"],
+            "pedido_id": pedido.id
+        }, status=status.HTTP_200_OK)
     
+@api_view(['POST'])
+def crear_preferencia(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            print("Datos recibidos en crear_preferencia:", data)
+
+            items = data.get("items")
+            if not items or not isinstance(items, list):
+                return JsonResponse({"error": "Lista de items no válida"}, status=400)
+            
+            external_reference = data.get("external_reference")
+            print("External Reference enviada a MP:", external_reference)
+
+
+            preference_data = {
+                "items": [
+                    {
+                        "title": item["title"],
+                        "quantity": item["quantity"],
+                        "unit_price": float(item["unit_price"]),
+                        "currency_id": "ARS",
+                    } for item in items
+                ],
+                "back_urls": {
+                    "success": "https://ef8c-2803-9800-9880-b71e-1cf7-dfe6-d28d-39fe.ngrok-free.app/api/pago-exitoso/",
+                    "failure": "https://tusitio.com/failure",
+                    "pending": "https://tusitio.com/pending"
+                },
+                "auto_return": "approved",
+                "external_reference": external_reference if external_reference else "no-reference"
+
+            }
+            print("Preference data enviado a MercadoPago:", preference_data)
+            print("External Reference enviada a MP:", external_reference)
+
+            preference_response = sdk.preference().create(preference_data)
+            print("Respuesta de Mercado Pago:", preference_response)
+            preference = preference_response["response"]
+
+            return JsonResponse({
+                "preference_id": preference["id"],
+                "init_point": preference["init_point"]
+            })
+        except KeyError as e:
+            return JsonResponse({"error": f"Falta el campo requerido: {str(e)}"}, status=400)
+        except Exception as e:
+            print("Error al crear preferencia:", str(e))
+            return JsonResponse({"error": f"Error al crear preferencia: {str(e)}"}, status=500)
+
+    return JsonResponse({"error": "Método no permitido"}, status=405)
+
+
+def procesar_pedido(nombre_usuario):
+    carrito = Carrito.objects.filter(nombre_usuario=nombre_usuario)
+
+    if not carrito.exists():
+        raise Exception("El carrito está vacío o no existe.")
+
+    items_comprados = [
+        {
+            'id_producto': item.id_producto.id_producto,
+            'cantidad': item.cantidad
+        } for item in carrito
+    ]
+
+    with transaction.atomic():
+        for item in items_comprados:
+            producto = Producto.objects.get(id_producto=item['id_producto'])
+            if producto.stock_actual < item['cantidad']:
+                raise Exception(f"Stock insuficiente para el producto {producto.nombre}")
+            producto.stock_actual -= item['cantidad']
+            producto.save()
+
+        ultimo_pedido = Pedido.objects.all().order_by('-numero_pedido').first()
+        numero_pedido = (ultimo_pedido.numero_pedido + 1) if ultimo_pedido else 1
+
+        pedido_data = {
+            'nombre_usuario': nombre_usuario,
+            'fecha': timezone.now(),
+            'id_estado_pedido': 1,
+            'numero_pedido': numero_pedido
+        }
+
+        pedido_serializer = PedidoSerializer(data=pedido_data)
+        if pedido_serializer.is_valid():
+            pedido = pedido_serializer.save()
+        else:
+            raise Exception(f"Error al crear el pedido: {pedido_serializer.errors}")
+
+        for item in items_comprados:
+            producto = Producto.objects.get(id_producto=item['id_producto'])
+            ProductoXPedido.objects.create(
+                id_producto=producto,
+                id_pedido=pedido,
+                cantidad=item['cantidad'],
+                precio=producto.precio
+            )
+
+        carrito.delete()
+
+
+@api_view(['GET'])
+def procesar_pago_exitoso(request):
+    print("Procesando el pago...")
+    print("Datos recibidos:", request.GET)
+
+    external_reference = request.query_params.get('external_reference') # nombre_usuario
+    print("Referencia externa recibida:", external_reference)
+
+    if not external_reference:
+        return JsonResponse({'error': 'Referencia externa no recibida'}, status=400)
+
+    try:
+        procesar_pedido(external_reference)
+        print("Pedido procesado correctamente")
+        return redirect('http://localhost:4200/dashboard')
+    except Exception as e:
+        print("Error al procesar el pedido:", str(e))
+        return JsonResponse({'error': str(e)}, status=500)
+
+
+
+
+
+
 # Vistas login / logout #####################################################################################
 class LoginView(APIView):
     def post (self, request):
@@ -281,13 +442,13 @@ class LoginView(APIView):
 
         # Si es correcto, añadimos a la request la información de sesión
         if user:
-            login(request, user)
-            return Response(
-                status=status.HTTP_200_OK)
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+            }, status=status.HTTP_200_OK)
         
-        # Si no es correcto, devolvemos un error en la petición
-        return Response(
-            status=status.HTTP_404_NOT_FOUND)
+        return Response({'error': 'Credenciales inválidas'}, status=status.HTTP_401_UNAUTHORIZED)
 
 class LogoutView(APIView):
     def post(self, request):
@@ -298,6 +459,7 @@ class LogoutView(APIView):
         return Response(status=status.HTTP_200_OK)
     
 class RegisterView (APIView):
+    permission_classes = [AllowAny]
     def post (self, request):
         usuario_serializer = UsuarioSerializer(data = request.data)
         admin_user_data =  {
@@ -316,6 +478,29 @@ class RegisterView (APIView):
             return Response(usuario_serializer.data, status= status.HTTP_201_CREATED)
         else:
             return Response(admin_user_serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+
+class UsuarioPorNombreView(APIView):
+    permission_clases = [IsAuthenticated]
+
+    def get(self, request, nombre_usuario):
+        try:
+            usuario = Usuario.objects.get(nombre_usuario=nombre_usuario)
+            serializer = UsuarioSerializer(usuario)
+            return Response(serializer.data)
+        except Usuario.DoesNotExist:
+            return Response({"error": "Usuario no encontrado"}, status=404)
+    
+    def put(self, request, nombre_usuario):
+        try:
+            usuario = Usuario.objects.get(nombre_usuario=nombre_usuario)
+        except Usuario.DoesNotExist:
+            return Response({'error': 'Usuario no encontrado'}, status=404)
+    
+        serializer = UsuarioSerializer(usuario, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
 
 # Para registrar usuarios en BDD
 @api_view(['POST'])
@@ -347,4 +532,104 @@ def registrar_usuario(request):
             user.delete()  # Si el perfil no es válido, borramos el usuario creado
             return Response(custom_user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UsuarioViewSet(viewsets.ModelViewSet):
+    queryset = Usuario.objects.all()
+    serializer_class = UsuarioSerializer 
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def obtener_user_por_username(request, nombre_usuario):
+    try:
+        usuario = Usuario.objects.get(nombre_usuario=nombre_usuario)
+    except Usuario.DoesNotExist:
+        return Response({'error': 'Usuario no encontrado'}, status=404)
+    
+    if request.method == 'GET':
+        serializer = UsuarioSerializer(usuario)
+        return Response(serializer.data)
+    
+    elif request.method == 'PUT':
+        serializer = UsuarioSerializer(usuario, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+    
+    
+class CuponViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Cupon.objects.all()
+    serializer_class = CuponSerializer
+
+class UsuarioCuponListCreateView(generics.RetrieveUpdateAPIView):
+    serializer_class = UsuarioCuponSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+    
+@api_view(['GET'])
+def obtener_usuario(request, username):
+    try:
+        usuario = User.objects.get(username=username)
+        serializer = UsuarioSerializer(usuario)
+        return Response(serializer.data)
+    except User.DoesNotExist:
+        return Response({"error": "Usuario no encontrado"}, status=404)
+
+class CuponSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Cupon
+        fields = ['id', 'nombre', 'descripcion', 'tipo_descuento', 'valor_descuento', 'imagen_url', 'fecha_vencimiento']
+
+
+class MisCuponesAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, nombre_usuario=None):
+        if nombre_usuario is None:
+            # Si no se pasa el nombre de usuario en la URL, usa el usuario autenticado
+            nombre_usuario = request.user.username  
+
+        # Filtra los cupones del usuario
+        cupones_usuario = UsuarioCupon.objects.filter(usuario__nombre_usuario=nombre_usuario)
         
+        # Obtiene los cupones completos (no solo los IDs)
+        cupones = [cupon.cupon for cupon in cupones_usuario]
+
+        # Serializa los cupones completos
+        cupones_serializados = CuponSerializer(cupones, many=True)
+
+        return Response(cupones_serializados.data)
+
+    def post(self, request):
+        username = request.user.username
+        cupon_id = request.data.get('cupon_id')
+
+        try:
+            usuario = Usuario.objects.get(nombre_usuario=username)
+            cupon = Cupon.objects.get(id=cupon_id)
+            # Crear relación si no existe
+            usuario_cupon, created = UsuarioCupon.objects.get_or_create(usuario=usuario, cupon=cupon)
+            if not created:
+                return Response({'mensaje': 'El usuario ya tiene este cupón'}, status=200)
+            return Response({'mensaje': 'Cupón agregado correctamente'})
+        except Usuario.DoesNotExist:
+            return Response({'error': 'Usuario no encontrado'}, status=404)
+        except Cupon.DoesNotExist:
+            return Response({'error': 'Cupón no encontrado'}, status=404)        
+
+    def delete(self, request, nombre_usuario=None):
+        if nombre_usuario is None:
+            nombre_usuario = request.user.username
+
+        try:
+            usuario = Usuario.objects.get(nombre_usuario=nombre_usuario)
+        except Usuario.DoesNotExist:
+            return Response({'error': 'Usuario no encontrado'}, status=404)
+
+        relaciones = UsuarioCupon.objects.filter(usuario=usuario)
+        cantidad = relaciones.count()
+        relaciones.delete()
+
+        return Response({'mensaje': f'Se eliminaron {cantidad} cupon(es) del usuario.'}, status=200)
