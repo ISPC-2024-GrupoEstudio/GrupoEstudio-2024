@@ -16,6 +16,9 @@ import { AuthService } from '../../../services/auth.service';
 import { CuponAplicado } from '../../dashboard/cupones/cupon-aplicado';
 import { CuponService } from '../../../services/cupon.service';
 import { HttpClient } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { AfterViewInit } from '@angular/core';
 
 @Component({
   selector: 'app-checkout',
@@ -24,7 +27,7 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.css'
 })
-export class CheckoutComponent implements OnInit{
+export class CheckoutComponent implements AfterViewInit{
   successMessage: string = ''; // Inicialización para evitar errores de tipo indefinido
   errorMessage: string = ''; // Inicialización para evitar errores de tipo indefinido
 
@@ -38,8 +41,9 @@ export class CheckoutComponent implements OnInit{
   constructor(private _formBuilder: FormBuilder,
     private cartService: CartService,
     private authService : AuthService, 
+    private cuponService : CuponService, 
     private router: Router,
-    private http: HttpClient) {
+    private http: HttpClient,) {
     this.form = this._formBuilder.group({
       name: ['', Validators.required],
       cardNumber: ['', [Validators.required, Validators.minLength(19), Validators.maxLength(19)]],
@@ -47,11 +51,28 @@ export class CheckoutComponent implements OnInit{
       cvv: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
     });
   }
+  ngAfterViewInit(): void {
+  const walletContainer = document.getElementById('wallet_container');
+  if (walletContainer) {
+    walletContainer.addEventListener('click', (event) => {
+      event.preventDefault();    
+      event.stopPropagation();     
+
+      console.log('Click detectado en wallet_container');
+      this.pagarConMercadoPago();
+    });
+  }
+}
+
 
   ngOnInit(): void {
   this.cartService.productosCarrito.subscribe(productosCarrito => {
     this.productosCarrito = productosCarrito;
   });
+
+  
+  
+
   // Simulación: ejemplo de cupón aplicado
   this.descuento = 10; // 10% de descuento
   this.tipoDescuento = 'porcentaje'; // o 'monto'
@@ -144,9 +165,10 @@ calculateSubtotal(): number {
 calculateTotalFinal(): number {
   const subtotal = this.calculateSubtotal();
   const descuento = this.getDescuentoTotal();
-  const envio = 20.00; // por ejemplo
+  // const envio = 20.00; 
 
-  const totalFinal = subtotal - descuento + envio;
+  // const totalFinal = subtotal - descuento + envio;
+  const totalFinal = subtotal - descuento;
   return totalFinal < 0 ? 0 : totalFinal;
 }
 
@@ -168,143 +190,127 @@ calculateTotalFinal(): number {
     this.cartService.quitarProducto(productoCarritoId);
   }
 
+//   private transformarItems(items: ICarrito[]): any[] {
+//   return items.map(item => ({
+//     title: item.producto.nombre,
+//     quantity: item.cantidad,
+//     unit_price: item.producto.precio
+//   }));
+// }
   private transformarItems(items: ICarrito[]): any[] {
-  return items.map(item => ({
-    title: item.producto.nombre,
-    quantity: item.cantidad,
-    unit_price: item.producto.precio
-  }));
-}
-
-
-
-
-
-  /*private transformarItems(items: any[]): any[] {
-    // Transforma los items del carrito para que solo contengan id_producto y cantidad
-    return items.map(item => ({
-      id_producto: item.id_producto,
-      cantidad: item.cantidad
+    const itemsTransformados = items.map(item => ({
+      title: item.producto.nombre,
+      quantity: item.cantidad,
+      unit_price: item.producto.precio
     }));
-  }*/
 
-  /*
-  onEnviar(event: Event): void {
-    console.log('Botón de envío clickeado'); // Verificar si la función se ejecuta al hacer clic en el botón
-    event.preventDefault();
-    if (this.form.valid) {
-        console.log('Formulario válido'); // Verificar que el formulario es válido
-        const paymentDetails = {
-            cardNumber: this.form.value.cardNumber.replace(/\s+/g, ''),
-            expirationDate: this.form.value.expiration,
-            cvv: this.form.value.cvv
-        };
+    const descuentoTotal = this.getDescuentoTotal();
 
-      const itemsComprados: any[] = this.cartService.obtenerProductosCarrito();
-      console.log('Items Comprados antes de transformación:', itemsComprados);  // Verificar productos antes de transformación
+    if (descuentoTotal > 0) {
+      itemsTransformados.push({
+        title: 'Descuento',
+        quantity: 1,
+        unit_price: -descuentoTotal 
+      });
+    }
 
-      // Transformar los items comprados para enviar solo id_producto y cantidad
-      const itemsCompradosTransformados = this.transformarItems(itemsComprados);
-      console.log('Items Comprados después de transformación:', itemsCompradosTransformados);  // Verificar productos después de transformación
-
-        console.log('Payment Details:', paymentDetails);  // Verificar detalles de pago
-
-        if (itemsCompradosTransformados.length === 0) {
-            console.log('El carrito está vacío'); // Verificar si hay productos en el carrito
-            this.errorMessage = 'El carrito está vacío';
-            return;
-        }
-        this.authService.getUsername().subscribe(
-          (username: string | null) => { // Inicio del suscribe de getUsername()
-            if (username) {
-              console.log('Usuario autenticado:', username);
-              const pedidoData = {
-                nombre_usuario: username,
-                items_comprados: itemsCompradosTransformados,
-                payment_details: paymentDetails
-              };
-    
-              // Hacer checkout de los productos
-              this.cartService.checkout(pedidoData).subscribe(
-                data => { // Inicio del suscribe de checkout()
-                  console.log('Respuesta del servidor:', data);
-                  this.successMessage = 'Procesamiento de pago exitoso';
-                  this.errorMessage = ''; // Limpiar mensaje de error si hubiera
-                  this.form.reset(); // Reiniciar formulario después de éxito
-                  this.cartService.limpiarCarrito();
-                  this.cartService.limpiarCupones();
-
-                   //Eliminar cupones desde backend
-                  this.cuponService.eliminarCupones(username).subscribe({
-                    next: (res) => {
-                      console.log('Cupones del usuario eliminados:', res.mensaje);
-                    },
-                    error: (err) => {
-                      console.error('Error al eliminar los cupones del usuario:', err);
-                    }
-                  });
-                },
-                error => { // Fin del suscribe de checkout(), inicio del error handler
-                  console.log('Error del servidor:', error);
-                  this.errorMessage = 'Error al procesar el pago';
-                  this.successMessage = ''; // Limpiar mensaje de éxito si hubiera
-                } // Fin del error handler
-              ); // Fin del suscribe de checkout()
-    
-            } else {
-              // Si no hay usuario autenticado, manejar el caso aquí
-              console.log('Usuario no autenticado');
-              this.errorMessage = 'Usuario no autenticado';
-              // Puedes redirigir a la página de inicio de sesión u otra acción
-              this.router.navigate(['/login']);
-            }
-          }, // Fin del suscribe de getUsername(), inicio del error handler
-          error => {
-            console.log('Error al obtener el nombre de usuario:', error);
-            this.errorMessage = 'Error al obtener el nombre de usuario';
-            // Manejar el error si falla la obtención del nombre de usuario
-          } // Fin del error handler
-        ); // Fin del suscribe de getUsername()
-    
-      } else {
-        console.log('Formulario inválido');
-        this.form.markAllAsTouched(); // Marcar todos los campos del formulario como tocados
-        this.logFormErrors(); // Aquí podrías llamar a una función para manejar los errores del formulario si fuera necesario
-      }
-    }*/
-
-
-  irAlDashboard(): void {
-    this.router.navigate(['/dashboard']); // Redirigir al dashboard
+    return itemsTransformados;
   }
+
+
+irAlDashboard(): void {
+  this.router.navigate(['http://localhost:4200/']);
+}
+
 logFormErrors(): void {
-    Object.keys(this.form.controls).forEach(key => {
-        const controlErrors = this.form.get(key)?.errors;
-        if (controlErrors) {
-            Object.keys(controlErrors).forEach(keyError => {
-                console.log('Error en el control ' + key + ': ' + keyError);
-            });
+  Object.keys(this.form.controls).forEach(key => {
+    const controlErrors = this.form.get(key)?.errors;
+    if (controlErrors) {
+      Object.keys(controlErrors).forEach(keyError => {
+        console.log('Error en el control ' + key + ': ' + keyError);
+      });
+    }
+  });
+}
+
+handlePagoExitoso(): void {
+  this.authService.getUsername().subscribe({
+    next: (username: string | null) => {
+      if (!username) {
+        this.errorMessage = 'Usuario no autenticado';
+        return;
+      }
+
+      this.http.get<any>('http://localhost:8000/api/pago-exitoso').subscribe({
+        next: (response) => {
+          if (response.message === 'Pedido procesado correctamente') {
+            console.log('Pago exitoso');
+          } else {
+            console.warn('Hubo un problema con el procesamiento del pago.');
+          }
+        },
+        error: (err) => {
+          console.error('Error al verificar el pago:', err);
+          this.errorMessage = 'Hubo un error al verificar el pago.';
+        },
+        complete: () => {
+          this.cuponService.eliminarCupones(username).subscribe({
+            next: (res: any) => {
+              console.log('Cupones del usuario eliminados:', res.mensaje);
+              this.irAlInicio();
+            },
+            error: (err: any) => {
+              console.error('Error al eliminar cupones:', err);
+              this.irAlInicio();
+            }
+          });
         }
-    });
+      });
+    },
+    error: (err) => {
+      console.error('Error al obtener el nombre de usuario:', err);
+      this.errorMessage = 'Error al obtener el nombre de usuario';
+    }
+  });
 }
 
 
- handlePagoExitoso(): void {
-    // Verificar si el pago fue exitoso
-    this.http.get<any>('http://localhost:8000/api/pago-exitoso').subscribe({
-      next: (response) => {
-        if (response.message === 'Pedido procesado correctamente') {
-          this.irAlDashboard(); // Redirigir al dashboard
-        } else {
-          this.errorMessage = 'Hubo un problema con el procesamiento del pago.';
-        }
-      },
-      error: (err) => {
-        console.error('Error al verificar el pago:', err);
-        this.errorMessage = 'Hubo un error al verificar el pago.';
+irAlInicio(): void {
+  this.router.navigate(['/']);
+}
+
+
+eliminarCupones(username: string): Observable<any> {
+  return this.http.delete(`http://localhost:8000/api/mis-cupones/${username}/`);
+}
+
+
+pagarConMercadoPago(): void {
+  this.authService.getUsername().subscribe({
+    next: (username: string | null) => {
+      if (!username) {
+        console.error('Usuario no autenticado');
+        return;
       }
-    });
-  }
+      
+      console.log('Botón clickeado, eliminando cupones para:', username);
+
+      // Llamamos a eliminar cupones
+      this.cuponService.eliminarCupones(username).subscribe({
+        next: (res: any) => {
+          console.log('Cupones eliminados:', res.mensaje);
+          
+        },
+        error: (err) => {
+          console.error('Error eliminando cupones:', err);
+        }
+      });
+    },
+    error: (err) => {
+      console.error('Error obteniendo usuario:', err);
+    }
+  });
+}
 
 
 
