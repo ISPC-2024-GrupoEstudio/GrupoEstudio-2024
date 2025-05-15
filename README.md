@@ -107,6 +107,8 @@ npm install
 # Ejecutar servidor de desarrollo
 ng serve
 ```
+Si la aplicación se levanta de forma local, debera levantar el servidor de NGROK para que funcione mercado pago y cambiar en views.py la dirección que le sale en NGROK en el succes de crear_preferencia
+
 La aplicación estará disponible en http://localhost:4200/
 
 El backend en http://127.0.0.1:8000/
