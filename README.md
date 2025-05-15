@@ -1,26 +1,39 @@
 # 🐾 Pet Boutique - Tienda en línea de productos para mascotas
-Pet Boutique es una aplicación web de e-commerce desarrollada como proyecto académico para la Tecnicatura en Desarrollo Web y Aplicaciones Digitales del Instituto Superior Politécnico Córdoba (ISPC). La tienda permite a los usuarios explorar, comprar productos para mascotas y gestionar su perfil, ofreciendo una experiencia completa de compra.
+Pet Boutique es una **aplicación web de e-commerce** desarrollada como proyecto académico para la Tecnicatura en Desarrollo Web y Aplicaciones Digitales del Instituto Superior Politécnico Córdoba (ISPC). La tienda permite a los usuarios explorar, comprar productos para mascotas y gestionar su perfil, ofreciendo una experiencia completa de compra.
 
 ## 🌐 Descripción General
 Esta aplicación simula una tienda en línea especializada en productos para mascotas, incluyendo juguetes, accesorios, indumentaria, entre otros. Está pensada como un entorno de práctica para aplicar los conocimientos adquiridos en tecnologías web modernas, y está orientada a usuarios interesados en realizar compras simuladas, gestionar sus perfiles y explorar funcionalidades de un sistema completo de e-commerce.
 
 ## 🚀 Funcionalidades Principales
-✅ **Landing Page:** Los usuarios cuentan con una landing page que tiene una pequeña reseña de la empresa y el mapa de su ubicación.  
+✅ **Landing Page:** Los usuarios cuentan con una landing page que tiene una pequeña reseña de la empresa y el mapa de su ubicación. 
+
 ✅ **Catálogo de Productos:** Los usuarios pueden navegar por una amplia selección de productos que incluyen indumentaria, juguetes, accesorios y más, o elegir buscar un producto específico por su nombre o descripción.  
+
 ✅ **Carrito de compras y proceso de checkout:** Los usuarios registrados tienen la funcionalidad disponible para agregar productos al carrito y después comprarlos a través de una pasarela de pagos simulada.  
+
 ✅ **Dashboard:** Los usuarios registrados tienen a su disposición un dashboard que muestra el historial de sus compras realizadas y sus cupones disponibles.  
+
 ✅ **Registro:** Los usuarios pueden registrarse en la plataforma y acceder a su cuenta para poder realizar sus compras.  
+
 ✅ **Login:** Los usuarios pueden iniciar sesión con las credenciales obtenidas del registro.  
+
 ✅ **Perfil:** Los usuarios registrados cuentan con esta funcionalidad para poder editar su foto de perfil y sus datos personales si así lo desean y poder visualizarlos en cualquier momento.  
+
 ✅ **Contacto:** Los usuarios pueden poner sus datos para facilitar el contacto, y tienen facilitado los números de contacto si ellos quisieran contactarse con la empresa directamente. Así mismo los usuarios registrados cuentan con un formulario precompletado con sus datos.  
+
 ✅ **Versión móvil:** Que redirige a la versión móvil del proyecto.  
 
 ## 🛠️ Tecnologías Utilizadas
-- Angular CLI 17 → Frontend web SPA  
-- Django 4.2 → Backend y API REST  
-- MySQL Workbench → Base de datos relacional  
-- Node.js → Dependencias frontend  
-- Python (virtualenv) → Entorno virtual backend  
+- Angular CLI 17 → Frontend web SPA
+  
+- Django 4.2 → Backend y API REST
+  
+- MySQL Workbench → Base de datos relacional
+  
+- Node.js → Dependencias frontend
+  
+- Python (virtualenv) → Entorno virtual backend
+  
 - Cloudinary → Gestión de imágenes de perfil  
 
 ## 📷 Capturas de Pantalla
@@ -51,16 +64,16 @@ Esta aplicación simula una tienda en línea especializada en productos para mas
 ![Página de Perfil](./Proyecto%202024/frontend/src/assets/imagenes/Readme-Capturas/perfil.png)
 
 ## 💻 Instrucciones de Instalación y Ejecución Local
-1. Clonar el repositorio
+**1.** Clonar el repositorio
 ```
 git clone https://github.com/tu-usuario/pet-boutique.git
 cd pet-boutique
 ```
-2. Backend (Django)
+**2.** Backend (Django)
 ```
 cd backend/PetBoutique
 ```
-3. Crear entorno virtual e instalar dependencias
+**3.** Crear entorno virtual e instalar dependencias
 ```
 python -m venv miEntornoVale
 source miEntornoVale/bin/activate  # En Windows: miEntornoVale\Scripts\activate
@@ -68,7 +81,7 @@ source miEntornoVale/bin/activate  # En Windows: miEntornoVale\Scripts\activate
 # Instalar dependencias
 pip install -r requirements.txt
 ```
-4. Configurar base de datos
+**4.** Configurar base de datos
 ```
 # Crear una base de datos MySQL llamada "petboutique"
 # Importar el archivo SQL proporcionado (por ejemplo desde MySQL Workbench)
@@ -79,15 +92,15 @@ pip install -r requirements.txt
 python manage.py migrate
 python manage.py createsuperuser
 ```
-5. Ejecutar servidor backend
+**5.** Ejecutar servidor backend
 ```
 python manage.py runserver
 ```
-6. Frontend (Angular)
+**6.** Frontend (Angular)
 ```
 cd frontend/pet-boutique
 ```
-7. Instalar dependencias y ejecutar servidor
+**7.** Instalar dependencias y ejecutar servidor
 ```
 npm install
 
@@ -95,6 +108,7 @@ npm install
 ng serve
 ```
 La aplicación estará disponible en http://localhost:4200/
+
 El backend en http://127.0.0.1:8000/
 
 ## 📁 Estructura del Proyecto
@@ -234,7 +248,7 @@ GrupoEstudio-2024/
 - [Django Docs](https://docs.djangoproject.com/)
 - [Cloudinary](https://cloudinary.com/)
 - [MySQL Workbench](https://dev.mysql.com/downloads/workbench/)
-- [Versión móvil del proyecto](https://github.com/tu-usuario/pet-boutique-movil) 
+- [Versión móvil del proyecto]([https://github.com/tu-usuario/pet-boutique-movil](https://github.com/ISPC-2024-GrupoEstudio/GrupoEstudio-Mobile2024)) 
 
 ## 👥 Autores / Colaboradores
 - Florencia Noel Carrillo - [@FlorenciaCarrilo]
