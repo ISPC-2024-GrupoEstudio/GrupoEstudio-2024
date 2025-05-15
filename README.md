@@ -75,8 +75,8 @@ cd backend/PetBoutique
 ```
 **3.** Crear entorno virtual e instalar dependencias
 ```
-python -m venv miEntornoVale
-source miEntornoVale/bin/activate  # En Windows: miEntornoVale\Scripts\activate
+python -m venv miEntorno
+source miEntorno/bin/activate  # En Windows: miEntorno\Scripts\activate
 
 # Instalar dependencias
 pip install -r requirements.txt
