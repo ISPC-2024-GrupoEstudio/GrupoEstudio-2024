@@ -248,16 +248,16 @@ GrupoEstudio-2024/
 - [Django Docs](https://docs.djangoproject.com/)
 - [Cloudinary](https://cloudinary.com/)
 - [MySQL Workbench](https://dev.mysql.com/downloads/workbench/)
-- [Versión móvil del proyecto]([https://github.com/tu-usuario/pet-boutique-movil](https://github.com/ISPC-2024-GrupoEstudio/GrupoEstudio-Mobile2024)) 
+- [Versión móvil del proyecto](https://github.com/ISPC-2024-GrupoEstudio/GrupoEstudio-Mobile2024) 
 
 ## 👥 Autores / Colaboradores
-- Florencia Noel Carrillo - [@FlorenciaCarrilo]
+- Florencia Noel Carrillo - [@FlorenciaCarrilo](https://github.com/FlorenciaCarrillo)
 
-- Florencia Castelucci - [@FlorCastelucci]
+- Florencia Castelucci - [@FlorCastelucci](https://github.com/FlorCastelucci)
 
-- Milena Nicole Giménez - [@MilenaGimenez]
+- Milena Nicole Giménez - [@MilenaGimenez](https://github.com/MilenaGimenez)
 
-- Valentina Angeletti - [@ValeAngeletti]
+- Valentina Angeletti - [@ValeAngeletti](https://github.com/ValeAngeletti)
 
 ## 🏫 Mención a la Institución
 Proyecto desarrollado en el marco de la Tecnicatura en Desarrollo Web y Aplicaciones Digitales del
