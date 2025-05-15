@@ -1,6 +1,8 @@
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { CuponService, Cupon } from '../../../services/cupon.service';
+import { CartService } from '../../../services/cart.service';
+import { CuponAplicado } from './cupon-aplicado';
 
 @Component({
   selector: 'app-cupones',
@@ -11,36 +13,44 @@ import { CuponService, Cupon } from '../../../services/cupon.service';
 })
 export class CuponesComponent implements OnInit {
 
-  // cuponesLista: {url: string,name:string, descripcion:string, fechaVencimiento: Date}[] = [
-  //   {url: "./../../../../assets/imagenes/Dashboard/cupon-de-descuento.png", name:"Invierno 50% Off", descripcion:"Aprovecha estos descuentos para abrigar a tus mascotas", fechaVencimiento: new Date(2024,6,31)},
-  //   {url: "./../../../../assets/imagenes/Dashboard/cucha.png", name:"Cuchas 15% Off", descripcion:"Solo por el mes de Junio,en la seccion de cuchas", fechaVencimiento: new Date(2024,5,30)},
-  //   {url: "./../../../../assets/imagenes/Dashboard/gato.png", name:"Cats Day 20% Off", descripcion:"Febrero es el mes de tu gato, aprovecha y mimalo", fechaVencimiento: new Date(2024,1,28)},
-  //   {url: "./../../../../assets/imagenes/Dashboard/percha.png", name:"Ropita Sale 30% Off", descripcion:"En toda la seccion de Ropa, solo por el mes de Mayo", fechaVencimiento: new Date(2024,7,1)},
-
-  // ]
-  
   cuponesDisponibles: Cupon[] = [];
   misCupones: Cupon[] = [];
+  mostrarModal: boolean = false;
 
-  constructor(private cuponService: CuponService) {}
+  constructor(private cuponService: CuponService, private cartService: CartService) {}
 
   ngOnInit(): void {
     this.cargarCupones();
   }
 
   cargarCupones(): void {
-    this.cuponService.getCupones().subscribe(cupones => {
-      this.cuponesDisponibles = cupones;
-    });
+    // Obtén el nombre de usuario del localStorage
+    const username = localStorage.getItem('user');
 
-    this.cuponService.getMisCupones().subscribe(cuponIds => {
-      this.misCupones = this.cuponesDisponibles.filter(cupon => cuponIds.includes(cupon.id));
-    });
+    if (username) {
+      // Obtiene los cupones disponibles
+      this.cuponService.getCupones().subscribe(cupones => {
+        this.cuponesDisponibles = cupones;
+      });
+
+      // Obtiene los cupones del usuario
+      this.cuponService.getMisCupones(username).subscribe(cupones => {
+        this.misCupones = cupones;
+      });
+    } else {
+      console.error('Usuario no autenticado');
+    }
   }
 
   seleccionarCupon(cupon: Cupon): void {
-    const username = localStorage.getItem('user'); // Asegúrate de que esté guardado tras login
+    const cuponAplicado: CuponAplicado = {
+      ...cupon,
+      tipo_descuento: cupon.tipo_descuento as 'PORCENTAJE' | 'MONTO'
+    };
   
+    this.cartService.aplicarCupon(cuponAplicado);
+  
+    const username = localStorage.getItem('user'); 
     if (!username) {
       console.error('Usuario no autenticado');
       return;
@@ -49,11 +59,24 @@ export class CuponesComponent implements OnInit {
     this.cuponService.agregarCupon(username, cupon.id).subscribe({
       next: (res) => {
         console.log('Cupón aplicado:', res);
-        this.cargarCupones(); // Refrescar cupones para que se actualicen en pantalla
+        this.cargarCupones();
+        this.mostrarModal = true;
       },
       error: (err) => console.error('Error al aplicar cupón:', err)
     });
-  
-    
+  }
+
+  yaFueReclamado(cupon: Cupon): boolean {
+    return this.misCupones.some(c => c.id === cupon.id);
+  }
+
+  estaVencido(cupon: Cupon): boolean {
+    const hoy = new Date();
+    const fechaVencimiento = new Date(cupon.fecha_vencimiento);
+    return fechaVencimiento < hoy;
+  }
+
+  cerrarModal(): void {
+    this.mostrarModal = false;
   }
 }

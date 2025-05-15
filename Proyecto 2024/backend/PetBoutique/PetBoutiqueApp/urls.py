@@ -49,6 +49,7 @@ urlpatterns = [
     path('api/usuarios/<str:nombre_usuario>/', UsuarioPorNombreView.as_view()),
     path('api/', include(router.urls)),
     path('mis-cupones/', views.MisCuponesAPIView.as_view()),
+    path('mis-cupones/<str:nombre_usuario>/', views.MisCuponesAPIView.as_view(), name='mis-cupones-usuario'),
     # path('api/mis-cupones/', UsuarioCuponListCreateView.as_view(), name='mis-cupones'),
 ]
 

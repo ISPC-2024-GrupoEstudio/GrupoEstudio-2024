@@ -1,16 +1,32 @@
-<div class="container-fluid container-detalles d-flex flex-column" >
-    <h1 class="text-lg font-semibold titulo-detalles">Detalle de compra N°: {{idPedido}}</h1>
-    <h2 class="align-self">Productos:</h2>
-    @for (producto of productosConNombres; track $index) {
-        <div class="div-productosNombres" *ngIf="producto.producto.id_pedido === idPedido">
-            <p>{{producto.producto.cantidad}}</p>
-            <p class="text-left">{{ producto.nombre }}</p>
-            <p class="text-right">${{producto.producto.precio}}</p>
-        </div>
-            
-    }
-    <div class="div-total">
-        <h3 class="total">Total compra: </h3>
-        <h3 class="total-precio">${{totalCompra}}</h3>
+<div class="container-fluid container-detalles bg-white rounded-5 shadow my-4 mx-0 p-4">
+  <div class="row mb-4">
+    <div class="col-12">
+      <h2 class="titulo-detalles fw-semibold mb-4">Detalle de compra N°: {{idPedido}}</h2>
     </div>
+  </div>
+  
+  <div class="row mb-3">
+    <div class="col-12">
+      <h5 class="text-secondary">Productos:</h5>
+    </div>
+  </div>
+  
+  <div class="productos-lista">
+    @for (producto of productosConNombres; track $index) {
+      <div class="row producto-item py-2" *ngIf="producto.producto.id_pedido === idPedido">
+        <div class="col-auto producto-cantidad fw-medium text-center">{{producto.producto.cantidad}}</div>
+        <div class="col producto-nombre flex-grow-1">{{ producto.nombre }}</div>
+        <div class="col-auto producto-precio fw-medium text-end">${{producto.producto.precio}}</div>
+      </div>
+    }
+  </div>
+  
+  <div class="row div-total mt-3 py-3 fw-semibold">
+    <div class="col">
+      <h4 class="total mb-0">Total compra:</h4>
+    </div>
+    <div class="col-auto">
+      <h4 class="total-precio mb-0">${{totalCompra}}</h4>
+    </div>
+  </div>
 </div>
