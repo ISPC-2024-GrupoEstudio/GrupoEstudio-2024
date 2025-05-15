@@ -1,47 +1,71 @@
 <div class="container-fluid login__cuerpo">
 
-    
-    <form class="form__login" [formGroup]="form" (ngSubmit)="onFormSubmit($event)" novalidate>
-      <div>
-        <h4 class="subtitulos__login">Ingresá tu nombre de usuario</h4>
-      </div>
-      <div class="form-group">
-        <label class="label__login" for="username">Usuario</label>
-        <input type="username" class="form-control input__login" formControlName="username">
-        @if (Username?.errors && Username?.touched) {
-          <small class="error-message" id="username-error">
-            @if (Username?.hasError("required")) {
-              El nombre de usuario es requerido
-            }
-          </small> 
-        }
-      </div>
-      <div class="form-group has-error">
-        <label class="label__login" for="password">Contraseña</label>
-        <input id="password" type="password" class="form-control input__login"  formControlName="password">
-        @if (Password?.errors && Password?.touched) {
-          <small class="error-message" id="password-error">
-            @if (Password?.hasError("required")) {
-              El password es requerido
-            }
-            @else if (Password?.hasError("minlength")) {
-              El Password requiere como mínimo 8 caracteres.
-            }
-          </small> 
-        }
-      </div>
-      @if (loginError) {
-        <div class="alert alert-danger">
-          {{loginError}}
-        </div>
+  <form class="form__login" [formGroup]="form" (ngSubmit)="onFormSubmit($event)" novalidate>
+    <div>
+      <h4 class="subtitulos__login">Ingresá tu nombre de usuario</h4>
+    </div>
+
+    <div class="form-group">
+      <label class="label__login" for="username">Usuario</label>
+      <input type="text" class="form-control input__login" formControlName="username">
+      @if (Username?.errors && Username?.touched) {
+        <small class="error-message" id="username-error">
+          @if (Username?.hasError("required")) {
+            El nombre de usuario es requerido
+          }
+        </small>
       }
-      
-      <div class="button">
-        <input class="input__registro" type="submit" value="Iniciar Sesión">
+    </div>
+
+    <div class="form-group has-error">
+      <label class="label__login" for="password">Contraseña</label>
+      <div class="password-input-wrapper">
+        <input 
+          id="password" 
+          [attr.type]="showPassword ? 'text' : 'password'" 
+          class="form-control input__login" 
+          formControlName="password"
+        >
+        <button type="button" (click)="showPassword = !showPassword" class="btn-ojito">
+          {{ showPassword ? '🙈' : '👁️' }}
+        </button>
       </div>
-      <div class="registrate">
-        <h4 class="titulo__login">¿Eres nuevo?, Crea tu cuenta ahora mismo! <a [routerLink]="['/registro']">Registrate aqui</a></h4>
+      @if (Password?.errors && Password?.touched) {
+        <small class="error-message" id="password-error">
+          @if (Password?.hasError("required")) {
+            El password es requerido
+          }
+          @else if (Password?.hasError("minlength")) {
+            El Password requiere como mínimo 8 caracteres.
+          }
+        </small>
+      }
+    </div>
+
+    @if (loginError) {
+      <div class="alert alert-danger">
+        {{loginError}}
       </div>
-    </form>
-   
-  </div>
+    }
+
+    <!-- 💡 Mostrar mensaje si está bloqueado -->
+    <div *ngIf="isLocked" class="alert alert-warning mt-2">
+      Demasiados intentos fallidos. Intenta de nuevo en {{ lockTimeLeft }} segundos.
+    </div>
+
+    <!--  Botón de login desactivado si está bloqueado -->
+    <div class="button mt-3">
+      <input class="input__registro"
+             type="submit"
+             value="Iniciar Sesión"
+             [disabled]="form.invalid || isLocked">
+    </div>
+
+    <div class="registrate">
+      <h4 class="titulo__login">¿Eres nuevo?, Crea tu cuenta ahora mismo!
+        <a [routerLink]="['/registro']">Registrate aqui</a>
+      </h4>
+    </div>
+  </form>
+
+</div>

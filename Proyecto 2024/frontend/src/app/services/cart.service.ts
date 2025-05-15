@@ -1,8 +1,11 @@
 import { Injectable, inject } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of, tap } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IProducto } from '../models/producto.interface';
 import { ICarrito } from '../models/carrito.interface';
+import { catchError } from 'rxjs/operators'; 
+import { CuponAplicado } from '../pages/dashboard/cupones/cupon-aplicado';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -16,36 +19,82 @@ export class CartService {
   private productosCarritoSubject: BehaviorSubject<ICarrito[]> = new BehaviorSubject<ICarrito[]>([]);
   public productosCarrito: Observable<ICarrito[]> = this.productosCarritoSubject.asObservable();
 
+
   constructor(private readonly httpClient : HttpClient) { 
     this.actualizarCarrito();
+    this.cargarCuponesDesdeLocalStorage();
+    this.obtenerCuponesUsuario().subscribe();
+  }
+
+  private getHeaders(): HttpHeaders {
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      console.error('Token no encontrado');
+      return new HttpHeaders(); // Devolver cabeceras vacías si no hay token
+    }
+    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
 
   actualizarCarrito() {
     const username = localStorage.getItem("user");
     const url = this.cartUrl + username
-    this.httpClient.get<ICarrito[]>(url).subscribe((products) => {
+    const token = localStorage.getItem('access_token');  // Obtener el token desde localStorage
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    if (!token) {
+      console.error("No token found");
+      return; // No hacer la solicitud si no hay token
+    }
+
+    this.httpClient.get<ICarrito[]>(url, { headers }).pipe(  // <-- AQUÍ AGREGAMOS headers
+      catchError(error => {
+        console.error('Error al obtener el carrito:', error);
+        return of([]); 
+      })
+    ).subscribe((products) => {
       console.log('Productos obtenidos del carrito:', products);
       this.productosCarritoSubject.next(products);
     });
   }
 
   agregarProducto(product: IProducto): Observable<any> {
+    const token = localStorage.getItem('access_token');  // Obtener el token desde localStorage
+    console.log('Token recuperado del localStorage:', token); 
+    if (!token) {
+      console.error('Token no encontrado');
+      return new Observable(observer => {
+        observer.error('Token no encontrado');
+        observer.complete();
+      });
+    }
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.httpClient.post(this.addToCartUrl, { 
       id_producto: product.id_producto,
       nombre_usuario: localStorage.getItem("user"),
       cantidad: 1
-     });
+    }, { headers }).pipe(
+      tap(() => {
+        this.actualizarCarrito();
+      }),
+      catchError((error) => {
+        console.error('Error al agregar producto al carrito:', error);
+        throw error;
+      })
+    );
   }
 
   quitarProducto(productoCarritoId:number):void {
+    const token = localStorage.getItem('access_token');  // Obtener el token desde localStorage
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     this.httpClient.delete(`${this.deleteFromCartUrl}${productoCarritoId}`).subscribe(() => {
       this.actualizarCarrito();
     });
   }
 
   checkout(pedidoData : any): Observable<any> {
+    const token = localStorage.getItem('access_token');  // Obtener el token desde localStorage
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
     });
 
     return this.httpClient.post<any>(this.checkoutUrl, pedidoData, { headers });
@@ -58,6 +107,59 @@ export class CartService {
   obtenerProductosCarrito(): ICarrito[] {
   return this.productosCarritoSubject.value;
   }
+
+  // private cuponAplicadoSubject = new BehaviorSubject<CuponAplicado | null>(null);
+  // cuponAplicado$ = this.cuponAplicadoSubject.asObservable();
+
+  // aplicarCupon(cupon: CuponAplicado) {
+  //   this.cuponAplicadoSubject.next(cupon);
+  // }
+  private cuponesAplicados: CuponAplicado[] = [];
+
+aplicarCupon(cupon: CuponAplicado): void {
+  const yaExiste = this.cuponesAplicados.some(c => c.id === cupon.id);
+  if (!yaExiste) {
+    this.cuponesAplicados.push(cupon);
+    localStorage.setItem('cuponesAplicados', JSON.stringify(this.cuponesAplicados)); // Guardar en localStorage
+  }
+}
+
+getCuponesAplicados(): CuponAplicado[] {
+  return this.cuponesAplicados;
+}
+
+obtenerCuponesUsuario(): Observable<CuponAplicado[]> {
+  const token = localStorage.getItem('access_token');
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  const username = localStorage.getItem('user');
+  const url = `${this.apiUrl}mis-cupones/${username}/`;
+
+  return this.httpClient.get<CuponAplicado[]>(url, { headers }).pipe(
+    tap((cupones) => {
+      this.cuponesAplicados = cupones;
+      localStorage.setItem('cuponesAplicados', JSON.stringify(cupones));
+    }),
+    catchError((error) => {
+      console.error('Error al obtener cupones del usuario:', error);
+      return of([]);
+    })
+  );
+}
+
+
+cargarCuponesDesdeLocalStorage(): void {
+  const cuponesGuardados = localStorage.getItem('cuponesAplicados');
+  if (cuponesGuardados) {
+    this.cuponesAplicados = JSON.parse(cuponesGuardados);
+  }
+}
+
+limpiarCupones(): void {
+  this.cuponesAplicados = [];
+  localStorage.removeItem('cuponesAplicados');
+}
+
+
 
   /*
   getPaymentMethods(): Observable<any> {

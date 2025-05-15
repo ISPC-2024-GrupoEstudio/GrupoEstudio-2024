@@ -1,4 +1,7 @@
 <body class="body__registro">
+  <div *ngIf="registroExitoso" class="alert-success" role="alert">
+    ✅ ¡Registro exitoso! Serás redirigido al login...
+  </div>
   <form [formGroup]="form" (ngSubmit)="onEnviar($event)">
     <div class="container">
       <div class="container__title">Registro de usuario</div>
@@ -46,6 +49,17 @@
                 <p class="text-danger">
                   El formato de DNI debe ser válido.
                 </p>
+                
+              }
+              @else if (Dni?.hasError("maxlength")) {
+                <p class="text-danger">
+                  El DNI no puede tener más de 8 dígitos.
+                </p>
+              }
+              @else if (Dni?.hasError("minlength")) {
+                <p class="text-danger">
+                  El DNI debe tener 8 dígitos.
+                </p>
               }
             }
           </div>
@@ -81,26 +95,63 @@
               }
             }
           </div>
-          <div class="input-box">
+           <!-- Campo Contraseña -->
+           <div class="input-box password-container">
             <label class="label__registro" for="contrasena">Contraseña:</label>
-            <input class="input__registro" type="password" id="contrasena" name="contrasena" class="form-control"  formControlName="password">
+          
+            <div class="password-input-wrapper">
+              <input class="input__registro" 
+                    [attr.type]="showPassword ? 'text' : 'password'"
+                     id="contrasena" 
+                     name="contrasena" 
+                     formControlName="password"
+                     (focus)="showPasswordHint = true" 
+                     (blur)="showPasswordHint = false"/>
+                     <button type="button" (click)="showPassword = !showPassword" class="btn-ojito">
+                      {{ showPassword ? '🙈' : '👁️' }}
+                    </button>
+              
+              <img 
+                src="../../../../assets/imagenes/info.png" 
+                alt="Información" 
+                class="password-icon" 
+                (mouseenter)="showPasswordHint = true" 
+                (mouseleave)="showPasswordHint = false"
+              />
+            </div>
+          
             <small class="error-message" id="password-error"></small>
-            @if (Password?.errors && Password?.touched) {
-              @if (Password?.hasError("required")) {
-                <p class="text-danger">
-                  El Password es requerido.
-                </p>
-              }
-              @else if (Password?.hasError("minlength")) {
-                <p class="text-danger">
-                  El Password requiere como mínimo 6 caracteres.
-                </p>
-              }
-            }
+            <div *ngIf="form.controls['password'].errors && form.controls['password'].touched">
+              <p class="text-danger" *ngIf="form.controls['password'].hasError('required')">El Password es requerido.</p>
+              <p class="text-danger" *ngIf="form.controls['password'].hasError('minlength')">El Password requiere como mínimo 6 caracteres.</p>
+            </div>
+          
+          
+
+            <!-- Tooltip de Requisitos de Contraseña -->
+            <div class="password-hint" *ngIf="showPasswordHint">
+              <ul>
+                <li [class.valid]="passwordValidLength" [class.invalid]="!passwordValidLength">Mínimo 8 caracteres</li>
+                <li [class.valid]="passwordValidUpper" [class.invalid]="!passwordValidUpper">Al menos una letra mayúscula</li>
+                <li [class.valid]="passwordValidLower" [class.invalid]="!passwordValidLower">Al menos una letra minúscula</li>
+                <li [class.valid]="passwordValidNumber" [class.invalid]="!passwordValidNumber">Al menos un número</li>
+                <li [class.valid]="passwordValidSpecial" [class.invalid]="!passwordValidSpecial">Al menos un carácter especial (&#64;, #, $, %, etc.)</li>
+              </ul>
+            </div>
           </div>
-          <div class="input-box">
+          <div class="input-box password-container">
             <label class="label__registro" for="confirmar_contrasena">Confirmar Contraseña:</label>
-            <input class="input__registro" type="password" id="confirmar_contrasena" name="confirmar_contrasena" class="form-control" formControlName="confirm_password">
+          
+            <div class="password-input-wrapper">
+              <input class="input__registro"
+                    [attr.type]="showConfirmPassword ? 'text' : 'password'"
+                    id="confirmar_contrasena"
+                    name="confirmar_contrasena"
+                    formControlName="confirm_password">
+              <button type="button" (click)="showConfirmPassword = !showConfirmPassword" class="btn-ojito">
+                {{ showConfirmPassword ? '🙈' : '👁️' }}
+              </button>
+            </div>
             <small class="error-message" id="confirmar_contrasena-error"></small>
             @if (ConfirmPsw?.errors && ConfirmPsw?.touched) {
               @if (ConfirmPsw?.hasError("required")) {
@@ -117,5 +168,6 @@
       </div>
       <h2>¿Ya tienes una cuenta? <a [routerLink]="['/login']">Inicia sesión aquí!</a></h2>
     </div> 
+    
   </form>
 </body>

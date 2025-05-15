@@ -43,6 +43,67 @@
 
 }
 
+.producto-detalle-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+  
+  .modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+    position: relative;
+    max-width: 400px;
+  }
+  
+  .close {
+    position: absolute;
+    right: 1rem;
+    top: 0.5rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  
+  .animate-fade {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  .card-cupones.reclamado {
+    background-color: #d3d3d3; 
+    filter: grayscale(80%);
+    pointer-events: none; 
+    opacity: 0.7;
+}
+
+.btn-cupones.reclamado-btn {
+    background-color: #414040;
+    background-image: none;
+    cursor: not-allowed;
+    color: white;
+    box-shadow: none;
+}
+
+.alert-danger{
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  
+
 @media (max-width: 1200px){
     .card-cupones{
         margin: 1rem 0;

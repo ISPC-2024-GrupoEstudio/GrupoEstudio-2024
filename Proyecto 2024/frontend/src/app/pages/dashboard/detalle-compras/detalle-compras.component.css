@@ -1,29 +1,32 @@
-.container-detalles {
-    width: 100%;
-    padding: 2rem;
-    background-color: white;
-    border-radius: 5px;
-    margin: 2rem 0;
-    justify-content: flex-start;
+body{
+    font-family: 'Poppins', sans-serif;
 }
 
-.titulo-detalles{
-    text-align: center;
-    padding-bottom: 1rem;
+.titulo-detalles {
+  color: #212529;
 }
 
-.div-productosNombres{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding-top: 1rem;
+.producto-item {
+  transition: background-color 0.2s;
 }
 
-.div-total{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    border-top: 1px solid black;
-    padding-top: 1rem;
+.producto-item:hover {
+  background-color: #f8f9fa;
+}
 
+.producto-cantidad {
+  width: 40px;
+}
+
+.producto-precio {
+  width: 80px;
+}
+
+.div-total {
+  background-color: #f8f9fa;
+  border-top: 1px solid #dee2e6;
+}
+
+.total-precio {
+  color: #0d6efd;
 }

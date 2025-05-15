@@ -268,6 +268,31 @@ class TipoEnvio(models.Model):
 
     def __str__(self):
         return self.id_tipo_envio
+    
+class Cupon(models.Model):
+    TIPO_DESCUENTO_CHOICES = [
+        ('PORCENTAJE', 'Porcentaje'),
+        ('MONTO', 'Monto fijo'),
+    ]
+
+    nombre = models.CharField(max_length=50)
+    descripcion = models.TextField()
+    tipo_descuento = models.CharField(max_length=20, choices=TIPO_DESCUENTO_CHOICES)
+    valor_descuento = models.FloatField()
+    imagen_url = models.URLField(blank=True, null=True)
+    fecha_vencimiento = models.DateField()
+    image_url = models.TextField(blank=True, null=True)    
+
+    class Meta:
+        verbose_name = "Cupón"
+        verbose_name_plural = "Cupones"
+
+    def __str__(self):
+        return f"{self.nombre} ({self.tipo_descuento})"
+    
+
+
+
 
 # Incorporamos usuario a registrar
 class Usuario(models.Model):
@@ -283,6 +308,7 @@ class Usuario(models.Model):
     id_rol = models.ForeignKey(Rol, models.DO_NOTHING, db_column='id_rol', blank=True, null=True)
     estado = models.TextField(blank=True, null=True)  # This field type is a guess.
     password = models.CharField(max_length=45, blank=True, null=True)
+    fotoPerfil = models.CharField(max_length=600, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -290,6 +316,16 @@ class Usuario(models.Model):
 
     def __str__(self):
         return self.nombre_usuario
+
+class UsuarioCupon(models.Model):
+    #usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name="cupones_usuario")
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name="cupones_usuario")
+    cupon = models.ForeignKey(Cupon, on_delete=models.CASCADE)
+    usado = models.BooleanField(default=False)
+    fecha_aplicado = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        unique_together = ('usuario', 'cupon')
 
 class Venta(models.Model):
     id_venta = models.AutoField(primary_key=True)
@@ -325,3 +361,5 @@ class CustomUser(models.Model):
 
     def __str__(self):
         return self.username
+ 
+    

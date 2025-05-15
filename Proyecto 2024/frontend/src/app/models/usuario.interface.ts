@@ -6,4 +6,5 @@ export interface IUsuario {
     nombre_usuario:string;
     email:string;
     password:string;
+    fotoPerfil: string;
 }
