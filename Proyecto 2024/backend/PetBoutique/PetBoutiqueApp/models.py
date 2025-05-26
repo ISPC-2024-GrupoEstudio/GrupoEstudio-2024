@@ -362,4 +362,12 @@ class CustomUser(models.Model):
     def __str__(self):
         return self.username
  
-    
+class Arrepentimiento(models.Model):
+    nombre = models.CharField(max_length=100)
+    telefono = models.CharField(max_length=20)
+    email = models.EmailField()
+    motivo = models.TextField(blank=True, null=True)
+    fecha_envio = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.nombre} - {self.email}'

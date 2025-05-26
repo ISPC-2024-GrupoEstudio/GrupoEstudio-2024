@@ -15,6 +15,12 @@
     </div>
 
     <div class="form-group">
+        <label for="telefono">Teléfono*</label>
+        <input id="telefono" type="text" formControlName="telefono" />
+        <div *ngIf="arrepentimientoForm.get('telefono')?.invalid && arrepentimientoForm.get('telefono')?.touched" class="error">Campo obligatorio</div>
+    </div>
+
+    <div class="form-group">
       <label for="pedido">Número de pedido*</label>
       <input id="pedido" type="text" formControlName="numeroPedido" />
       <div *ngIf="arrepentimientoForm.get('numeroPedido')?.invalid && arrepentimientoForm.get('numeroPedido')?.touched" class="error">Campo obligatorio</div>
@@ -36,5 +42,19 @@
 
   <div *ngIf="mensajeEnviado" class="mensaje-confirmacion">
     Tu solicitud fue enviada. Nos pondremos en contacto a la brevedad.
+  </div>
+</div>
+
+<!-- Modal flotante de confirmación -->
+<div *ngIf="mostrarModal" class="producto-detalle-modal d-flex flex-column justify-content-center align-items-center w-100" (click)="cerrarModal()">
+  <div class="modal-content-productos p-3 text-center w-50 animate-fade" (click)="$event.stopPropagation()">
+    <button type="button" class="close" (click)="cerrarModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h2 class="titulo-modal-productos">¡Solicitud enviada!</h2>
+    <p>Tu solicitud fue recibida y será procesada. Nos pondremos en contacto a la brevedad.</p>
+    <div class="text-center mt-3">
+      <button class="btn btn-primary fw-semibold" (click)="cerrarModal()">Aceptar</button>
+    </div>
   </div>
 </div>

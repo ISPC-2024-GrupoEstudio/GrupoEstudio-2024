@@ -15,13 +15,13 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.decorators import api_view, permission_classes
 from .models import CustomUser
-from .serializer import CustomUserSerializer
+from .serializer import CustomUserSerializer, ArrepentimientoSerializer
 # Fin importaciones registro #
 from .models import Roles, Usuario
 from .serializer import RolesSerializer
 from django.db import transaction
 from rest_framework import viewsets
-from .models import Producto, CategoriaProducto, Proveedor, Pedido, EstadoPedido, ProductoXPedido, FormaDePago, TipoEnvio, Carrito, Usuario, Cupon, UsuarioCupon
+from .models import Producto, CategoriaProducto, Proveedor, Pedido, EstadoPedido, ProductoXPedido, FormaDePago, TipoEnvio, Carrito, Usuario, Cupon, UsuarioCupon, Arrepentimiento
 from .serializer import ProductoSerializer, CategoriaProductoSerializer, ProveedorSerializer, PedidoSerializer, EstadoPedidoSerializer, ProductoXPedidoSerializer, FormaDePagoSerializer, TipoEnvioSerializer, UserSerializer, UsuarioSerializer, CarritoSerializer, CuponSerializer, UsuarioCuponSerializer
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -633,3 +633,8 @@ class MisCuponesAPIView(APIView):
         relaciones.delete()
 
         return Response({'mensaje': f'Se eliminaron {cantidad} cupon(es) del usuario.'}, status=200)
+    
+
+class ArrepentimientoCreateView(generics.CreateAPIView):
+    queryset = Arrepentimiento.objects.all()
+    serializer_class = ArrepentimientoSerializer    

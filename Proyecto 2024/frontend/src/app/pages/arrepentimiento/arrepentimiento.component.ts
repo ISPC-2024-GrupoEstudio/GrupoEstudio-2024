@@ -15,6 +15,11 @@ export class ArrepentimientoComponent {
   mensajeEnviado = false;
   errorMsg = '';
   successMsg = '';
+  mostrarModal = false;
+
+  cerrarModal() {
+    this.mostrarModal = false;
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -25,32 +30,37 @@ export class ArrepentimientoComponent {
       email: ['', [Validators.required, Validators.email]],
       numeroPedido: ['', Validators.required],
       fechaCompra: ['', Validators.required],
+      telefono: ['', Validators.required], 
       motivo: ['']
     });
   }
 
-  onSubmit() {
-    this.mensajeEnviado = true;
-    this.errorMsg = '';
-    this.successMsg = '';
+onSubmit() {
+  this.mensajeEnviado = true;
+  this.errorMsg = '';
+  this.successMsg = '';
 
-    if (this.arrepentimientoForm.invalid) {
-      this.errorMsg = 'Por favor completá todos los campos obligatorios.';
-      return;
-    }
-
-    const formData = this.arrepentimientoForm.value;
-    this.arrepentimientoService.enviarSolicitud(formData).subscribe({
-      next: () => {
-        this.successMsg = 'Tu solicitud fue recibida y será procesada. ¡Gracias!';
-        this.arrepentimientoForm.reset();
-        this.mensajeEnviado = false;
-      },
-      error: (err) => {
-        this.errorMsg = 'Ocurrió un error al enviar la solicitud. Intentá más tarde.';
-        console.error(err);
-      }
-    });
+  if (this.arrepentimientoForm.invalid) {
+    this.errorMsg = 'Por favor completá todos los campos obligatorios.';
+    return;
   }
+
+  const formData = this.arrepentimientoForm.value;
+  console.log('Datos enviados al backend:', formData); 
+
+  this.arrepentimientoService.enviarSolicitud(formData).subscribe({
+    next: () => {
+      this.successMsg = 'Tu solicitud fue recibida y será procesada. ¡Gracias!';
+      this.arrepentimientoForm.reset();
+      this.mostrarModal = true;
+      this.mensajeEnviado = false;
+    },
+    error: (err) => {
+      this.errorMsg = 'Ocurrió un error al enviar la solicitud. Intentá más tarde.';
+      console.error('Error detallado del backend:', err.error);
+    }
+  });
+}
+
 }
 
