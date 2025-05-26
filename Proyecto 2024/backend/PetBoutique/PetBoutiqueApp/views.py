@@ -330,7 +330,7 @@ def crear_preferencia(request):
                     } for item in items
                 ],
                 "back_urls": {
-                    "success": "https://ef8c-2803-9800-9880-b71e-1cf7-dfe6-d28d-39fe.ngrok-free.app/api/pago-exitoso/",
+                    "success": "https://144e-2803-9800-9880-b71e-8a-c4d6-4191-aa8d.ngrok-free.app/api/pago-exitoso/",
                     "failure": "https://tusitio.com/failure",
                     "pending": "https://tusitio.com/pending"
                 },

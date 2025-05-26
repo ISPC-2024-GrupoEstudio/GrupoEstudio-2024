@@ -1,0 +1,40 @@
+<div class="arrepentimiento-container">
+  <h2>Ejercer derecho de arrepentimiento de compra</h2>
+  <p>Completá el siguiente formulario. Nos estaremos comunicando con vos para avisarte que tu compra ha sido cancelada con éxito.</p>
+  <form [formGroup]="arrepentimientoForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="nombre">Nombre completo*</label>
+      <input id="nombre" type="text" formControlName="nombre" />
+      <div *ngIf="arrepentimientoForm.get('nombre')?.invalid && arrepentimientoForm.get('nombre')?.touched" class="error">Campo obligatorio</div>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email*</label>
+      <input id="email" type="email" formControlName="email" />
+      <div *ngIf="arrepentimientoForm.get('email')?.invalid && arrepentimientoForm.get('email')?.touched" class="error">Email inválido</div>
+    </div>
+
+    <div class="form-group">
+      <label for="pedido">Número de pedido*</label>
+      <input id="pedido" type="text" formControlName="numeroPedido" />
+      <div *ngIf="arrepentimientoForm.get('numeroPedido')?.invalid && arrepentimientoForm.get('numeroPedido')?.touched" class="error">Campo obligatorio</div>
+    </div>
+
+    <div class="form-group">
+      <label for="fechaCompra">Fecha de compra*</label>
+      <input id="fechaCompra" type="date" formControlName="fechaCompra" />
+      <div *ngIf="arrepentimientoForm.get('fechaCompra')?.invalid && arrepentimientoForm.get('fechaCompra')?.touched" class="error">Campo obligatorio</div>
+    </div>
+
+    <div class="form-group">
+      <label for="motivo">Motivo (opcional)</label>
+      <textarea id="motivo" formControlName="motivo"></textarea>
+    </div>
+
+    <button type="submit" [disabled]="arrepentimientoForm.invalid">Enviar</button>
+  </form>
+
+  <div *ngIf="mensajeEnviado" class="mensaje-confirmacion">
+    Tu solicitud fue enviada. Nos pondremos en contacto a la brevedad.
+  </div>
+</div>
