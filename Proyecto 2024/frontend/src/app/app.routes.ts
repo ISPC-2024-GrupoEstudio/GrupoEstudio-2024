@@ -17,6 +17,7 @@ import { permisosGuard } from './pages/guards/permisos.guard';
 import { PerfilComponent } from './pages/perfil/perfil.component';
 import { EditarPerfilComponent } from './pages/perfil/editar-perfil/editar-perfil.component';
 import { PoliticaPrivacidadComponent } from './pages/politica-privacidad/politica-privacidad.component';
+import { TerminosCondicionesComponent } from './terminos-condiciones/terminos-condiciones.component';
 
 export const routes: Routes = [
     {path: "", component: HomeComponent},
@@ -37,6 +38,7 @@ export const routes: Routes = [
 
     { path: 'arrepentimiento', component: ArrepentimientoComponent },
     { path: 'politica-privacidad', component: PoliticaPrivacidadComponent },
+    { path: 'terminos-condiciones', component: TerminosCondicionesComponent },
     {path: "**", component: NotFoundComponent}
 ];
   

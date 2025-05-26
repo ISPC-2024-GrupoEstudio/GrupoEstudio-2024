@@ -41,3 +41,16 @@
   display: flex;
   justify-content: center;
 }
+
+.btn-terminos-condiciones {
+  background-color: #545cc9;
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  margin: 0 1rem 0 1rem;
+}
