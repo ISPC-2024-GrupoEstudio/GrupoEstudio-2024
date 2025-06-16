@@ -20,13 +20,33 @@
       </div>
     }
   </div>
+  <div class="mt-3 d-flex justify-content-between">
+    <strong>Costo de envío:</strong> {{ costoEnvio | currency: '$' }}
+  </div>
+  <div class="mt-3 d-flex justify-content-between">
+    <strong>Descuento aplicado:</strong>
+    <span *ngIf="descuento > 0">{{ descuento | currency: '- $' }}</span>
+    <span *ngIf="descuento === 0">No se aplicaron descuentos</span>
+  </div>
   
   <div class="row div-total mt-3 py-3 fw-semibold">
     <div class="col">
       <h4 class="total mb-0">Total compra:</h4>
     </div>
     <div class="col-auto">
-      <h4 class="total-precio mb-0">${{totalCompra}}</h4>
+      <h4 class="total-precio mb-0">${{totalFinalPedido}}</h4>
+    </div>
+  </div>
+</div>
+<!-- Card con los datos de envío -->
+<div class="container-fluid container-detalles bg-white rounded-5 shadow my-4 mx-0 p-4">
+  <div class="row mb-3">
+    <div class="col-12">
+      <h3 class="text-secondary fw-semibold mb-4">Datos de envío:</h3>
+      <p><strong>Dirección de entrega:</strong> {{ direccionEntrega }}</p>
+      <p><strong>Tipo de envío:</strong> {{ tipoEnvioTexto }}</p>
+      <p><strong>Provincia:</strong> {{ ciudadEnvio }}</p>
+      <p><strong>Código Postal:</strong> {{ codigoPostal }}</p>
     </div>
   </div>
 </div>

@@ -144,7 +144,7 @@ class EstadoPedido(models.Model):
         db_table = 'estado_pedido'
 
     def __str__(self):
-        return self.id_estado_pedido
+        return str(self.id_estado_pedido)
 
 class FormaDePago(models.Model):
     id_forma_de_pago = models.IntegerField(primary_key=True)
@@ -155,7 +155,7 @@ class FormaDePago(models.Model):
         db_table = 'forma_de_pago'
 
     def __str__(self):
-        return self.id_forma_de_pago
+        return str(self.id_forma_de_pago)
 
 class Pedido(models.Model):
     id_pedido = models.AutoField(primary_key=True)
@@ -163,17 +163,22 @@ class Pedido(models.Model):
     id_estado_pedido = models.ForeignKey(EstadoPedido, models.DO_NOTHING, db_column='id_estado_pedido', blank=True, null=True)
     nombre_usuario = models.ForeignKey('Usuario', models.DO_NOTHING, db_column='nombre_usuario', blank=True, null=True)
     id_tipo_de_envio = models.ForeignKey('TipoEnvio', models.DO_NOTHING, db_column='id_tipo_de_envio', blank=True, null=True)
-    domicilio_envio = models.CharField(max_length=50, blank=True, null=True)
+    domicilio_envio = models.CharField(max_length=150, blank=True, null=True)
     id_forma_de_pago = models.ForeignKey(FormaDePago, models.DO_NOTHING, db_column='id_forma_de_pago', blank=True, null=True)
     numero_pedido = models.IntegerField(unique=True)
-
+    total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    codigo_postal = models.CharField(max_length=10, blank=True, null=True)
+    costo_envio = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    ciudad_envio = models.CharField(max_length=100, blank=True, null=True)
+    descuento = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, default=0)
+    
     class Meta:
         managed = False
         db_table = 'pedido'
 
         
     def __str__(self):
-        return self.id_pedido
+        return str(self.id_pedido)
 
 class Producto(models.Model):
     id_producto = models.AutoField(primary_key=True)
@@ -185,6 +190,7 @@ class Producto(models.Model):
     stock_minimo = models.IntegerField(blank=True, null=True)
     id_categoria_producto = models.ForeignKey(CategoriaProducto, models.DO_NOTHING, db_column='id_categoria_producto', blank=True, null=True)
     image_url = models.TextField(blank=True, null=True)
+    peso = models.DecimalField(max_digits=5, decimal_places=2, default=0.50)
 
     class Meta:
         managed = False
@@ -267,7 +273,7 @@ class TipoEnvio(models.Model):
         db_table = 'tipo_envio'
 
     def __str__(self):
-        return self.id_tipo_envio
+        return str(self.id_tipo_envio)
     
 class Cupon(models.Model):
     TIPO_DESCUENTO_CHOICES = [

@@ -36,7 +36,232 @@
                           <i class="fas fa-trash-alt"></i>
                         </button>
                       </div>
+                       
                     </div>
+                    
+                  </div>
+                  
+                </div>
+                 <!-- Formulario de envío reformado -->
+                <div class="card mt-4 shadow-sm">
+                  <div class="card-body">
+                    <h5 class="text-primary mb-3">Datos de envío</h5>
+                    
+                    <!-- Mensajes de éxito y error -->
+                    <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+                      {{ successMessage }}
+                      <button type="button" class="btn-close" (click)="successMessage = ''"></button>
+                    </div>
+                    
+                    <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+                      {{ errorMessage }}
+                      <button type="button" class="btn-close" (click)="errorMessage = ''"></button>
+                    </div>
+                    
+                    <form [formGroup]="form">
+                      
+                      <!-- Paso 1: Código Postal -->
+                      <div class="mb-3">
+                        <label for="codigo_postal" class="form-label">Código Postal</label>
+                        <input type="text" 
+                              formControlName="codigo_postal" 
+                              class="form-control" 
+                              id="codigo_postal" 
+                              placeholder="Ej. 1406"
+                              maxlength="4"
+                              [class.is-invalid]="form.get('codigo_postal')?.invalid && form.get('codigo_postal')?.touched">
+                        <div class="invalid-feedback" *ngIf="form.get('codigo_postal')?.invalid && form.get('codigo_postal')?.touched">
+                          El código postal es requerido
+                        </div>
+                        
+                      </div>
+                      <div class="mb-3">
+                        <label for="provincia" class="form-label">Provincia</label>
+                        <select formControlName="provincia" class="form-select" id="provincia" required>
+                          <option value="">Selecciona una provincia</option>
+                          <option value="AR-B">Buenos Aires</option>
+                          <option value="AR-C">CABA</option>
+                          <option value="AR-K">Catamarca</option>
+                          <option value="AR-H">Chaco</option>
+                          <option value="AR-U">Chubut</option>
+                          <option value="AR-X">Córdoba</option>
+                          <option value="AR-W">Corrientes</option>
+                          <option value="AR-E">Entre Ríos</option>
+                          <option value="AR-P">Formosa</option>
+                          <option value="AR-Y">Jujuy</option>
+                          <option value="AR-L">La Pampa</option>
+                          <option value="AR-F">La Rioja</option>
+                          <option value="AR-M">Mendoza</option>
+                          <option value="AR-N">Misiones</option>
+                          <option value="AR-Q">Neuquén</option>
+                          <option value="AR-R">Río Negro</option>
+                          <option value="AR-A">Salta</option>
+                          <option value="AR-J">San Juan</option>
+                          <option value="AR-D">San Luis</option>
+                          <option value="AR-Z">Santa Cruz</option>
+                          <option value="AR-S">Santa Fe</option>
+                          <option value="AR-G">Santiago del Estero</option>
+                          <option value="AR-V">Tierra del Fuego</option>
+                          <option value="AR-T">Tucumán</option>
+                        </select>
+                      </div>
+
+
+
+                      <button type="button" 
+                              class="btn btn-success w-100 mb-3" 
+                              (click)="calcularCostoEnvio()" 
+                              [disabled]="!form.get('codigo_postal')?.value || form.get('codigo_postal')?.value.length < 4">
+                        <i class="fas fa-calculator me-2"></i>Calcular costo de envío
+                      </button>
+
+                      <!-- Paso 2: Opciones de envío -->
+                      <div *ngIf="opcionesEnvio.length > 0" class="mb-4">
+                        <label class="form-label"><strong>Selecciona el tipo de envío:</strong></label>
+                        <div class="border rounded p-3 bg-light">
+                          <div *ngFor="let opcion of opcionesEnvio; let i = index" class="form-check mb-2">
+                            <input class="form-check-input"
+                                  type="radio"
+                                  name="tipoEnvio"
+                                  [id]="'envio-' + i"
+                                  [value]="opcion.tipo"
+                                  [checked]="tipoEnvioSeleccionado === opcion.tipo"
+                                  (change)="onSeleccionarTipoEnvio(opcion.tipo)">
+                            <label class="form-check-label d-flex justify-content-between align-items-center w-100" [for]="'envio-' + i">
+                              <span>
+                                <i class="fas" [class.fa-home]="opcion.tipo === 'A domicilio'" [class.fa-store]="opcion.tipo === 'A sucursal'"></i>
+                                {{ opcion.tipo }}
+                              </span>
+                              <span class="badge bg-primary">${{ opcion.costoBase || opcion.costo }}</span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Paso 3: Selección de sucursal (si aplica) -->
+                      <div *ngIf="tipoEnvioSeleccionado === 'A sucursal' && sucursalesDisponibles.length > 0" class="mb-4">
+                        <!-- Select de sucursal -->
+                        <div class="mb-3">
+                          <label for="sucursalDropdown" class="form-label">Selecciona una sucursal:</label>
+                          <select 
+                            id="sucursalDropdown" 
+                            class="form-select" 
+                            (change)="seleccionarSucursalDesdeDropdown($event)">
+                            <option [value]="-1" disabled [selected]="sucursalSeleccionadaIndex === null">Selecciona una sucursal</option>
+                            <option *ngFor="let sucursal of sucursalesDisponibles; index as i" [value]="i">
+                              {{ sucursal.nombre }}
+                            </option>
+                          </select>
+                        </div>
+
+                        <!-- Tarjeta con datos de la sucursal seleccionada -->
+                        <div *ngIf="sucursalSeleccionada" class="card mt-3 shadow-sm border">
+                          <div class="card-body">
+                            <h5 class="card-title mb-3">
+                              <i class="fas fa-store me-2 text-primary"></i>{{ sucursalSeleccionada.nombre }}
+                            </h5>
+                            <p class="mb-1"><strong>Dirección:</strong> {{ sucursalSeleccionada.direccion }}</p>
+                            <p class="mb-1"><strong>Provincia:</strong> {{ sucursalSeleccionada.provincia }}</p>
+                            <p class="mb-1"><strong>Teléfono:</strong> {{ sucursalSeleccionada.telefono || 'No disponible' }}</p>
+                            <p class="mb-0"><strong>Horarios:</strong> {{ sucursalSeleccionada.horarios || 'Consultar en sucursal' }}</p>
+                          </div>
+                        </div>
+                      </div>
+
+
+
+                      <!-- Loading de sucursales -->
+                      <div *ngIf="tipoEnvioSeleccionado === 'A sucursal' && sucursalesDisponibles.length === 0" class="mb-4">
+                        <div class="text-center p-4">
+                          <div class="spinner-border spinner-border-sm text-primary" role="status">
+                            <span class="visually-hidden">Cargando sucursales...</span>
+                          </div>
+                          <p class="mt-2 text-muted">Cargando sucursales disponibles...</p>
+                        </div>
+                      </div>
+
+                      <!-- Paso 3: Dirección (si es envío a domicilio) -->
+                      <div *ngIf="tipoEnvioSeleccionado === 'A domicilio'" class="mb-4">
+                        <label for="direccion" class="form-label">
+                          <i class="fas fa-home me-2"></i>Dirección de entrega
+                        </label>
+                        <input type="text" 
+                              formControlName="direccion" 
+                              class="form-control" 
+                              id="direccion" 
+                              placeholder="Ej. Av. Siempre Viva 742, Piso 2, Depto A"
+                              [class.is-invalid]="form.get('direccion')?.invalid && form.get('direccion')?.touched">
+                        <div class="invalid-feedback" *ngIf="form.get('direccion')?.invalid && form.get('direccion')?.touched">
+                          La dirección es requerida para el envío a domicilio
+                        </div>
+                        <small class="form-text text-muted">
+                          Incluye número de piso, departamento o referencias adicionales
+                        </small>
+                      </div>
+
+                      <!-- Resumen del envío seleccionado -->
+                      <div *ngIf="tipoEnvioSeleccionado && envioCosto > 0" class="alert alert-info mb-4">
+                        <h6 class="alert-heading">
+                          <i class="fas fa-info-circle me-2"></i>Resumen del envío
+                        </h6>
+                        <p class="mb-2">
+                          <strong>Tipo:</strong> {{ tipoEnvioSeleccionado }}
+                        </p>
+                        <p class="mb-2">
+                          <strong>Costo:</strong> ${{ envioCosto }}
+                        </p>
+                        <p class="mb-0" *ngIf="tipoEnvioSeleccionado === 'A domicilio' && form.get('direccion')?.value">
+                          <strong>Dirección:</strong> {{ form.get('direccion')?.value }}
+                        </p>
+                        <p class="mb-0" *ngIf="tipoEnvioSeleccionado === 'A sucursal' && sucursalSeleccionada">
+                          <strong>Sucursal:</strong> {{ sucursalSeleccionada.nombre }} - {{ sucursalSeleccionada.direccion }}
+                        </p>
+                      </div>
+
+                      
+                      
+                      <!-- Indicadores de progreso -->
+                      <div class="progress mb-3" style="height: 8px;">
+                        <div class="progress-bar" 
+                            role="progressbar" 
+                            [style.width.%]="getProgresoFormulario()"
+                            [class.bg-success]="esPagoPosible"
+                            [class.bg-warning]="!esPagoPosible && getProgresoFormulario() > 0"
+                            [class.bg-secondary]="getProgresoFormulario() === 0">
+                        </div>
+                      </div>
+                      
+                      <div class="row text-center">
+                        <div class="col-4">
+                          <small class="text-muted">
+                            <i class="fas fa-map-pin" [class.text-success]="form.get('codigo_postal')?.value"></i>
+                            <br>Código Postal
+                          </small>
+                        </div>
+                        <div class="col-4">
+                          <small class="text-muted">
+                            <i class="fas fa-shipping-fast" [class.text-success]="tipoEnvioSeleccionado"></i>
+                            <br>Tipo de Envío
+                          </small>
+                        </div>
+                        <div class="col-4">
+                          <small class="text-muted">
+                            <i class="fas fa-check-circle" [class.text-success]="esPagoPosible"></i>
+                            <br>Completado
+                          </small>
+                        </div>
+                      </div>
+                      
+                      
+                    </form>
+                    <button class="btn btn-primary w-100 mt-3"
+                            [disabled]="!esPagoPosible || procesandoPago"
+                            (click)="generarWallet()">
+                      <span *ngIf="procesandoPago" class="spinner-border spinner-border-sm me-2" role="status"></span>
+                      <i class="fas fa-wallet me-2" *ngIf="!procesandoPago"></i> 
+                      {{ procesandoPago ? 'Generando...' : 'Generar botón de pago' }}
+                    </button>
+
                   </div>
                 </div>
               </div>
@@ -45,10 +270,10 @@
                 <div class="card bg-primary text-white rounded-3">
                   <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-4">
-                      <h5 class="mb-0">Detalles de tarjeta</h5>
+                      <h5 class="mb-0">Detalles del Pago:</h5>
                     </div>
 
-                   <div id="wallet_container"></div>
+                   <div id="wallet_container" class="mt-3"></div>
 
                     <hr class="my-4">
 
@@ -64,7 +289,7 @@
 
                     <div class="d-flex justify-content-between">
                       <p class="mb-2">Envío</p>
-                      <p class="mb-2">Gratis</p>
+                      <p class="mb-2">${{ envioCosto }}</p>
                     </div>
 
                     <hr class="my-3">
