@@ -7,5 +7,9 @@ export interface IPedido {
     domicilio_envio: string,
     id_forma_de_pago: number,
     numero_pedido: number,
-    
+    costo_envio:number,
+    total: number,
+    codigo_postal: string,
+    ciudad_envio:string,
+    descuento:number
 }

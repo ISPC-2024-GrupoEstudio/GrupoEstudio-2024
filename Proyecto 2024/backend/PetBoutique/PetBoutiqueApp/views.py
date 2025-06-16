@@ -319,7 +319,6 @@ def crear_preferencia(request):
             external_reference = data.get("external_reference")
             print("External Reference enviada a MP:", external_reference)
 
-
             preference_data = {
                 "items": [
                     {
@@ -330,20 +329,20 @@ def crear_preferencia(request):
                     } for item in items
                 ],
                 "back_urls": {
-                    "success": "https://144e-2803-9800-9880-b71e-8a-c4d6-4191-aa8d.ngrok-free.app/api/pago-exitoso/",
+                    "success": "https://9784-181-92-31-235.ngrok-free.app/api/pago-exitoso/",
                     "failure": "https://tusitio.com/failure",
                     "pending": "https://tusitio.com/pending"
                 },
                 "auto_return": "approved",
                 "external_reference": external_reference if external_reference else "no-reference"
-
             }
+
             print("Preference data enviado a MercadoPago:", preference_data)
-            print("External Reference enviada a MP:", external_reference)
 
             preference_response = sdk.preference().create(preference_data)
-            print("Respuesta de Mercado Pago:", preference_response)
             preference = preference_response["response"]
+
+            print("Respuesta de Mercado Pago:", preference_response)
 
             return JsonResponse({
                 "preference_id": preference["id"],
@@ -358,7 +357,22 @@ def crear_preferencia(request):
     return JsonResponse({"error": "Método no permitido"}, status=405)
 
 
-def procesar_pedido(nombre_usuario):
+def procesar_pedido(external_reference_completa):
+    # Parsear la referencia externa completa
+    parts = external_reference_completa.split('|')
+    nombre_usuario = parts[0]
+    direccion_envio = parts[1] if len(parts) > 1 else ""
+    codigo_postal = parts[2] if len(parts) > 2 else ""
+    opcion_envio_json = parts[3] if len(parts) > 3 else "{}"
+    total_final = float(parts[4]) if len(parts) > 4 else 0.0
+    ciudad_envio = parts[6] if len(parts) > 6 else ""
+    tipo_envio_id = int(parts[6]) if len(parts) > 6 else None
+    descuento = float(parts[7]) if len(parts) > 7 else 0.0
+
+    try:
+        opcion_envio = json.loads(opcion_envio_json)
+    except:
+        opcion_envio = {}
     carrito = Carrito.objects.filter(nombre_usuario=nombre_usuario)
 
     if not carrito.exists():
@@ -386,7 +400,17 @@ def procesar_pedido(nombre_usuario):
             'nombre_usuario': nombre_usuario,
             'fecha': timezone.now(),
             'id_estado_pedido': 1,
-            'numero_pedido': numero_pedido
+            'numero_pedido': numero_pedido,
+            'domicilio_envio': direccion_envio,
+            'codigo_postal': codigo_postal,
+            'costo_envio': opcion_envio.get('costo', 0),
+            'tipo_envio': opcion_envio.get('tipo', ''),
+            'datos_envio': json.dumps(opcion_envio),
+            'total': total_final,
+            'ciudad_envio': ciudad_envio,
+            'id_tipo_de_envio': tipo_envio_id,
+            'descuento': descuento
+
         }
 
         pedido_serializer = PedidoSerializer(data=pedido_data)

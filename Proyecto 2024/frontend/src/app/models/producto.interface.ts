@@ -7,5 +7,6 @@ export interface IProducto {
     stock_minimo : number,
     id_proveedor : number,
     id_categoria_producto : number,
-    image_url : string
+    image_url : string;
+    peso:number;
 }
