@@ -11,5 +11,6 @@ export interface IPedido {
     total: number,
     codigo_postal: string,
     ciudad_envio:string,
-    descuento:number
+    descuento:number,
+    localidad: string
 }

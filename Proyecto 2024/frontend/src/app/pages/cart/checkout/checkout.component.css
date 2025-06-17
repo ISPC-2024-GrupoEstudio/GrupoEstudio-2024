@@ -18,3 +18,14 @@
     border: none;
     cursor: pointer;
   }
+
+  .envio-selected {
+  background-color: #8b5cf6 !important; /* Color violeta */
+  border-color: #7c3aed !important;
+  color: white !important;
+}
+
+.envio-selected .badge {
+  background-color: white !important;
+  color: #8b5cf6 !important;
+}

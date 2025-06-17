@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import Producto, CategoriaProducto, Proveedor, Pedido, EstadoPedido, ProductoXPedido, Roles, FormaDePago, TipoEnvio, Carrito, Usuario, Cupon, Arrepentimiento
 # Importaciones referentes a Custom User
-from .models import CustomUser
+from .models import CustomUser, Direccion
 from django.contrib.auth.models import User
 
 # serializador creación usuarios
@@ -121,4 +121,9 @@ class UsuarioCuponSerializer(serializers.ModelSerializer):
 class ArrepentimientoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Arrepentimiento
+        fields = '__all__'
+
+class DireccionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Direccion
         fields = '__all__'

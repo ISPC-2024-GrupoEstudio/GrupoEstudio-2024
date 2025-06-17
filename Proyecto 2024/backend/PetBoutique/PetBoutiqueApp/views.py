@@ -14,8 +14,8 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.decorators import api_view, permission_classes
-from .models import CustomUser
-from .serializer import CustomUserSerializer, ArrepentimientoSerializer
+from .models import CustomUser, Direccion
+from .serializer import CustomUserSerializer, ArrepentimientoSerializer, DireccionSerializer
 # Fin importaciones registro #
 from .models import Roles, Usuario
 from .serializer import RolesSerializer
@@ -171,9 +171,42 @@ class AddToCartView (APIView):
         carrito_serializer = CarritoSerializer(data = request.data)
 
         if carrito_serializer.is_valid():
-            carrito_serializer.save()
+            print()
+            print("Datos recibidos:", request.data)
+            print()
+            if Carrito.objects.filter(id_producto=request.data["id_producto"], nombre_usuario=request.data["nombre_usuario"]).exists():
+                # Si el carrito ya existe, actualizamos la cantidad
+                carrito = Carrito.objects.get(id_producto=request.data["id_producto"], nombre_usuario=request.data["nombre_usuario"])
+                carrito.cantidad += request.data["cantidad"]
+                carrito.save()
+                return Response(carrito_serializer.data, status= status.HTTP_201_CREATED)
+            else:
+                # Si el carrito no existe, lo creamos
+                carrito_serializer.save()
+                return Response(carrito_serializer.data, status= status.HTTP_201_CREATED)
 
-            return Response(carrito_serializer.data, status= status.HTTP_201_CREATED)
+        else:
+            return Response(carrito_serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+
+class DeleteItemFromCartView (APIView):
+    def post (self, request):
+        carrito_serializer = CarritoSerializer(data = request.data)
+
+        if carrito_serializer.is_valid():
+            if Carrito.objects.filter(id_producto=request.data["id_producto"], nombre_usuario=request.data["nombre_usuario"]).exists():
+                # Si el carrito ya existe, actualizamos la cantidad
+                carrito = Carrito.objects.get(id_producto=request.data["id_producto"], nombre_usuario=request.data["nombre_usuario"])
+                carrito.cantidad -= request.data["cantidad"]
+                if (carrito.cantidad <= 0):
+                    carrito.delete()
+                else:
+                    carrito.save()
+                return Response(carrito_serializer.data, status= status.HTTP_200_OK)
+            else:
+                # Si el carrito no existe, lo creamos
+                carrito_serializer.save()
+                return Response(carrito_serializer.data, status= status.HTTP_201_CREATED)
+
         else:
             return Response(carrito_serializer.errors, status= status.HTTP_400_BAD_REQUEST)
 
@@ -329,7 +362,7 @@ def crear_preferencia(request):
                     } for item in items
                 ],
                 "back_urls": {
-                    "success": "https://9784-181-92-31-235.ngrok-free.app/api/pago-exitoso/",
+                    "success": "https://dbe9-2803-9800-9883-4725-7873-2721-c155-d6eb.ngrok-free.app/api/pago-exitoso/",
                     "failure": "https://tusitio.com/failure",
                     "pending": "https://tusitio.com/pending"
                 },
@@ -365,9 +398,10 @@ def procesar_pedido(external_reference_completa):
     codigo_postal = parts[2] if len(parts) > 2 else ""
     opcion_envio_json = parts[3] if len(parts) > 3 else "{}"
     total_final = float(parts[4]) if len(parts) > 4 else 0.0
+    tipo_envio_id = int(parts[5]) if len(parts) > 5 else None
     ciudad_envio = parts[6] if len(parts) > 6 else ""
-    tipo_envio_id = int(parts[6]) if len(parts) > 6 else None
     descuento = float(parts[7]) if len(parts) > 7 else 0.0
+    localidad = parts[8] if len(parts) > 8 else ""  
 
     try:
         opcion_envio = json.loads(opcion_envio_json)
@@ -409,7 +443,8 @@ def procesar_pedido(external_reference_completa):
             'total': total_final,
             'ciudad_envio': ciudad_envio,
             'id_tipo_de_envio': tipo_envio_id,
-            'descuento': descuento
+            'descuento': descuento,
+            'localidad': localidad,
 
         }
 
@@ -662,3 +697,44 @@ class MisCuponesAPIView(APIView):
 class ArrepentimientoCreateView(generics.CreateAPIView):
     queryset = Arrepentimiento.objects.all()
     serializer_class = ArrepentimientoSerializer    
+
+
+# class DireccionViewSet(viewsets.ModelViewSet):
+#     queryset = Direccion.objects.all()
+#     serializer_class = DireccionSerializer
+#     permission_classes = [AllowAny]
+
+#     def get_queryset(self):
+#         # Mostrar solo las direcciones del usuario autenticado
+#         return Direccion.objects.filter(usuario=self.request.user)
+
+#     def perform_create(self, serializer):
+#         # Asignar automáticamente el usuario autenticado
+#         serializer.save(usuario=self.request.user)
+# class DireccionViewSet(viewsets.ModelViewSet):
+#     queryset = Direccion.objects.all()
+#     serializer_class = DireccionSerializer
+#     permission_classes = [AllowAny]
+
+#     def get_queryset(self):
+#         return Direccion.objects.all()
+
+#     def perform_create(self, serializer):
+#         serializer.save()
+
+class DireccionViewSet(viewsets.ModelViewSet):
+    queryset = Direccion.objects.all()
+    serializer_class = DireccionSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        # Si usuario está autenticado, filtrar por usuario, sino devolver todo o vacío
+        if self.request.user and self.request.user.is_authenticated:
+            return Direccion.objects.filter(usuario=self.request.user)
+        return Direccion.objects.none()
+
+    def perform_create(self, serializer):
+        if self.request.user and self.request.user.is_authenticated:
+            serializer.save(usuario=self.request.user)
+        else:
+            serializer.save(usuario=None)

@@ -171,6 +171,8 @@ class Pedido(models.Model):
     costo_envio = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     ciudad_envio = models.CharField(max_length=100, blank=True, null=True)
     descuento = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, default=0)
+    localidad = models.CharField(max_length=100, blank=True, null=True)
+
     
     class Meta:
         managed = False
@@ -377,3 +379,12 @@ class Arrepentimiento(models.Model):
 
     def __str__(self):
         return f'{self.nombre} - {self.email}'
+    
+class Direccion(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='direcciones', null=True, blank=True)
+    titulo = models.CharField(max_length=100)
+    calle = models.CharField(max_length=200)
+    ciudad = models.CharField(max_length=100)
+    codigo_postal = models.CharField(max_length=20)
+
+

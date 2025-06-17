@@ -9,7 +9,7 @@ import { FormGroup, ReactiveFormsModule, FormBuilder, Validators, FormsModule } 
 import { RouterLink } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
 import { CartService} from '../../../services/cart.service';
-import { NgFor, NgIf } from '@angular/common';
+import { NgFor, NgIf, TitleCasePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { ICarrito } from '../../../models/carrito.interface';
 import { AuthService } from '../../../services/auth.service';
@@ -20,12 +20,14 @@ import { Observable, throwError } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { AfterViewInit } from '@angular/core';
 import { CorreoArgentinoService } from '../../../services/correo-argentino.service';
+import { UserService } from '../../../services/user.service';
+import { DireccionService } from '../../../services/direccion.service';
 
 
 @Component({
   selector: 'app-checkout',
   standalone: true,
-  imports: [RouterLink, RouterOutlet, ReactiveFormsModule,NgFor, NgIf, FormsModule],
+  imports: [RouterLink, RouterOutlet, ReactiveFormsModule,NgFor, NgIf, FormsModule, TitleCasePipe],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.css'
 })
@@ -40,6 +42,7 @@ export class CheckoutComponent implements OnInit, AfterViewInit{
   public mp: any; 
   envioCosto: number = 0;
   opcionesEnvio: any[] = [];
+  direccionesGuardadas: any[] = [];
   
   // Nuevas propiedades para el flujo reformado
   tipoEnvioSeleccionado: string = '';
@@ -63,11 +66,14 @@ export class CheckoutComponent implements OnInit, AfterViewInit{
     private cuponService : CuponService, 
     private router: Router,
     private http: HttpClient,
+    private userService: UserService,
+    private direccionService: DireccionService,
     private correoService: CorreoArgentinoService) {
     this.form = this._formBuilder.group({
       direccion: [''],
       codigo_postal: ['', Validators.required],
       provincia: ['', Validators.required],
+      localidad: ['', Validators.required]
     });
   }
 
@@ -159,6 +165,8 @@ export class CheckoutComponent implements OnInit, AfterViewInit{
     this.sucursalSeleccionada = null;
     this.sucursalSeleccionadaIndex = null;
 
+    const localidadIngresada = (this.form.get('localidad')?.value || '').toUpperCase().trim();
+
     const headers = {
       'x-rapidapi-host': 'correo-argentino1.p.rapidapi.com',
       'x-rapidapi-key': '803b62e838mshb358622f22ad8e2p10f250jsn6f64206459b9'
@@ -168,7 +176,13 @@ export class CheckoutComponent implements OnInit, AfterViewInit{
       .subscribe({
         next: (response) => {
           if (response && Array.isArray(response)) {
-            this.sucursalesDisponibles = response.map((sucursal: any, index: number) => ({
+            this.sucursalesDisponibles = response
+              .filter((sucursal: any) => {
+                const localidadIngresada = this.form.get('localidad')?.value?.trim().toUpperCase();
+                const localidadSucursal = sucursal.localidad?.toUpperCase() || sucursal.nombre_localidad?.toUpperCase() || '';
+                return localidadSucursal.includes(localidadIngresada);
+              })
+              .map((sucursal: any, index: number) => ({
               index,
               codigo: sucursal.codigo_sucursal || 'SIN-CODIGO',
               nombre: sucursal.nombre_sucursal || 'Sucursal sin nombre',
@@ -177,7 +191,8 @@ export class CheckoutComponent implements OnInit, AfterViewInit{
               codigo_postal: sucursal.codigo_postal || '',
               telefono: sucursal.telefono || '',
               horarios: sucursal.horarios || '',
-              costo: costoBase
+              costo: costoBase,
+              localidad: sucursal.localidad || sucursal.nombre_localidad || '',
             }));
 
             console.log('✅ Sucursales parseadas:', this.sucursalesDisponibles);
@@ -204,17 +219,33 @@ export class CheckoutComponent implements OnInit, AfterViewInit{
   }
 
   seleccionarSucursalDesdeDropdown(event: Event): void {
-    const target = event.target as HTMLSelectElement;
-    const index = parseInt(target.value, 10);
+    const index = Number((event.target as HTMLSelectElement).value);
+    const sucursal = this.sucursalesDisponibles[index];
 
-    if (!isNaN(index) && this.sucursalesDisponibles[index]) {
+    if (sucursal) {
       this.sucursalSeleccionadaIndex = index;
-      this.onSeleccionarSucursal(this.sucursalesDisponibles[index]);
-    } else {
-      this.sucursalSeleccionada = null;
-      this.sucursalSeleccionadaIndex = null;
+      this.sucursalSeleccionada = sucursal;
+
+      //  Asegurar que el costo se actualiza correctamente
+      this.envioCosto = sucursal.costo || 0;
+
+      //  Establecer dirección final de entrega (opcional)
+      this.direccionEntrega = `${sucursal.nombre} - ${sucursal.direccion}`;
+
+      //  Actualiza el estado para habilitar el botón de pago
+      this.actualizarEstadoPago();
     }
   }
+
+  onSeleccionarDireccionGuardada(event: Event): void {
+    const id = +(event.target as HTMLSelectElement).value;
+    const seleccionada = this.direccionesGuardadas.find(d => d.id === id);
+    if (seleccionada) {
+      this.form.get('direccion')?.setValue(seleccionada.calle);
+      this.form.get('localidad')?.setValue(seleccionada.ciudad);
+    }
+  }
+
 
   onSeleccionarTipoEnvio(tipo: string): void {
     console.log('Tipo de envío seleccionado:', tipo); // Debug
@@ -234,6 +265,28 @@ export class CheckoutComponent implements OnInit, AfterViewInit{
       // Hacer requerido el campo dirección
       this.form.get('direccion')?.setValidators([Validators.required]);
       this.form.get('direccion')?.updateValueAndValidity();
+
+       // 👇 NUEVO: cargar la dirección del usuario automáticamente
+        this.userService.getNombreUsuario().subscribe(username => {
+          if (username) {
+            this.userService.getUsuario(username).subscribe(user => {
+              const direccionGuardada = user?.direccion;
+              if (direccionGuardada) {
+                this.form.get('direccion')?.setValue(direccionGuardada);
+                this.direccionEntrega = direccionGuardada;
+              }
+              if (user?.localidad) {
+                this.form.get('localidad')?.setValue(user.localidad);
+              }
+            });
+
+            // Obtener direcciones guardadas del backend
+            this.direccionService.getDirecciones().subscribe(direcciones => {
+              this.direccionesGuardadas = direcciones;
+            });
+
+          }
+        });
       
       // Limpiar validaciones de sucursal (si las hay)
       this.direccionEntrega = '';
@@ -349,7 +402,9 @@ export class CheckoutComponent implements OnInit, AfterViewInit{
         ciudad_envio: this.getNombreProvincia(this.form.get('provincia')?.value),
         costo_envio: this.envioCosto,
         sucursal_info: this.sucursalSeleccionada || null,
-        descuento: this.getDescuentoTotal()
+        descuento: this.getDescuentoTotal(),
+        localidad: this.form.get('localidad')?.value
+
       }
     };
 
@@ -799,8 +854,9 @@ export class CheckoutComponent implements OnInit, AfterViewInit{
     const tipoEnvioId = this.tipoEnvioId;
     const envio = JSON.stringify(this.opcionesEnvio.find(op => op.tipo === this.tipoEnvioSeleccionado) || {});
     const descuento = this.getDescuentoTotal();
+    const localidad = (this.form.get('localidad')?.value || '').toUpperCase();
 
-    return `${nombre_usuario}|${direccion}|${cp}|${envio}|${this.calculateTotalFinal()}|${provincia}|${tipoEnvioId}|${descuento}`;
+    return `${nombre_usuario}|${direccion}|${cp}|${envio}|${this.calculateTotalFinal()}|${tipoEnvioId}|${provincia}|${descuento}|${localidad}`;
   }
 
 
@@ -862,5 +918,59 @@ export class CheckoutComponent implements OnInit, AfterViewInit{
     };
     return provincias[codigo] || codigo;
   }
+
+  buscarSucursalesFiltradas(): void {
+    const provincia = this.form.get('provincia')?.value;
+    const localidad = this.form.get('localidad')?.value?.toUpperCase() || '';
+    const costoSucursal = this.opcionesEnvio.find(o => o.tipo === 'A sucursal')?.costo || 0;
+
+
+    if (!provincia || !localidad) {
+      this.errorMessage = 'Debe ingresar una localidad y una provincia válidas.';
+      return;
+    }
+
+    const headers = {
+      'x-rapidapi-host': 'correo-argentino1.p.rapidapi.com',
+      'x-rapidapi-key': '803b62e838mshb358622f22ad8e2p10f250jsn6f64206459b9'
+    };
+
+    this.http.get<any>(`https://correo-argentino1.p.rapidapi.com/obtenerSucursales?provincia=${provincia}`, { headers })
+      .subscribe({
+        next: (response) => {
+          if (response && Array.isArray(response)) {
+            const filtradas = response.filter((s: any) =>
+              s.nombre_sucursal?.toUpperCase().includes(localidad)
+            );
+
+            this.sucursalesDisponibles = response
+            .filter((s: any) => s.nombre_sucursal?.toUpperCase().includes(localidad.toUpperCase()))
+            .map((sucursal: any, index: number) => ({
+              index,
+              nombre: sucursal.nombre_sucursal || 'Sucursal sin nombre',
+              direccion: sucursal.nombre_sucursal || 'Dirección no disponible',
+              provincia: sucursal.nombre_provincia || '',
+              localidad: sucursal.localidad || '',
+              codigo_postal: sucursal.codigo_postal || '',
+              telefono: sucursal.telefono || '',
+              horarios: sucursal.horarios || '',
+              costo: costoSucursal, // ✅ esto es clave
+            }));
+
+            this.successMessage = `Se encontraron ${this.sucursalesDisponibles.length} sucursales en "${localidad}"`;
+          } else {
+            this.sucursalesDisponibles = [];
+            this.errorMessage = 'No se encontraron sucursales en esa localidad.';
+          }
+        },
+        error: (err) => {
+          console.error('Error al buscar sucursales:', err);
+          this.errorMessage = 'Error al consultar sucursales.';
+        }
+      });
+  }
+
+
+
 
 }
