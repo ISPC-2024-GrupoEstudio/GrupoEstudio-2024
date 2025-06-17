@@ -3,7 +3,7 @@ from rest_framework import routers
 from PetBoutiqueApp import views
 from .views import RoleListCreateAPIView, RoleRetrieveUpdateDestroyAPIView ,ProcessPaymentView,CheckoutView, CuponViewSet, UsuarioCuponListCreateView, MisCuponesAPIView
 from .views import RoleListCreateAPIView, RoleRetrieveUpdateDestroyAPIView ,ProcessPaymentView,CheckoutView, crear_preferencia, ArrepentimientoCreateView
-from .views import registrar_usuario, UsuarioPorNombreView
+from .views import registrar_usuario, UsuarioPorNombreView, DireccionViewSet  
 
 router=routers.DefaultRouter()
 router.register(r'productos', views.ProductoViewSet)
@@ -16,6 +16,7 @@ router.register(r'formaDePago', views.FormaDePagoViewSet)
 router.register(r'tipoEnvio', views.TipoEnvioViewSet)
 router.register(r'usuarios', views.UsuarioViewSet)
 router.register(r'cupones', CuponViewSet)
+router.register(r'direcciones', DireccionViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
