@@ -15,6 +15,7 @@ export class CartService {
   private cartUrl = this.apiUrl + 'cart/';
   private deleteFromCartUrl = this.apiUrl + 'delete-from-cart/';
   private checkoutUrl =  this.apiUrl + 'checkout/';
+  private deleteItemFromCartUrl = this.apiUrl + 'delete-item-from-cart/';
  
   private productosCarritoSubject: BehaviorSubject<ICarrito[]> = new BehaviorSubject<ICarrito[]>([]);
   public productosCarrito: Observable<ICarrito[]> = this.productosCarritoSubject.asObservable();
@@ -82,6 +83,31 @@ export class CartService {
     );
   }
 
+    quitarItemProducto(product: IProducto): Observable<any> {
+    const token = localStorage.getItem('access_token');  // Obtener el token desde localStorage
+    console.log('Token recuperado del localStorage:', token); 
+    if (!token) {
+      console.error('Token no encontrado');
+      return new Observable(observer => {
+        observer.error('Token no encontrado');
+        observer.complete();
+      });
+    }
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.httpClient.post(this.deleteItemFromCartUrl, { 
+      id_producto: product.id_producto,
+      nombre_usuario: localStorage.getItem("user"),
+      cantidad: 1
+    }, { headers }).pipe(
+      tap(() => {
+        this.actualizarCarrito();
+      }),
+      catchError((error) => {
+        console.error('Error al agregar producto al carrito:', error);
+        throw error;
+      })
+    );
+  }
   quitarProducto(productoCarritoId:number):void {
     const token = localStorage.getItem('access_token');  // Obtener el token desde localStorage
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
