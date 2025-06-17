@@ -17,7 +17,12 @@
         <a href="#" class="text-decoration-none text-dark fw-semibold">
           <p class="mb-1">{{ productoCarrito.producto.nombre }}</p>
         </a>
-        <p class="mb-0 small">1 <i class="fa-solid fa-xmark text-muted"></i> ${{ productoCarrito.producto.precio }}</p>
+        <p class="mb-1">${{ productoCarrito.producto.precio }}</p>
+        <p class="mb-0 small">
+          <button (click)="quitarItem(productoCarrito)"><i class="fas fa-minus"></i></button> 
+          {{productoCarrito.cantidad}} 
+          <button (click)="agregarItem(productoCarrito)"><i class="fas fa-plus"></i></button>
+        </p>
       </div>
       <button type="button" class="btn btn-sm text-danger fs-5" (click)="removeFromCart(productoCarrito.id_carrito)">
         <i class="fas fa-times"></i>

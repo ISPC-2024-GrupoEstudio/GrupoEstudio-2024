@@ -58,7 +58,7 @@ export class MinicartComponent implements OnInit {
   //   return total.toFixed(2);
   // }
   calculateTotal() {
-    let total = this.productosCarrito.reduce((sum, item) => sum + item.producto.precio, 0);
+    let total = this.productosCarrito.reduce((sum, item) => sum + item.producto.precio * item.cantidad, 0); 
   
     const cupones = this.cartService.getCuponesAplicados();
   
@@ -78,6 +78,28 @@ export class MinicartComponent implements OnInit {
 
   viewCart() {
     // Lógica para ver el carrito
+  }
+
+  agregarItem(carrito: ICarrito) {
+     this.cartService.agregarProducto(carrito.producto).subscribe(
+           (response) => {
+             this.cartService.actualizarCarrito();
+           },
+           (error) => {
+             console.error('Error al agregar producto al carrito:', error);
+           }
+         );
+  }
+
+  quitarItem(carrito: ICarrito) {
+    this.cartService.quitarItemProducto(carrito.producto).subscribe(
+           (response) => {
+             this.cartService.actualizarCarrito();
+           },
+           (error) => {
+             console.error('Error al quitar producto al carrito:', error);
+           }
+         );
   }
 
   checkout() {
