@@ -21,6 +21,7 @@ import { switchMap } from 'rxjs/operators';
 import { AfterViewInit } from '@angular/core';
 import { CorreoArgentinoService } from '../../../services/correo-argentino.service';
 import { UserService } from '../../../services/user.service';
+import { DireccionService } from '../../../services/direccion.service';
 
 
 @Component({
@@ -41,6 +42,7 @@ export class CheckoutComponent implements OnInit, AfterViewInit{
   public mp: any; 
   envioCosto: number = 0;
   opcionesEnvio: any[] = [];
+  direccionesGuardadas: any[] = [];
   
   // Nuevas propiedades para el flujo reformado
   tipoEnvioSeleccionado: string = '';
@@ -65,6 +67,7 @@ export class CheckoutComponent implements OnInit, AfterViewInit{
     private router: Router,
     private http: HttpClient,
     private userService: UserService,
+    private direccionService: DireccionService,
     private correoService: CorreoArgentinoService) {
     this.form = this._formBuilder.group({
       direccion: [''],
@@ -234,7 +237,14 @@ export class CheckoutComponent implements OnInit, AfterViewInit{
     }
   }
 
-
+  onSeleccionarDireccionGuardada(event: Event): void {
+    const id = +(event.target as HTMLSelectElement).value;
+    const seleccionada = this.direccionesGuardadas.find(d => d.id === id);
+    if (seleccionada) {
+      this.form.get('direccion')?.setValue(seleccionada.calle);
+      this.form.get('localidad')?.setValue(seleccionada.ciudad);
+    }
+  }
 
 
   onSeleccionarTipoEnvio(tipo: string): void {
@@ -269,6 +279,12 @@ export class CheckoutComponent implements OnInit, AfterViewInit{
                 this.form.get('localidad')?.setValue(user.localidad);
               }
             });
+
+            // Obtener direcciones guardadas del backend
+            this.direccionService.getDirecciones().subscribe(direcciones => {
+              this.direccionesGuardadas = direcciones;
+            });
+
           }
         });
       

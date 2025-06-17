@@ -208,6 +208,19 @@
                         </div>
                       </div>
 
+                      <!-- SELECT con direcciones guardadas -->
+                      <!-- Solo se muestra si hay direcciones -->
+                      <div *ngIf="direccionesGuardadas.length > 0" class="mb-3">
+                        <label for="direccionGuardada">Seleccionar dirección guardada</label>
+                        <select id="direccionGuardada" class="form-select" (change)="onSeleccionarDireccionGuardada($event)">
+                          <option value="">-- Seleccionar dirección --</option>
+                          <option *ngFor="let dir of direccionesGuardadas" [value]="dir.id">
+                            {{ dir.titulo }} - {{ dir.calle }}, {{ dir.ciudad }}
+                          </option>
+                        </select>
+                      </div>
+
+
                       <!--Dirección (si es envío a domicilio) -->
                       <div *ngIf="tipoEnvioSeleccionado === 'A domicilio'" class="mb-4">
                         <!--Localidad -->
