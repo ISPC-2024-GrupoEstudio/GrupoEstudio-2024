@@ -14,8 +14,8 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.decorators import api_view, permission_classes
-from .models import CustomUser
-from .serializer import CustomUserSerializer, ArrepentimientoSerializer
+from .models import CustomUser, Direccion
+from .serializer import CustomUserSerializer, ArrepentimientoSerializer, DireccionSerializer
 # Fin importaciones registro #
 from .models import Roles, Usuario
 from .serializer import RolesSerializer
@@ -362,7 +362,7 @@ def crear_preferencia(request):
                     } for item in items
                 ],
                 "back_urls": {
-                    "success": "https://d773-181-92-31-235.ngrok-free.app/api/pago-exitoso/",
+                    "success": "https://dbe9-2803-9800-9883-4725-7873-2721-c155-d6eb.ngrok-free.app/api/pago-exitoso/",
                     "failure": "https://tusitio.com/failure",
                     "pending": "https://tusitio.com/pending"
                 },
@@ -697,3 +697,44 @@ class MisCuponesAPIView(APIView):
 class ArrepentimientoCreateView(generics.CreateAPIView):
     queryset = Arrepentimiento.objects.all()
     serializer_class = ArrepentimientoSerializer    
+
+
+# class DireccionViewSet(viewsets.ModelViewSet):
+#     queryset = Direccion.objects.all()
+#     serializer_class = DireccionSerializer
+#     permission_classes = [AllowAny]
+
+#     def get_queryset(self):
+#         # Mostrar solo las direcciones del usuario autenticado
+#         return Direccion.objects.filter(usuario=self.request.user)
+
+#     def perform_create(self, serializer):
+#         # Asignar automáticamente el usuario autenticado
+#         serializer.save(usuario=self.request.user)
+# class DireccionViewSet(viewsets.ModelViewSet):
+#     queryset = Direccion.objects.all()
+#     serializer_class = DireccionSerializer
+#     permission_classes = [AllowAny]
+
+#     def get_queryset(self):
+#         return Direccion.objects.all()
+
+#     def perform_create(self, serializer):
+#         serializer.save()
+
+class DireccionViewSet(viewsets.ModelViewSet):
+    queryset = Direccion.objects.all()
+    serializer_class = DireccionSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        # Si usuario está autenticado, filtrar por usuario, sino devolver todo o vacío
+        if self.request.user and self.request.user.is_authenticated:
+            return Direccion.objects.filter(usuario=self.request.user)
+        return Direccion.objects.none()
+
+    def perform_create(self, serializer):
+        if self.request.user and self.request.user.is_authenticated:
+            serializer.save(usuario=self.request.user)
+        else:
+            serializer.save(usuario=None)

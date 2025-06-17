@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractContro
 import { UserService } from '../../../services/user.service';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
+import { Direccion } from './direccion.model';
+import { DireccionService } from '../../../services/direccion.service';
 
 @Component({
   selector: 'app-editar-perfil',
@@ -19,6 +21,8 @@ export class EditarPerfilComponent implements OnInit, OnDestroy {
   cargando: boolean = true;
   error: string | null = null;
   submitted: boolean = false;
+  direcciones: Direccion[] = [];
+  formDireccion!: FormGroup;
   
   // Suscripciones para liberarlas al destruir el componente
   private suscripciones: Subscription[] = [];
@@ -26,11 +30,21 @@ export class EditarPerfilComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
+    private direccionService: DireccionService
   ) {}
 
   ngOnInit(): void {
     // Inicializar formulario con valores vacíos
     this.inicializarFormulario();
+
+    this.formDireccion = this.fb.group({
+      titulo: ['', Validators.required],
+      calle: ['', Validators.required],
+      ciudad: ['', Validators.required],
+      codigo_postal: ['', Validators.required]
+    });
+
+    this.cargarDirecciones();
     
     // Cargar datos del usuario actual
     this.cargarDatosUsuario();
@@ -77,6 +91,44 @@ export class EditarPerfilComponent implements OnInit, OnDestroy {
     
     return null;
   }
+
+    cargarDirecciones(): void {
+    this.direccionService.getDirecciones().subscribe(data => {
+      this.direcciones = data;
+    });
+  }
+
+  // agregarNuevaDireccion(): void {
+  //   if (this.formDireccion.invalid) return;
+
+  //   const nueva = this.formDireccion.value;
+  //   nueva.usuario = this.username;
+
+  //   this.direccionService.agregarDireccion(nueva).subscribe(() => {
+  //     this.formDireccion.reset();
+  //     this.cargarDirecciones();
+  //   });
+  // }
+  agregarNuevaDireccion(): void {
+  if (this.formDireccion.invalid) return;
+
+  const nueva = { ...this.formDireccion.value }; // NO enviar usuario
+
+  this.direccionService.agregarDireccion(nueva).subscribe(() => {
+    this.formDireccion.reset();
+    this.cargarDirecciones();
+  });
+}
+
+
+  eliminarDireccion(id: number): void {
+    if (confirm('¿Eliminar esta dirección?')) {
+      this.direccionService.eliminarDireccion(id).subscribe(() => {
+        this.cargarDirecciones();
+      });
+    }
+  }
+
 
   // Validador para la dirección (al menos un número y 3 caracteres mínimo)
   direccionValidator(control: AbstractControl): ValidationErrors | null {
