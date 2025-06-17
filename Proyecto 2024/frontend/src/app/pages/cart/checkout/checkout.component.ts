@@ -20,6 +20,7 @@ import { Observable, throwError } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { AfterViewInit } from '@angular/core';
 import { CorreoArgentinoService } from '../../../services/correo-argentino.service';
+import { UserService } from '../../../services/user.service';
 
 
 @Component({
@@ -63,6 +64,7 @@ export class CheckoutComponent implements OnInit, AfterViewInit{
     private cuponService : CuponService, 
     private router: Router,
     private http: HttpClient,
+    private userService: UserService,
     private correoService: CorreoArgentinoService) {
     this.form = this._formBuilder.group({
       direccion: [''],
@@ -253,6 +255,22 @@ export class CheckoutComponent implements OnInit, AfterViewInit{
       // Hacer requerido el campo dirección
       this.form.get('direccion')?.setValidators([Validators.required]);
       this.form.get('direccion')?.updateValueAndValidity();
+
+       // 👇 NUEVO: cargar la dirección del usuario automáticamente
+        this.userService.getNombreUsuario().subscribe(username => {
+          if (username) {
+            this.userService.getUsuario(username).subscribe(user => {
+              const direccionGuardada = user?.direccion;
+              if (direccionGuardada) {
+                this.form.get('direccion')?.setValue(direccionGuardada);
+                this.direccionEntrega = direccionGuardada;
+              }
+              if (user?.localidad) {
+                this.form.get('localidad')?.setValue(user.localidad);
+              }
+            });
+          }
+        });
       
       // Limpiar validaciones de sucursal (si las hay)
       this.direccionEntrega = '';
