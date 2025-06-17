@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink, RouterOutlet} from '@angular/router';
 import { PedidosService } from '../../../services/pedidos.service';
 import { IPedido } from '../../../models/pedido.interface';
-import { NgFor, NgIf, CurrencyPipe } from '@angular/common';
+import { NgFor, NgIf, CurrencyPipe, TitleCasePipe } from '@angular/common';
 import { ProductoXPedidoService } from '../../../services/productoXPedido.service';
 import { IProductoXPedido } from '../../../models/productosXPedido.interface';
 import { ActivatedRoute, ParamMap } from '@angular/router';
@@ -12,7 +12,7 @@ import { ProductoService } from '../../../services/producto.service';
 @Component({
   selector: 'app-detalle-compras',
   standalone: true,
-  imports: [RouterLink, RouterOutlet, NgFor, NgIf, CurrencyPipe],
+  imports: [RouterLink, RouterOutlet, NgFor, NgIf, CurrencyPipe, TitleCasePipe],
   templateUrl: './detalle-compras.component.html',
   styleUrl: './detalle-compras.component.css',
   providers: [PedidosService, ProductoXPedidoService, ProductoService]
@@ -30,6 +30,7 @@ export class DetalleComprasComponent implements OnInit{
   tipoEnvioTexto: string = '';
   direccionEntrega: string = '';
   descuento: number = 0;
+  localidad: string = '';
 
   constructor(
     private router: Router, 
@@ -53,6 +54,7 @@ export class DetalleComprasComponent implements OnInit{
           this.ciudadEnvio = pedidoEncontrado.ciudad_envio || '';
           this.direccionEntrega = pedidoEncontrado.domicilio_envio || '';
           this.descuento = pedidoEncontrado.descuento || 0;
+          this.localidad = pedidoEncontrado.localidad || '';
           this.tipoEnvioTexto = pedidoEncontrado.id_tipo_de_envio === 1 ? 'A domicilio' :
                           pedidoEncontrado.id_tipo_de_envio === 2 ? 'A sucursal' : 'Desconocido';
           console.log("Costo de envío:", this.costoEnvio);

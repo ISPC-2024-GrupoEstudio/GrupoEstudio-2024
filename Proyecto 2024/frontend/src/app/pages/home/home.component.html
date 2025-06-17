@@ -1,15 +1,33 @@
 <body class="body__landing"> 
   <main class="main__home">
-      <section class="text-center h-100vh fondo-seccion">
-        <div class="row w-100">
-          <div class="col text-center banderin">
-            <div class="banderin-container">
-              <img src="assets/imagenes/PetBoutique.png" alt="Logo de Pet Boutique" class="logo" width="300" height="300">
+      <section class="text-center h-100vh fondo-seccion text-center d-flex flex-row align-items-center justify-content-center m-0 p-0 position-relative w-100">
+            <div class="bannerImgs d-flex flex-row p-0 m-0">
+              <div class="position-absolute top-0 start-0 m-0 p-0" style="z-index: 10;">
+                <!-- SVG Bandera que toca el tope -->
+                <svg width="30rem" height="95vh" viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                  <path d="M10 0 L90 0 L90 120 L50 100 L10 120 Z" 
+                        fill="white"/>
+                </svg>
+                
+                <!-- Imagen superpuesta -->
+                <img src="../../../assets/imagenes/Pet_Boutique2.png" 
+                    alt="Pet Boutique Logo" 
+                    class="position-absolute"
+                    style="top: 7rem; left: 50%; transform: translateX(-50%); max-width: 80%; height: auto;">
+              </div>
+              
+              <!-- Imagen del perro -->
+              <div class="d-flex align-items-center justify-content-center ">
+                <img src="../../../assets/imagenes/perroInicio.png" alt="Perro" class="perroInicio-img">
+              </div>
             </div>
-          </div>
-        </div>
-        <h1 class="titulo text-white text-bold">Variedad de productos para mascotas</h1>
-      </section>
+            
+            <!-- Contenido de texto -->
+            <div class="d-flex flex-column text-center text-white textos-banner">
+              <h1 class="bold mb-3 titulo-banner">AMAR TAMBIÉN ES CUIDAR</h1>
+              <h3>Encontrá variedad de productos para tus mascotas</h3>
+            </div>
+          </section>
     
       <section class="container mt-5 section__landing">
         <h1 class="text-center pt-5">Sobre Nosotros</h1>
