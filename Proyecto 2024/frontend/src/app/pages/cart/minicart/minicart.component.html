@@ -19,9 +19,11 @@
         </a>
         <p class="mb-1">${{ productoCarrito.producto.precio }}</p>
         <p class="mb-0 small">
-          <button (click)="quitarItem(productoCarrito)"><i class="fas fa-minus"></i></button> 
-          {{productoCarrito.cantidad}} 
-          <button (click)="agregarItem(productoCarrito)"><i class="fas fa-plus"></i></button>
+          <button class="item-button" (click)="quitarItem(productoCarrito)"><i class="fas fa-minus"></i></button> 
+          <span class="item-cantidad">
+            {{productoCarrito.cantidad}} 
+          </span>
+          <button class="item-button" (click)="agregarItem(productoCarrito)"><i class="fas fa-plus"></i></button>
         </p>
       </div>
       <button type="button" class="btn btn-sm text-danger fs-5" (click)="removeFromCart(productoCarrito.id_carrito)">

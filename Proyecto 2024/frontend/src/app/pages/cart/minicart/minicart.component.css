@@ -1,5 +1,23 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css');
 
+/* botones de agregar y quitar items*/
+.item-button {
+  background-color: #8b35dc;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.item-cantidad {
+  color: black;
+  font-weight: bold;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
 /* Ícono del carrito */
 .mini-cart .cart-icon {
   position: relative;
