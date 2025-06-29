@@ -1,33 +1,38 @@
-.perroInicio-img{
-    margin-left:26.2rem;
-    margin-top:17rem;
+.perroInicio-img {
+    margin-left: 26.8rem;
+    margin-bottom: 7rem;
 }
 
-.titulo-banner{
-    font-size:6rem;
+.titulo-banner-home {
+    font-size: 6rem;
 }
 
+.textos-banner {
+    width: 100%;
+}
+
+/* Adaptación para pantallas menores a 1100px */
 @media (max-width: 1100px) {
-
-    .titulo-banner {
+    .titulo-banner-home {
         font-size: 4rem;
         text-align: center;
     }
 }
 
-.fondo-seccion {
-    display: flex;
-    flex-direction: row;
-}
-
-@media screen and (max-width: 970px) {
+/* ESTO CAMBIA TODO cuando la pantalla es menor o igual a 1380px */
+@media (max-width: 1200px) {
     .fondo-seccion {
-        flex-direction: column;
+        flex-direction: column !important;
+        /* para centrar verticalmente en columna */
     }
-    .bannerImgs {
-        order: 1;
+
+    .perroInicio-img {
+        margin-left: 0;
+        margin-bottom: 0;
+        margin-top: 20rem;
     }
+
     .textos-banner {
-        order: 2;
+        margin-top: 6rem;
     }
 }
