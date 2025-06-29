@@ -362,7 +362,7 @@ def crear_preferencia(request):
                     } for item in items
                 ],
                 "back_urls": {
-                    "success": "https://dbe9-2803-9800-9883-4725-7873-2721-c155-d6eb.ngrok-free.app/api/pago-exitoso/",
+                    "success": "https://98f1-181-111-12-240.ngrok-free.app/api/pago-exitoso/",
                     "failure": "https://tusitio.com/failure",
                     "pending": "https://tusitio.com/pending"
                 },
@@ -484,11 +484,6 @@ def procesar_pago_exitoso(request):
     except Exception as e:
         print("Error al procesar el pedido:", str(e))
         return JsonResponse({'error': str(e)}, status=500)
-
-
-
-
-
 
 # Vistas login / logout #####################################################################################
 class LoginView(APIView):
@@ -698,29 +693,6 @@ class ArrepentimientoCreateView(generics.CreateAPIView):
     queryset = Arrepentimiento.objects.all()
     serializer_class = ArrepentimientoSerializer    
 
-
-# class DireccionViewSet(viewsets.ModelViewSet):
-#     queryset = Direccion.objects.all()
-#     serializer_class = DireccionSerializer
-#     permission_classes = [AllowAny]
-
-#     def get_queryset(self):
-#         # Mostrar solo las direcciones del usuario autenticado
-#         return Direccion.objects.filter(usuario=self.request.user)
-
-#     def perform_create(self, serializer):
-#         # Asignar automáticamente el usuario autenticado
-#         serializer.save(usuario=self.request.user)
-# class DireccionViewSet(viewsets.ModelViewSet):
-#     queryset = Direccion.objects.all()
-#     serializer_class = DireccionSerializer
-#     permission_classes = [AllowAny]
-
-#     def get_queryset(self):
-#         return Direccion.objects.all()
-
-#     def perform_create(self, serializer):
-#         serializer.save()
 
 class DireccionViewSet(viewsets.ModelViewSet):
     queryset = Direccion.objects.all()
